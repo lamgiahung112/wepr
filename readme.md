@@ -16,7 +16,7 @@ In a Spring Boot application, the `spring.jpa.hibernate.ddl-auto` property is us
    - When the application shuts down, it drops the database schema.
    - This is useful for development and testing, where you want to start with a clean database for each run of the application.
 
-- **update:**
+- **update:** (WE USE THIS)
    - Hibernate checks the database schema at startup and updates it to match the current state of the JPA entity classes.
    - It adds new tables, columns, and constraints and updates existing ones if necessary.
    - This option is often used in development and testing to automatically evolve the database schema as the entity classes change.
