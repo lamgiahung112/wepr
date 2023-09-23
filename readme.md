@@ -8,7 +8,9 @@
 - [1. Spring Boot `spring.jpa.hibernate.ddl-auto` Property](#n1)
 
 <div id='n1'></div>
-#1 Spring Boot `spring.jpa.hibernate.ddl-auto` Property
+aaa
+
+#  1 Spring Boot `spring.jpa.hibernate.ddl-auto` Property
 
 In a Spring Boot application, the `spring.jpa.hibernate.ddl-auto` property is used to control the behavior of Hibernate (the JPA implementation) regarding database schema generation and management during application startup. This property specifies how Hibernate should handle the database schema in relation to your JPA entities. There are several options for this property:
 
@@ -48,7 +50,9 @@ The choice of `spring.jpa.hibernate.ddl-auto` option depends on your development
 **Note:** Automatic schema generation and modification should be used with caution in production environments, as they can lead to data loss or unexpected schema changes. Always make sure to have proper backups and migration strategies when working with databases in production.
 
 <div id='db1'></div>
-#2 Server is running on the host and accepting TCP/IP connections at the port, and that no firewall is blocking TCP connections to the port
+aaa
+
+#  2 Server is running on the host and accepting TCP/IP connections at the port, and that no firewall is blocking TCP connections to the port
 
 	Full error: com.microsoft.sqlserver.jdbc.SQLServerException: The TCP/IP connection to the host localhost, port 1433 has failed. Error: “Connection refused: connect. Verify the connection properties, check that an instance of SQL Server is running on the host and accepting TCP/IP connections at the port, and that no firewall is blocking TCP connections to the port.”.
 	
