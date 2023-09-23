@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    url:  jdbc:sqlserver://localhost:1433;databaseName=ielts_app_db;
+    username: wepr
+    password: weprielts
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    hibernate:
+      ddl-auto: update # You can use "create", "create-drop", "update", or "validate"
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServerDialect
