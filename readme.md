@@ -1,6 +1,7 @@
 # Trouble shooting some common errors
 ### Database errors
 - [1. Server is running on the host and accepting TCP/IP connections at the port, and that no firewall is blocking TCP connections to the port](#db1)
+- [2. Cannot open database 'ielts_app_db' requested by the login. The login failed](#db2)
 
 ### App errors
 
@@ -67,4 +68,14 @@ nav
 3. On the **TCP/IP Properties** dialog box that appears, click the **IP Addresses** tab.
 4. Scroll down to locate the **IPALL** node. Remove any value, if present for **TCP Dynamic Ports** and specify **1433** for **TCP Port**.
 
+<div id='db2'></div>
+nav
+
+## 3. Cannot open database 'ielts_app_db' requested by the login. The login failed
+
+This error occurs usually because the database doesn't exist.
+
+**Solution**
+
+Open SSMS, login, then create database named 'ielts_app_db'
 
