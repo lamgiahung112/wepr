@@ -52,6 +52,7 @@ public class ApplicationUser {
 		this.username = username;
 	}
 	
+	
 	public String getPassword() {
 		return this.password;
 	}
@@ -59,6 +60,7 @@ public class ApplicationUser {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
 	
 	public Collection<?> getAuthorities() {
 		return this.authorities;

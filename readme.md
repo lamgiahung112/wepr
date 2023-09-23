@@ -1,3 +1,13 @@
+# Trouble shooting some common errors
+### Database errors
+- [1. Server is running on the host and accepting TCP/IP connections at the port, and that no firewall is blocking TCP connections to the port](#db1)
+
+### App errors
+
+### Notices
+- [1. Spring Boot `spring.jpa.hibernate.ddl-auto` Property](#n1)
+
+<div id='n1'></div>
 #1 Spring Boot `spring.jpa.hibernate.ddl-auto` Property
 
 In a Spring Boot application, the `spring.jpa.hibernate.ddl-auto` property is used to control the behavior of Hibernate (the JPA implementation) regarding database schema generation and management during application startup. This property specifies how Hibernate should handle the database schema in relation to your JPA entities. There are several options for this property:
@@ -36,3 +46,16 @@ The choice of `spring.jpa.hibernate.ddl-auto` option depends on your development
 - In situations where you want full control over the database schema, you can use `none` and manage schema changes manually.
 
 **Note:** Automatic schema generation and modification should be used with caution in production environments, as they can lead to data loss or unexpected schema changes. Always make sure to have proper backups and migration strategies when working with databases in production.
+
+<div id='db1'></div>
+#2 Server is running on the host and accepting TCP/IP connections at the port, and that no firewall is blocking TCP connections to the port
+
+	Full error: com.microsoft.sqlserver.jdbc.SQLServerException: The TCP/IP connection to the host localhost, port 1433 has failed. Error: “Connection refused: connect. Verify the connection properties, check that an instance of SQL Server is running on the host and accepting TCP/IP connections at the port, and that no firewall is blocking TCP connections to the port.”.
+	
+**Solution**
+1. From the **Start menu**, open **SQL Server 2022 Configuration Manager**.
+2. Click Protocol for **SQLSERVEREXPRESS** (or SQLSERVERDEVELOPER,... the name of your currenly running instance) under **SQL Server Network Configuration** on the left pane. On the right pane, right- click **TCP/IP**, and select **Properties**.
+3. On the **TCP/IP Properties** dialog box that appears, click the **IP Addresses** tab.
+4. Scroll down to locate the **IPALL** node. Remove any value, if present for **TCP Dynamic Ports** and specify **1433** for **TCP Port**.
+
+ad

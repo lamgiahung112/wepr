@@ -6,7 +6,7 @@ spring:
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
   jpa:
     hibernate:
-      ddl-auto: update # You can use "create", "create-drop", "update", or "validate", see readme.md #1
+      ddl-auto: create-drop # You can use "create", "create-drop", "update", or "validate", see readme.md #1
     properties:
       hibernate:
         dialect: org.hibernate.dialect.SQLServerDialect
