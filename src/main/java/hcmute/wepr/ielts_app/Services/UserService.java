@@ -14,6 +14,6 @@ public class UserService {
 	private UserRepository _userRepository;
 	public Optional<ApplicationUser> loadByUsername(String username) {
 		System.out.println("In the user service");
-		return _userRepository.findApplicationUserByUserName(username);
+		return _userRepository.findApplicationUserByUsername(username);
 	}
 }

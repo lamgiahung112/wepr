@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import hcmute.wepr.ielts_app.Models.ApplicationUser;
 
 public interface UserRepository extends JpaRepository<ApplicationUser, Integer>{ 
-	Optional<ApplicationUser> findApplicationUserByUserName(String username);
+	Optional<ApplicationUser> findApplicationUserByUsername(String username);
 }
