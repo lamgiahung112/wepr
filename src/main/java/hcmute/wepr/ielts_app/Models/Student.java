@@ -1,11 +1,13 @@
 package hcmute.wepr.ielts_app.Models;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.Set;
 
 @Entity
 @Table(name="student")
+@Data
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
