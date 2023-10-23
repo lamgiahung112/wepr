@@ -29,14 +29,16 @@ public class SecurityConfiguration {
 				.securityContext(t -> t.securityContextRepository(securityContextRepository))
 				.authorizeHttpRequests(customizer -> {
 					customizer
-						.requestMatchers("/login").permitAll()
+						.requestMatchers("/auth/**").permitAll()
 						.requestMatchers("/uploads/**").permitAll()
 						.requestMatchers("/dashboard").permitAll()
 						.anyRequest().authenticated();
 				})
 
 				.formLogin(customizer -> {
-					customizer.disable();
+					customizer.loginProcessingUrl("/auth/login");
+					customizer.loginPage("/auth/login");
+					customizer.defaultSuccessUrl("/dashboard");
 				}).build();
 	}
 

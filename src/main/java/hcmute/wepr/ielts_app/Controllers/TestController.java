@@ -13,8 +13,7 @@ import hcmute.wepr.ielts_app.security.annotations.IsStudent;
 @RequestMapping("/auth")
 public class TestController {
 	
-	@GetMapping
-	@IsAuthenticated
+	@GetMapping("/login")
 	public String test() {
 		return "index";
 	}
