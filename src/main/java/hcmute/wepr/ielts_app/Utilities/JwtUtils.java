@@ -59,16 +59,16 @@ public class JwtUtils {
         return expiration.before(new Date());
     }
 	
-	public String generateToken(Teacher teacher) {
+	public String generateToken(JwtDataWrapper data) {
 		Date now = new Date();
 		Date expiration = new Date(now.getTime() + expTime);
 		
 		
 		Map<String, Object> claims = new HashMap<>();
-		claims.put("id", teacher.getTeacherId());
-		claims.put("username", teacher.getUsername());
-		claims.put("name", teacher.getTeacherName());
-		claims.put("role", "ROLE_TEACHER");
+		claims.put("id", data.getId());
+		claims.put("username", data.getUsername());
+		claims.put("name", data.getName());
+		claims.put("role", data.getRole());
 		
 		return Jwts.builder()
 				.setIssuedAt(now)
@@ -78,23 +78,14 @@ public class JwtUtils {
 				.compact();
 	}
 	
-	public String generateToken(Student student) {
-		Date now = new Date();
-		Date expiration = new Date(now.getTime() + expTime);
-		
-		
-		Map<String, Object> claims = new HashMap<>();
-		claims.put("id", student.getId());
-		claims.put("username", student.getUsername());
-		claims.put("name", student.getStudentName());
-		claims.put("role", "ROLE_STUDENT");
-		
-		return Jwts.builder()
-				.setIssuedAt(now)
-				.setExpiration(expiration)
-				.addClaims(claims)
-				.signWith(key)
-				.compact();
+	public JwtDataWrapper parse(String token) {
+		Claims claims = getAllClaimsFromToken(token);
+		return JwtDataWrapper.builder()
+				.id(claims.get("id", String.class))
+				.name(claims.get("name", String.class))
+				.username(claims.get("username", String.class))
+				.role(claims.get("role", String.class))
+				.build();
 	}
 	
 	public Boolean validateToken(String token) {

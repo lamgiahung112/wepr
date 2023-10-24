@@ -1,6 +1,7 @@
 package hcmute.wepr.ielts_app.security;
 
 import java.util.Optional;
+import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,20 @@ import org.springframework.stereotype.Component;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class CookieSecurityContextRepository implements SecurityContextRepository {
+	private final Pattern[] STRICTLY_PUBLIC_ENDPOINT_WHITELIST = {
+		Pattern.compile("^/auth/.*$"),
+		Pattern.compile("^/uploads/.*$"),
+	};
+	
+	private final Pattern[] PARTIALLY_AUTHENTICATED_ENDPOINT_WHITELIST = {
+			Pattern.compile("/dashboard")		
+	};
+	
 	@Value("${auth.cookie.name}")
 	private String COOKIE_NAME;
 
@@ -53,6 +65,13 @@ public class CookieSecurityContextRepository implements SecurityContextRepositor
 	public SecurityContext loadContext(HttpRequestResponseHolder requestResponseHolder) {
 		HttpServletRequest request = requestResponseHolder.getRequest();
 		HttpServletResponse response = requestResponseHolder.getResponse();
+		
+		for (Pattern endpoint : STRICTLY_PUBLIC_ENDPOINT_WHITELIST) {
+			String currentEndpoint = request.getRequestURI();
+			if (endpoint.matcher(currentEndpoint).matches()) {
+				return new SecurityContextImpl();
+			}
+		}
 
 		Optional<Cookie> cookie = readCookieFromRequest(request);
 		

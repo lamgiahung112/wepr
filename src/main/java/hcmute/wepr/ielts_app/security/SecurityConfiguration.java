@@ -14,10 +14,7 @@ import lombok.AllArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
-@AllArgsConstructor
 public class SecurityConfiguration {
-	@Autowired
-	private AuthenticationManager cookieAuthManager;
 
 	@Autowired
 	private SecurityContextRepository securityContextRepository;
@@ -25,7 +22,6 @@ public class SecurityConfiguration {
 	@Bean
 	public SecurityFilterChain securityWebFilterChain(HttpSecurity http) throws Exception {
 		return http
-				.authenticationManager(cookieAuthManager)
 				.securityContext(t -> t.securityContextRepository(securityContextRepository))
 				.authorizeHttpRequests(
 						customizer -> customizer

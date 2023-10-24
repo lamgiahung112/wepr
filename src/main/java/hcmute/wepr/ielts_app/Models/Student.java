@@ -1,6 +1,7 @@
 package hcmute.wepr.ielts_app.Models;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Set;
@@ -8,6 +9,7 @@ import java.util.Set;
 @Entity
 @Table(name="student")
 @Data
+@Builder
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

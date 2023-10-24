@@ -32,7 +32,6 @@ public class CookieAuthenticationManager implements AuthenticationManager {
 		
 		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(role));
-		
 		return new UsernamePasswordAuthenticationToken(username, username, authorities);
 	}
 
