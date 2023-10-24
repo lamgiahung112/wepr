@@ -6,9 +6,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.DefaultSecurityFilterChain;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.context.SecurityContextRepository;
 
 import lombok.AllArgsConstructor;
@@ -24,22 +23,19 @@ public class SecurityConfiguration {
 	private SecurityContextRepository securityContextRepository;
 
 	@Bean
-	public DefaultSecurityFilterChain securityWebFilterChain(HttpSecurity http) throws Exception {
-		return http.authenticationManager(cookieAuthManager)
+	public SecurityFilterChain securityWebFilterChain(HttpSecurity http) throws Exception {
+		return http
+				.authenticationManager(cookieAuthManager)
 				.securityContext(t -> t.securityContextRepository(securityContextRepository))
-				.authorizeHttpRequests(customizer -> {
-					customizer
-						.requestMatchers("/auth/**").permitAll()
-						.requestMatchers("/uploads/**").permitAll()
-						.requestMatchers("/dashboard").permitAll()
-						.anyRequest().authenticated();
-				})
-
-				.formLogin(customizer -> {
-					customizer.loginProcessingUrl("/auth/login");
-					customizer.loginPage("/auth/login");
-					customizer.defaultSuccessUrl("/dashboard");
-				}).build();
+				.authorizeHttpRequests(
+						customizer -> customizer
+							.requestMatchers("/auth/**").permitAll()
+							.requestMatchers("/uploads/**").permitAll()
+							.requestMatchers("/dashboard").permitAll()
+							.anyRequest().authenticated()
+				)
+				.formLogin(customizer -> customizer.disable())
+				.csrf(customizer -> customizer.disable()).build();
 	}
 
 	@Bean
