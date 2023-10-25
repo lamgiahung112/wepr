@@ -34,24 +34,8 @@ public class JwtUtils {
 		return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
 	}
 	
-	public String getIdFromToken(String token) {
-		return getAllClaimsFromToken(token).get("id", String.class);
-	}
-	
-	public String getNameFromToken(String token) {
-		return getAllClaimsFromToken(token).get("name", String.class);
-	}
-
-    public String getUsernameFromToken(String token) {
-        return getAllClaimsFromToken(token).get("username", String.class);
-    }
-
     public Date getExpirationDateFromToken(String token) {
         return getAllClaimsFromToken(token).getExpiration();
-    }
-	
-    public String getRoleFromToken(String token) {
-    	return getAllClaimsFromToken(token).get("roles", String.class);
     }
     
     private Boolean isTokenExpired(String token) {

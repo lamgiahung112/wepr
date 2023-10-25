@@ -80,7 +80,7 @@ public class CookieSecurityContextRepository implements SecurityContextRepositor
 		}
 		
 		Authentication auth = cookieAuthenticationManager
-				.authenticate(new UsernamePasswordAuthenticationToken(cookie, cookie));
+				.authenticate(new UsernamePasswordAuthenticationToken(cookie.get().getValue(), cookie.get().getValue()));
 		return new SecurityContextImpl(auth);
 	}
 }

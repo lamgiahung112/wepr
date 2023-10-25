@@ -50,6 +50,8 @@ public class AuthenticationController {
 		String cookieToken = studentService.authenticateAndGetCredentials(username, password);
 		Cookie cookie = new Cookie(COOKIE_NAME, cookieToken);
 		cookie.setHttpOnly(true);
+		cookie.setDomain("localhost");
+		cookie.setPath("/");
 		cookie.setMaxAge(Integer.MAX_VALUE);
 		response.addCookie(cookie);
 		response.sendRedirect("/dashboard");
