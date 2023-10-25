@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import hcmute.wepr.ielts_app.Utilities.JwtDataWrapper;
 import hcmute.wepr.ielts_app.Utilities.JwtUtils;
 
 @Component
@@ -27,12 +28,13 @@ public class CookieAuthenticationManager implements AuthenticationManager {
 			throw new InsufficientAuthenticationException("Invalid Credentials");
 		}
 		
-		String role = jwtUtils.getRoleFromToken(authToken);
-		String username = jwtUtils.getUsernameFromToken(authToken);
+		JwtDataWrapper jwtData = jwtUtils.parse(authToken);
+		
+		String role = jwtData.getRole();
+		String username = jwtData.getUsername();
 		
 		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(role));
-		
 		return new UsernamePasswordAuthenticationToken(username, username, authorities);
 	}
 
