@@ -29,12 +29,12 @@ public class AuthenticationController {
 
 	@GetMapping("/login/student")
 	public String getLoginStudentPage() {
-		return "login_student";
+		return "student/login_student";
 	}
 	
 	@GetMapping("/signup/student")
 	public String getSignupStudentPage() {
-		return "signup_student";
+		return "student/signup_student";
 	}
 	
 	@PostMapping("/signup/student")
@@ -61,12 +61,12 @@ public class AuthenticationController {
 	
 	@GetMapping("/login/teacher")
 	public String getLoginTeacherPage() {
-		return "login_teacher";
+		return "teacher/login_teacher";
 	}
 	
 	@GetMapping("/signup/teacher")
 	public String getSignupPage() {
-		return "signup_teacher";
+		return "teacher/signup_teacher";
 	}
 	
 	@PostMapping("/signup/teacher")
