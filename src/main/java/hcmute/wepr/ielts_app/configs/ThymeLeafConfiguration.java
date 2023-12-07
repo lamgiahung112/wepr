@@ -12,7 +12,7 @@ public class ThymeLeafConfiguration {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setPrefix("META-INF/views/"); // Location of your templates
         templateResolver.setSuffix(".html");
-        templateResolver.setTemplateMode(TemplateMode.HTML);
+        templateResolver.setTemplateMode(TemplateMode.HTML); //
         return templateResolver;
     }
 }
