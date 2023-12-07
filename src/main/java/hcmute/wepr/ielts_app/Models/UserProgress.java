@@ -1,14 +1,14 @@
 package hcmute.wepr.ielts_app.Models;
 
-import java.time.LocalDateTime;
 
-import jakarta.persistence.Column;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,18 +16,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "purchase_transaction")
+@Table(name = "user_progress")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class PurchaseTransaction {
+public class UserProgress {
 	@EmbeddedId
-	private PurchaseTransactionId purchaseTransactionId;
+	private UserProgressId userProgressId;
 	
-	@Column(name = "created_at", columnDefinition = "DATETIME")
-	private LocalDateTime createdAt;
-	private float amount;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "lesson_id")
+	private Lesson lesson;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("userId")
@@ -38,5 +38,4 @@ public class PurchaseTransaction {
 	@MapsId("courseId")
 	@JoinColumn(name = "course_id")
 	private Course course;
-	
 }

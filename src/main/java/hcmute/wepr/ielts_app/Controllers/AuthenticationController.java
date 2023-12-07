@@ -24,8 +24,8 @@ public class AuthenticationController {
 	@Value("${auth.cookie.name}")
 	private String COOKIE_NAME;
 	
-	@Autowired
-	private StudentServiceInterface studentService;
+	//@Autowired
+	//private StudentServiceInterface studentService;
 
 	@GetMapping("/login/student")
 	public String getLoginStudentPage() {
@@ -39,7 +39,7 @@ public class AuthenticationController {
 	
 	@PostMapping("/signup/student")
 	public String signupStudent(@ModelAttribute SignUpUserRequest params) {
-		studentService.createNewStudent(params);
+		//studentService.createNewStudent(params);
 		return "redirect:/auth/login/student";
 	}
 	
@@ -47,13 +47,13 @@ public class AuthenticationController {
 	public void loginStudent(@RequestParam(value = "username", required = true) String username,
 			@RequestParam(value = "password", required = true) String password,
 			HttpServletResponse response) throws IOException {
-		String cookieToken = studentService.authenticateAndGetCredentials(username, password);
-		Cookie cookie = new Cookie(COOKIE_NAME, cookieToken);
-		cookie.setHttpOnly(true);
-		cookie.setDomain("localhost");
-		cookie.setPath("/");
-		cookie.setMaxAge(Integer.MAX_VALUE);
-		response.addCookie(cookie);
+		//String cookieToken = studentService.authenticateAndGetCredentials(username, password);
+		//Cookie cookie = new Cookie(COOKIE_NAME, cookieToken);
+		//cookie.setHttpOnly(true);
+		//cookie.setDomain("localhost");
+		//cookie.setPath("/");
+		//cookie.setMaxAge(Integer.MAX_VALUE);
+		//response.addCookie(cookie);
 		response.sendRedirect("/dashboard");
 	}
 	
@@ -71,7 +71,7 @@ public class AuthenticationController {
 	
 	@PostMapping("/signup/teacher")
 	public String signupTeacher(@ModelAttribute SignUpUserRequest params) {
-		studentService.createNewStudent(params);
+		//studentService.createNewStudent(params);
 		return "redirect:/auth/login/teacher";
 	}
 	
@@ -79,13 +79,13 @@ public class AuthenticationController {
 	public void loginTeacher(@RequestParam(value = "username", required = true) String username,
 			@RequestParam(value = "password", required = true) String password,
 			HttpServletResponse response) throws IOException {
-		String cookieToken = studentService.authenticateAndGetCredentials(username, password);
-		Cookie cookie = new Cookie(COOKIE_NAME, cookieToken);
-		cookie.setHttpOnly(true);
-		cookie.setDomain("localhost");
-		cookie.setPath("/");
-		cookie.setMaxAge(Integer.MAX_VALUE);
-		response.addCookie(cookie);
+		//String cookieToken = studentService.authenticateAndGetCredentials(username, password);
+		//Cookie cookie = new Cookie(COOKIE_NAME, cookieToken);
+		//cookie.setHttpOnly(true);
+		//cookie.setDomain("localhost");
+		//cookie.setPath("/");
+		//cookie.setMaxAge(Integer.MAX_VALUE);
+		//response.addCookie(cookie);
 		response.sendRedirect("/dashboard");
 	}
 }

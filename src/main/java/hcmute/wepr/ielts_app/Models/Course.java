@@ -1,99 +1,61 @@
 package hcmute.wepr.ielts_app.Models;
 
-import jakarta.persistence.*;
-
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
+import hcmute.wepr.ielts_app.Models.enums.DifficultLevel;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
-@Table(name="course")
+@Table(name = "course")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Course {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="course_id")
-    private Long id;
-    private String courseName;
-    private String courseDescription;
-    private String coverImage;
-    private Date createdAt;
-    private Double price;
-    private int level;
-    private Date updatedAt;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="author_id", foreignKey = @ForeignKey(name="FK_course_teacher"))
-    Teacher teacher;
-
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    Set<Lesson> lessons;
-
-    @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    Set<PurchaseTransaction> purchaseTransactions;
-
-    public String getCourseName() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
-    }
-
-    public String getCourseDescription() {
-        return courseDescription;
-    }
-
-    public void setCourseDescription(String courseDescription) {
-        this.courseDescription = courseDescription;
-    }
-
-    public String getCoverImage() {
-        return coverImage;
-    }
-
-    public void setCoverImage(String coverImage) {
-        this.coverImage = coverImage;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Double getPrice() {
-        return price;
-    }
-
-    public void setPrice(Double price) {
-        this.price = price;
-    }
-
-    public int getLevel() {
-        return level;
-    }
-
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "course_id")
+	private int courseId;
+	@Column(name = "course_name", columnDefinition = "NVARCHAR(255)")
+	private String courseName;
+	@Column(columnDefinition = "NVARCHAR(255)")
+	private String description;
+	@Column(name = "cover_image", columnDefinition = "VARCHAR(255)")
+	private String coverImage;
+	@Column(name = "created_at", columnDefinition = "DATETIME")
+	private LocalDateTime createdAt;
+	@Column(name = "updated_at", columnDefinition = "DATETIME")
+	private LocalDateTime updatedAt;
+	private float price;
+	@Enumerated(EnumType.STRING)
+	@Column(columnDefinition = "VARCHAR(20)")
+	private DifficultLevel level;
+	
+	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private Set<CartItem> cartItems = new HashSet<>();
+	
+	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private Set<PurchaseTransaction> purchaseTransactions = new HashSet<>();
+	
+	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private Set<Lesson> lessons = new HashSet<>();
+	
+	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private Set<UserProgress> userProgresses = new HashSet<>();
 }

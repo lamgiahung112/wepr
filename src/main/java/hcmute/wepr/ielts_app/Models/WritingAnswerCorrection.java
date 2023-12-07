@@ -1,24 +1,38 @@
 package hcmute.wepr.ielts_app.Models;
 
-import jakarta.persistence.*;
+import java.time.LocalDateTime;
+import java.util.Set;
 
-import java.util.Date;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Table(name="writing_answer_correction")
+@Table(name = "writing_answer_correction")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class WritingAnswerCorrection {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="writing_answer_correction_id")
-    private Long id;
-
-    private String correction;
-    private Date createdAt;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumns(value = {
-            @JoinColumn(name = "student_writing_answer_exercise_id", referencedColumnName = "writing_exercise_id"),
-            @JoinColumn(name = "student_writing_answer_attempt_id", referencedColumnName = "answer_attempt_id"),
-    }, foreignKey = @ForeignKey(name="FK_writing_answer_correction_student_writing_answer"))
-    private StudentWritingAnswer studentWritingAnswer;
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "writing_answer_correction_id")
+	private int writingAnswerCorrectionId;
+	@Column(columnDefinition = "NVARCHAR(MAX)")
+	private String correction;
+	@Column(name = "created_at", columnDefinition = "DATETIME")
+	private LocalDateTime createdAt;
+	
+	@OneToOne(fetch = FetchType.LAZY)
+	private StudentWritingAnswer studentWritingAnswer;
 }
