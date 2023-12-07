@@ -27,24 +27,56 @@ public class AuthenticationController {
 	@Autowired
 	private StudentServiceInterface studentService;
 
-	@GetMapping("/login")
-	public String test() {
-		return "index";
+	@GetMapping("/login/student")
+	public String getLoginStudentPage() {
+		return "login_student";
 	}
 	
-	@GetMapping("/signup")
-	public String getSignupPage() {
-		return "signup";
+	@GetMapping("/signup/student")
+	public String getSignupStudentPage() {
+		return "signup_student";
 	}
 	
 	@PostMapping("/signup/student")
 	public String signupStudent(@ModelAttribute SignUpUserRequest params) {
 		studentService.createNewStudent(params);
-		return "redirect:/auth/login";
+		return "redirect:/auth/login/student";
 	}
 	
-	@GetMapping("/login/student")
+	@PostMapping("/login/student")
 	public void loginStudent(@RequestParam(value = "username", required = true) String username,
+			@RequestParam(value = "password", required = true) String password,
+			HttpServletResponse response) throws IOException {
+		String cookieToken = studentService.authenticateAndGetCredentials(username, password);
+		Cookie cookie = new Cookie(COOKIE_NAME, cookieToken);
+		cookie.setHttpOnly(true);
+		cookie.setDomain("localhost");
+		cookie.setPath("/");
+		cookie.setMaxAge(Integer.MAX_VALUE);
+		response.addCookie(cookie);
+		response.sendRedirect("/dashboard");
+	}
+	
+	///// TEACHER AUTH
+	
+	@GetMapping("/login/teacher")
+	public String getLoginTeacherPage() {
+		return "login_teacher";
+	}
+	
+	@GetMapping("/signup/teacher")
+	public String getSignupPage() {
+		return "signup_teacher";
+	}
+	
+	@PostMapping("/signup/teacher")
+	public String signupTeacher(@ModelAttribute SignUpUserRequest params) {
+		studentService.createNewStudent(params);
+		return "redirect:/auth/login/teacher";
+	}
+	
+	@PostMapping("/login/teacher")
+	public void loginTeacher(@RequestParam(value = "username", required = true) String username,
 			@RequestParam(value = "password", required = true) String password,
 			HttpServletResponse response) throws IOException {
 		String cookieToken = studentService.authenticateAndGetCredentials(username, password);

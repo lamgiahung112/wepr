@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Sign up student</title>
+<link rel="stylesheet"
+	href="/webjars/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+	<div th:replace="fragments/navbar_student :: nav"></div>
+	<div class="container mt-5">
+		<div class="row justify-content-center">
+			<div class="col-md-6">
+				<h1 style="width: 100%; text-align: center;">Sign up as a student!</h1>
+				<form action="/auth/signup/student" method="post">
+					<div class="form-group">
+						<label for="username">Username:</label> <input type="text"
+							class="form-control" id="username" name="username" required>
+					</div>
+					<div class="form-group">
+						<label for="password">Password:</label> <input type="password"
+							class="form-control" id="password" name="password" required>
+					</div>
+					<div class="form-group">
+						<label for="name">Full name:</label> <input type="text"
+							class="form-control" id="name" name="name" required>
+					</div>
+					<div class="form-group">
+						<label for="email">Email:</label> <input type="email"
+							class="form-control" id="email" name="email" required>
+					</div>
+					<p class="text-muted">
+						Already has an account? <a href="/auth/login/student">Click
+							here to log in!</a>
+					</p>
+					<button type="submit" class="btn btn-primary">Login</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
