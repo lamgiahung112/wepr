@@ -1,65 +1,47 @@
 package hcmute.wepr.ielts_app.Models;
 
-import jakarta.persistence.*;
 
-import java.util.Set;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
-@Table(name="lesson")
+@Table(name = "lesson")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class Lesson {
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name="lesson_id")
-    private Long id;
-    private String title;
-    private String description;
-    private String video;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="course_id", foreignKey = @ForeignKey(name="FK_lesson_course"))
-    private Course course;
-
-    @OneToMany(mappedBy = "lesson", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    Set<MultipleChoiceExercise> multipleChoiceExercises;
-
-    @OneToMany(mappedBy = "lesson", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    Set<WritingExercise> writingExercises;
-
-    @OneToMany(mappedBy = "lesson", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    Set<AnswerAttempt> answerAttempts;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getVideo() {
-        return video;
-    }
-
-    public void setVideo(String video) {
-        this.video = video;
-    }
-
-    public void setCourse(Course course) {
-        this.course = course;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column(name = "lesson_id")
+	private int lessonId;
+	@Column(columnDefinition = "VARCHAR(255)")
+	private String video;
+	@Column(columnDefinition = "NVARCHAR(255)")
+	private String title;
+	@Column(columnDefinition = "NVARCHAR(255)")
+	private String description;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "course_id")
+	private Course course;
+	
+	@OneToOne(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private UserProgress userProgress;
+	
+	@OneToOne(mappedBy = "lesson", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+	private WritingExercise writingExercise;
 }

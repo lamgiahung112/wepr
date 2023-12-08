@@ -8,8 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import hcmute.wepr.ielts_app.Models.Student;
-import hcmute.wepr.ielts_app.Models.Teacher;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
