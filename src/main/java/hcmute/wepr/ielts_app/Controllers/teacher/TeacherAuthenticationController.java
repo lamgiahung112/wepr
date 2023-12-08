@@ -12,9 +12,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import hcmute.wepr.ielts_app.Models.ApplicationUser;
+import hcmute.wepr.ielts_app.Models.UserProfile;
 import hcmute.wepr.ielts_app.Models.enums.Role;
+import hcmute.wepr.ielts_app.Services.Interfaces.TeacherServiceInterface;
 import hcmute.wepr.ielts_app.Services.Interfaces.UserServiceInterface;
+import hcmute.wepr.ielts_app.Utilities.Requests.SignUpTeacherRequest;
 import hcmute.wepr.ielts_app.Utilities.Requests.SignUpUserRequest;
+import hcmute.wepr.ielts_app.repositories.UserProfileRepositoryInterface;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -27,6 +32,9 @@ public class TeacherAuthenticationController {
 	
 	@Autowired
 	private UserServiceInterface userService;
+	
+	@Autowired
+	private TeacherServiceInterface teacherService;
 
 	@GetMapping("/login")
 	public String getLoginPage() {
@@ -50,8 +58,9 @@ public class TeacherAuthenticationController {
 	}
 	
 	@PostMapping("/signup")
-	public String signup(@ModelAttribute SignUpUserRequest params) {
-		userService.createUser(params.getUsername(), params.getPassword(), Role.ROLE_TEACHER, params.getEmail(), 0);
+	public String signup(@ModelAttribute SignUpTeacherRequest params) {
+		ApplicationUser user = userService.createUser(params.getUsername(), params.getPassword(), Role.ROLE_TEACHER, params.getEmail(), 0);
+		teacherService.createTeacherProfile(user, params);
 		return "redirect:/auth/teacher/login";
 	}
 	
