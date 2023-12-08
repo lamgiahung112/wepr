@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import hcmute.wepr.ielts_app.Models.ApplicationUser;
+import hcmute.wepr.ielts_app.Models.enums.Role;
 import hcmute.wepr.ielts_app.Services.Interfaces.UserServiceInterface;
 import hcmute.wepr.ielts_app.Utilities.JwtDataWrapper;
 import hcmute.wepr.ielts_app.Utilities.JwtUtils;
@@ -44,5 +45,25 @@ public class UserService implements UserServiceInterface {
 				.build();
 		return jwtUtils.generateToken(data);
 	}
+
+	@Override
+	public void createUser(String username, String password, String role, String email, float balance) {
+		ApplicationUser user = new ApplicationUser();
+		user.setUsername(username);
+		user.setHashPassword(passwordEncoder.encode(password));
+		if (role.equals("ADMIN")) {
+			user.setRole(Role.ROLE_ADMIN);
+		} else if (role.equals("STUDENT")) {
+			user.setRole(Role.ROLE_STUDENT);
+		} else if (role.equals("TEACHER")) {
+			user.setRole(Role.ROLE_TEACHER);
+		}
+		user.setEmail(email);
+		user.setBalance(balance);
+		
+		userRepository.save(user);
+	}
+
+	
 
 }
