@@ -33,15 +33,15 @@ public class ApplicationUser {
 	@Column(name = "user_id", unique = true)
 	private int userId;
 	
-	@Column(columnDefinition = "VARCHAR(30)")
+	@Column(columnDefinition = "VARCHAR(60)")
 	private String username;
 	@Column(name = "hash_password", columnDefinition = "VARCHAR(255)")
 	private String hashPassword;
-	@Column(columnDefinition = "VARCHAR(40)")
+	@Column(columnDefinition = "VARCHAR(60)")
 	private String email;
 	private float balance;
 	@Enumerated(EnumType.STRING)
-	@Column(columnDefinition = "VARCHAR(20)")
+	@Column(columnDefinition = "VARCHAR(30)")
 	private Role role;
 	
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
