@@ -30,7 +30,7 @@ import lombok.Setter;
 public class ApplicationUser {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "user_id")
+	@Column(name = "user_id", unique = true)
 	private int userId;
 	
 	@Column(columnDefinition = "VARCHAR(30)")
@@ -41,7 +41,7 @@ public class ApplicationUser {
 	private String email;
 	private float balance;
 	@Enumerated(EnumType.STRING)
-	@Column(columnDefinition = "VARCHAR(10)")
+	@Column(columnDefinition = "VARCHAR(20)")
 	private Role role;
 	
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)

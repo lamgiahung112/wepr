@@ -17,7 +17,6 @@ public class IeltsAppApplication {
 	@Bean
 	CommandLineRunner runner(UserServiceInterface userService) {
 		return args -> {
-			//userService.createUser("bananback", "bananaback", "ADMIN", "votrongtin882003@gmail.com", 0);
 		};
 	}
 }

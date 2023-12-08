@@ -47,21 +47,20 @@ public class UserService implements UserServiceInterface {
 	}
 
 	@Override
-	public void createUser(String username, String password, String role, String email, float balance) {
-		ApplicationUser user = new ApplicationUser();
-		user.setUsername(username);
-		user.setHashPassword(passwordEncoder.encode(password));
-		if (role.equals("ADMIN")) {
-			user.setRole(Role.ROLE_ADMIN);
-		} else if (role.equals("STUDENT")) {
-			user.setRole(Role.ROLE_STUDENT);
-		} else if (role.equals("TEACHER")) {
-			user.setRole(Role.ROLE_TEACHER);
+	public void createUser(String username, String password, Role role, String email, float balance) {
+		Optional<ApplicationUser> existingUser = userRepository.findByUsername(username);
+		if (existingUser.isEmpty()) {
+			ApplicationUser user = new ApplicationUser();
+			user.setUsername(username);
+			user.setHashPassword(passwordEncoder.encode(password));
+			user.setRole(role);
+			user.setEmail(email);
+			user.setBalance(balance);
+			
+			userRepository.save(user);
+		} else {
+			// response error
 		}
-		user.setEmail(email);
-		user.setBalance(balance);
-		
-		userRepository.save(user);
 	}
 
 	
