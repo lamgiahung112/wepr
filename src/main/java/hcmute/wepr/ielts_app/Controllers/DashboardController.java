@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import hcmute.wepr.ielts_app.security.annotations.IsAdmin;
+
 @Controller
 @CrossOrigin
 @RequestMapping("/dashboard")
@@ -12,5 +14,10 @@ public class DashboardController {
 	@GetMapping
 	public String dashboard() {
 		return "dashboard";
+	}
+	@IsAdmin
+	@GetMapping("/admin")
+	public String adminDashboard() {
+		return "secured";
 	}
 }

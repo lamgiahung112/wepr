@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import hcmute.wepr.ielts_app.Models.enums.Role;
 import hcmute.wepr.ielts_app.Services.Interfaces.StudentServiceInterface;
 import hcmute.wepr.ielts_app.Services.Interfaces.UserServiceInterface;
 import hcmute.wepr.ielts_app.Utilities.Requests.SignUpUserRequest;
@@ -41,7 +42,7 @@ public class AuthenticationController {
 	
 	@PostMapping("/signup/student")
 	public String signupStudent(@ModelAttribute SignUpUserRequest params) {
-//		studentService.createNewStudent(params);
+		userService.createUser(params.getUsername(), params.getPassword(), Role.ROLE_STUDENT, params.getEmail(), 0);
 		return "redirect:/auth/login/student";
 	}
 	
