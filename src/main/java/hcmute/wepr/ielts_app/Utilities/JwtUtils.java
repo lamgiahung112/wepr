@@ -50,7 +50,7 @@ public class JwtUtils {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put("id", data.getId());
 		claims.put("username", data.getUsername());
-		claims.put("name", data.getName());
+		claims.put("email", data.getEmail());
 		claims.put("role", data.getRole());
 		
 		return Jwts.builder()
@@ -65,7 +65,7 @@ public class JwtUtils {
 		Claims claims = getAllClaimsFromToken(token);
 		return JwtDataWrapper.builder()
 				.id(claims.get("id", String.class))
-				.name(claims.get("name", String.class))
+				.email(claims.get("email", String.class))
 				.username(claims.get("username", String.class))
 				.role(claims.get("role", String.class))
 				.build();

@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class JwtDataWrapper {
 	private String id;
-	private String name;
+	private String email;
 	private String username;
 	private String role;
 }
