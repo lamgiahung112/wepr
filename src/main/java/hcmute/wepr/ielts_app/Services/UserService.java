@@ -47,7 +47,7 @@ public class UserService implements UserServiceInterface {
 	}
 
 	@Override
-	public void createUser(String username, String password, Role role, String email, float balance) {
+	public ApplicationUser createUser(String username, String password, Role role, String email, float balance) {
 		Optional<ApplicationUser> existingUser = userRepository.findByUsername(username);
 		if (existingUser.isEmpty()) {
 			ApplicationUser user = new ApplicationUser();
@@ -57,9 +57,10 @@ public class UserService implements UserServiceInterface {
 			user.setEmail(email);
 			user.setBalance(balance);
 			
-			userRepository.save(user);
+			return userRepository.save(user);
 		} else {
 			// response error
+			return null;
 		}
 	}
 
