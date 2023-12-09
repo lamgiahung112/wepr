@@ -55,6 +55,47 @@
     max-height: 500px; /* Adjust the height as needed */
 }
 
+/* CSS for transition effect */
+#price-select-container {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+#price-select-container.show {
+    opacity: 1;
+    max-height: 500px; /* Adjust the height as needed */
+}
+
+/* CSS for transition effect */
+#rating-select-container {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+#rating-select-container.show {
+    opacity: 1;
+    max-height: 500px; /* Adjust the height as needed */
+}
+
+/* CSS for transition effect */
+#enrollment-select-container {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+#enrollment-select-container.show {
+    opacity: 1;
+    max-height: 500px; /* Adjust the height as needed */
+}
+
+
+
 .author-element {
 	border: 2px solid black;
 	border-radius: 5px;

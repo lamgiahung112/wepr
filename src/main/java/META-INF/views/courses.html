@@ -19,18 +19,16 @@
 				</div>
 				<!-- Sidebar content -->
 				<div class="sidebar-content">
-
 					<div id="accordion">
-
 						<div class="card">
 							<div class="card-header">
 								<a class="btn" data-bs-toggle="collapse" href="#collapseOne">
 									Filter
 								</a>
 							</div>
-							<div id="collapseOne" class="collapse show" data-bs-parent="#accordion">
+							<div id="collapseOne" class="collapse">
 								<div class="card-body">
-									<h3>Lorem ipsum..</h3>
+									<h3>Courses filter</h3>
 									<!-- Filter Button -->
 									<button id="addFilterBtn" class="btn btn-primary mt-3" data-bs-toggle="collapse"
 										data-bs-target="#filter-enable-container">Enable filter</button>
@@ -49,7 +47,8 @@
 										<div class="form-check form-switch ms-3 pb-3 pt-3">
 											<input class="form-check-input" type="checkbox" id="difficultyFilterSwitch"
 												name="darkmode" value="no">
-											<label class="form-check-label" for="difficultyFilterSwitch">Filter by difficulty</label>
+											<label class="form-check-label" for="difficultyFilterSwitch">Filter by
+												difficulty</label>
 										</div>
 									</div>
 
@@ -80,26 +79,75 @@
 												<div class="form-check form-switch ms-3 pt-3">
 													<input class="form-check-input" type="checkbox" id="priceSwitch"
 														name="darkmode" value="no">
-													<label class="form-check-label" for="mySwitch">Price</label>
+													<label class="form-check-label" for="priceSwitch">Price</label>
+													<div id="price-select-container">
+														<div id="price-range-select-sliders"
+															class="d-flex flex-row justify-content-around mt-3">
+															<label for="customRangeMin" class="form-label">Min
+																price</label>
+															<input type="range" class="form-range" min="0" step="100000"
+																max="10000000" value="0" id="customRangeMin">
+															<label for="customRangeMax" class="form-label">Max
+																price</label>
+															<input type="range" class="form-range" min="0" step="100000"
+																max="10000000" value="10000000" id="customRangeMax">
+														</div>
+														<div id="price-range-notify">
+															<p>Price from 0 to 10000000 VND</p>
+														</div>
+													</div>
 												</div>
 												<div class="form-check form-switch ms-3 pt-3">
 													<input class="form-check-input" type="checkbox" id="ratingSwitch"
 														name="darkmode" value="no">
-													<label class="form-check-label" for="mySwitch">Rating</label>
+													<label class="form-check-label" for="ratingSwitch">Rating</label>
+													<div id="rating-select-container">
+														<div id="rating-range-select-sliders"
+															class="d-flex flex-row justify-content-around mt-3">
+															<label for="customRatingMin" class="form-label">Min
+																rating</label>
+															<input type="range" class="form-range" min="0" step="1"
+																max="5" value="0" id="customRatingMin">
+															<label for="customRangeMax" class="form-label">Max
+																rating</label>
+															<input type="range" class="form-range" min="0" step="1"
+																max="5" value="5" id="customRatingMax">
+														</div>
+														<div id="rating-range-notify">
+															<p>Rating from 0 to 5 stars</p>
+														</div>
+													</div>
 												</div>
 												<div class="form-check form-switch ms-3 pb-3 pt-3">
 													<input class="form-check-input" type="checkbox"
 														id="enrollmentSwitch" name="darkmode" value="no">
-													<label class="form-check-label" for="mySwitch">Enrollment</label>
+													<label class="form-check-label" for="enrollmentSwitch">Enrollment</label>
+													<div id="enrollment-select-container">
+														<div id="enrollment-range-select-sliders"
+															class="d-flex flex-row justify-content-around mt-3">
+															<label for="customEnrollmentMin" class="form-label">Min </label>
+															<input type="range" class="form-range" min="0" step="100"
+																max="10000" value="0" id="customEnrollmentMin">
+															<label for="customEnrollmentMax" class="form-label">Max </label>
+															<input type="range" class="form-range" min="0" step="100"
+																max="10000" value="10000" id="customEnrollmentMax">
+														</div>
+														<div id="enrollment-range-notify">
+															<p>0 to 10000 people enrolled</p>
+														</div>
+													</div>
 												</div>
 											</div>
 										</div>
 										<div id="filter-by-difficulty" class="ms-3">
 											<h5>With difficulty: </h5>
 											<div class="d-flex flex-row mt-3 justify-content-around mb-3">
-												<button id = "beginner-btn" type="button" class="btn btn-outline-success">BEGINNER</button>
-												<button id = "immediate-btn" type="button" class="btn btn-outline-warning">IMMEDIATE</button>
-												<button id = "advanced-btn" type="button" class="btn btn-outline-danger">ADVANCED</button>
+												<button id="beginner-btn" type="button"
+													class="btn btn-outline-success">BEGINNER</button>
+												<button id="immediate-btn" type="button"
+													class="btn btn-outline-warning">IMMEDIATE</button>
+												<button id="advanced-btn" type="button"
+													class="btn btn-outline-danger">ADVANCED</button>
 											</div>
 
 										</div>
@@ -115,9 +163,9 @@
 									Sort
 								</a>
 							</div>
-							<div id="collapseTwo" class="collapse" data-bs-parent="#accordion">
+							<div id="collapseTwo" class="collapse">
 								<div class="card-body">
-									Lorem ipsum..
+									Sorting the result...
 								</div>
 							</div>
 						</div>
@@ -128,15 +176,15 @@
 									Pagination
 								</a>
 							</div>
-							<div id="collapseThree" class="collapse" data-bs-parent="#accordion">
+							<div id="collapseThree" class="collapse">
 								<div class="card-body">
-									Lorem ipsum..
+									Paginating the result...
 								</div>
 							</div>
 						</div>
 
 					</div>
-
+					<button type="button" class="btn btn-primary mt-3">Get results</button>
 				</div>
 			</div>
 			<!-- Content -->

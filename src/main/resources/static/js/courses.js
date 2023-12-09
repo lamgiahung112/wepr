@@ -15,6 +15,104 @@ $(document).ready(function() {
 			$('#filter-by-range').removeClass('show'); // Hide the author filter
 		}
 	});
+	
+	$('#priceSwitch').change(function() {
+		if (this.checked) {
+			$('#price-select-container').addClass('show'); // Show the author filter
+		} else {
+			$('#price-select-container').removeClass('show'); // Hide the author filter
+		}
+	});
+	
+	$('#ratingSwitch').change(function() {
+		if (this.checked) {
+			$('#rating-select-container').addClass('show'); // Show the author filter
+		} else {
+			$('#rating-select-container').removeClass('show'); // Hide the author filter
+		}
+	});
+	
+	$('#enrollmentSwitch').change(function() {
+		if (this.checked) {
+			$('#enrollment-select-container').addClass('show'); // Show the author filter
+		} else {
+			$('#enrollment-select-container').removeClass('show'); // Hide the author filter
+		}
+	});
+	
+	function updateRangeNotify() {
+        var minPrice = parseInt($('#customRangeMin').val());
+        var maxPrice = parseInt($('#customRangeMax').val());
+        var notifyMessage = "";
+
+        if (maxPrice < minPrice) {
+            notifyMessage = "Invalid price range"; // Show message for invalid range
+        } else {
+            notifyMessage = "Price from " + minPrice + " VND " + " to " + maxPrice + " VND";
+        }
+
+        $('#price-range-notify p').text(notifyMessage);
+    }
+
+    // Initial update on load
+    updateRangeNotify();
+
+    // Event listeners for range slider change
+    $('#customRangeMin, #customRangeMax').on('input', function() {
+        updateRangeNotify();
+    });
+
+	$('#difficultyFilterSwitch').change(function() {
+		if (this.checked) {
+			$('#filter-by-difficulty').addClass('show'); // Show the author filter
+		} else {
+			$('#filter-by-difficulty').removeClass('show'); // Hide the author filter
+		}
+	});
+	
+	function updateRatingNotify() {
+        var minRating = parseInt($('#customRatingMin').val());
+        var maxRating = parseInt($('#customRatingMax').val());
+        var notifyMessage = "";
+
+        if (maxRating < minRating) {
+            notifyMessage = "Invalid rating range"; // Show message for invalid range
+        } else {
+            notifyMessage = "Rating from " + minRating + " star " + " to " + maxRating + " stars";
+        }
+
+        $('#rating-range-notify p').text(notifyMessage);
+    }
+
+    // Initial update on load
+    updateRatingNotify();
+
+    // Event listeners for range slider change
+    $('#customRatingMin, #customRatingMax').on('input', function() {
+        updateRatingNotify();
+    });
+    
+    function updateEnrollmentNotify() {
+        var minEnrollment = parseInt($('#customEnrollmentMin').val());
+        var maxEnrollment = parseInt($('#customEnrollmentMax').val());
+        var notifyMessage = "";
+
+        if (maxEnrollment < minEnrollment) {
+            notifyMessage = "Invalid enrollment range"; // Show message for invalid range
+        } else {
+            notifyMessage = "From " + minEnrollment + " to " + maxEnrollment + " people enrolled";
+        }
+
+        $('#enrollment-range-notify p').text(notifyMessage);
+    }
+
+    // Initial update on load
+    updateEnrollmentNotify();
+
+    // Event listeners for range slider change
+    $('#customEnrollmentMin, #customEnrollmentMax').on('input', function() {
+        updateEnrollmentNotify();
+    });
 
 	$('#difficultyFilterSwitch').change(function() {
 		if (this.checked) {
