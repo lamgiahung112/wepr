@@ -1,0 +1,61 @@
+.sidebar-collapsed .bg-light {
+	width: 60px;
+}
+
+.sidebar-collapsed .sidebar-content {
+	display: none;
+}
+
+#filter-enable-container {
+	background-color: deepskyblue;
+	border-radius: 20px;
+}
+
+#sidebar-filters {
+	border: 3px solid cadetblue;
+	border-radius: 10px;
+}
+
+/* CSS for transition effect */
+#filter-by-author {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+#filter-by-author.show {
+    opacity: 1;
+    max-height: 500px; /* Adjust the height as needed */
+}
+
+/* CSS for transition effect */
+#filter-by-range {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+#filter-by-range.show {
+    opacity: 1;
+    max-height: 500px; /* Adjust the height as needed */
+}
+
+/* CSS for transition effect */
+#filter-by-difficulty {
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+#filter-by-difficulty.show {
+    opacity: 1;
+    max-height: 500px; /* Adjust the height as needed */
+}
+
+.author-element {
+	border: 2px solid black;
+	border-radius: 5px;
+}

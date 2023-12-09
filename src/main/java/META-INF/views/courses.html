@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Course browsing</title>
+	<link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/courses.css">
+	<script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+	<script src="/js/courses.js"></script>
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<!-- Sidebar -->
+			<div class="sidebar col-md-3 bg-light">
+				<div class="d-flex justify-content-between align-items-center">
+					<h3>Sidebar</h3>
+				</div>
+				<!-- Sidebar content -->
+				<div class="sidebar-content">
+
+					<div id="accordion">
+
+						<div class="card">
+							<div class="card-header">
+								<a class="btn" data-bs-toggle="collapse" href="#collapseOne">
+									Filter
+								</a>
+							</div>
+							<div id="collapseOne" class="collapse show" data-bs-parent="#accordion">
+								<div class="card-body">
+									<h3>Lorem ipsum..</h3>
+									<!-- Filter Button -->
+									<button id="addFilterBtn" class="btn btn-primary mt-3" data-bs-toggle="collapse"
+										data-bs-target="#filter-enable-container">Enable filter</button>
+									<div id="filter-enable-container" class="container-fluid mt-3 collapse">
+										<div class="form-check form-switch ms-3 pt-3">
+											<input class="form-check-input" type="checkbox" id="authorFilterSwitch"
+												name="darkmode" value="no">
+											<label class="form-check-label" for="mySwitch">Filter by author</label>
+										</div>
+										<div class="form-check form-switch ms-3 pt-3">
+											<input class="form-check-input" type="checkbox" id="rangeFilterSwitch"
+												name="darkmode" value="no">
+											<label class="form-check-label" for="rangeFilterSwitch">Filter by
+												range</label>
+										</div>
+										<div class="form-check form-switch ms-3 pb-3 pt-3">
+											<input class="form-check-input" type="checkbox" id="difficultyFilterSwitch"
+												name="darkmode" value="no">
+											<label class="form-check-label" for="difficultyFilterSwitch">Filter by difficulty</label>
+										</div>
+									</div>
+
+									<!-- Container for selected filters -->
+									<div id="sidebar-filters" class="mt-3">
+										<div id="filter-by-author" class="ms-3">
+											<h5>Show courses of authors: </h5>
+											<div class="d-flex flex-row p-2 bd-highlight justify-content-around">
+												<!-- Dropdown for filtering courses by authors -->
+												<select id="authorDropdown" class="mt-2 flex-fill">
+													<option value="author1">Author 1</option>
+													<option value="author2">Author 2</option>
+													<option value="author3">Author 3</option>
+													<!-- Add more options as needed -->
+												</select>
+												<button id="addAuthorBtn"
+													class="btn btn-primary mt-2 ms-3 w-25">Add</button>
+											</div>
+											<!-- Container to display selected authors -->
+											<div id="authors-container"
+												class="d-flex flex-row flex-wrap justify-content-around mt-3">
+												<!-- Selected authors will be added here -->
+											</div>
+										</div>
+										<div id="filter-by-range" class="ms-3">
+											<div id="range-filter-enable-container" class="container-fluid mt-3">
+												<h5>With range: </h5>
+												<div class="form-check form-switch ms-3 pt-3">
+													<input class="form-check-input" type="checkbox" id="priceSwitch"
+														name="darkmode" value="no">
+													<label class="form-check-label" for="mySwitch">Price</label>
+												</div>
+												<div class="form-check form-switch ms-3 pt-3">
+													<input class="form-check-input" type="checkbox" id="ratingSwitch"
+														name="darkmode" value="no">
+													<label class="form-check-label" for="mySwitch">Rating</label>
+												</div>
+												<div class="form-check form-switch ms-3 pb-3 pt-3">
+													<input class="form-check-input" type="checkbox"
+														id="enrollmentSwitch" name="darkmode" value="no">
+													<label class="form-check-label" for="mySwitch">Enrollment</label>
+												</div>
+											</div>
+										</div>
+										<div id="filter-by-difficulty" class="ms-3">
+											<h5>With difficulty: </h5>
+											<div class="d-flex flex-row mt-3 justify-content-around mb-3">
+												<button id = "beginner-btn" type="button" class="btn btn-outline-success">BEGINNER</button>
+												<button id = "immediate-btn" type="button" class="btn btn-outline-warning">IMMEDIATE</button>
+												<button id = "advanced-btn" type="button" class="btn btn-outline-danger">ADVANCED</button>
+											</div>
+
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="card">
+							<div class="card-header">
+								<a class="collapsed btn" data-bs-toggle="collapse" href="#collapseTwo">
+									Sort
+								</a>
+							</div>
+							<div id="collapseTwo" class="collapse" data-bs-parent="#accordion">
+								<div class="card-body">
+									Lorem ipsum..
+								</div>
+							</div>
+						</div>
+
+						<div class="card">
+							<div class="card-header">
+								<a class="collapsed btn" data-bs-toggle="collapse" href="#collapseThree">
+									Pagination
+								</a>
+							</div>
+							<div id="collapseThree" class="collapse" data-bs-parent="#accordion">
+								<div class="card-body">
+									Lorem ipsum..
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+			<!-- Content -->
+			<div class="col-md-9">
+				<h1>This is courses page</h1>
+				<!-- Main content -->
+				<p>Main content goes here...</p>
+			</div>
+		</div>
+	</div>
+
+	<!-- Bootstrap Bundle with Popper.js -->
+	<script src="/webjars/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
