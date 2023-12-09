@@ -18,80 +18,86 @@
 
 /* CSS for transition effect */
 #filter-by-author {
-    opacity: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease, opacity 0.3s ease;
+	opacity: 0;
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 
 #filter-by-author.show {
-    opacity: 1;
-    max-height: 500px; /* Adjust the height as needed */
+	opacity: 1;
+	max-height: 500px;
+	/* Adjust the height as needed */
 }
 
 /* CSS for transition effect */
 #filter-by-range {
-    opacity: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease, opacity 0.3s ease;
+	opacity: 0;
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 
 #filter-by-range.show {
-    opacity: 1;
-    max-height: 500px; /* Adjust the height as needed */
+	opacity: 1;
+	max-height: 500px;
+	/* Adjust the height as needed */
 }
 
 /* CSS for transition effect */
 #filter-by-difficulty {
-    opacity: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease, opacity 0.3s ease;
+	opacity: 0;
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 
 #filter-by-difficulty.show {
-    opacity: 1;
-    max-height: 500px; /* Adjust the height as needed */
+	opacity: 1;
+	max-height: 500px;
+	/* Adjust the height as needed */
 }
 
 /* CSS for transition effect */
 #price-select-container {
-    opacity: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease, opacity 0.3s ease;
+	opacity: 0;
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 
 #price-select-container.show {
-    opacity: 1;
-    max-height: 500px; /* Adjust the height as needed */
+	opacity: 1;
+	max-height: 500px;
+	/* Adjust the height as needed */
 }
 
 /* CSS for transition effect */
 #rating-select-container {
-    opacity: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease, opacity 0.3s ease;
+	opacity: 0;
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 
 #rating-select-container.show {
-    opacity: 1;
-    max-height: 500px; /* Adjust the height as needed */
+	opacity: 1;
+	max-height: 500px;
+	/* Adjust the height as needed */
 }
 
 /* CSS for transition effect */
 #enrollment-select-container {
-    opacity: 0;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease, opacity 0.3s ease;
+	opacity: 0;
+	max-height: 0;
+	overflow: hidden;
+	transition: max-height 0.3s ease, opacity 0.3s ease;
 }
 
 #enrollment-select-container.show {
-    opacity: 1;
-    max-height: 500px; /* Adjust the height as needed */
+	opacity: 1;
+	max-height: 500px;
+	/* Adjust the height as needed */
 }
 
 
@@ -99,4 +105,20 @@
 .author-element {
 	border: 2px solid black;
 	border-radius: 5px;
+}
+
+.sort-mode-btn {
+	border: 2px solid black;
+}
+
+.rotate180 {
+	transform: rotate(180deg);
+	transition: transform 0.3s ease;
+	/* Smooth transition effect */
+}
+
+.rotate0 {
+	transform: rotate(0deg);
+	transition: transform 0.3s ease;
+	/* Smooth transition effect */
 }
