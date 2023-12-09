@@ -5,4 +5,6 @@ import hcmute.wepr.ielts_app.Utilities.Requests.CreateNewCourseRequest;
 
 public interface CourseServiceInterface {
 	Course createNewCourse(CreateNewCourseRequest request);
+
+	void generatesCourses();
 }
