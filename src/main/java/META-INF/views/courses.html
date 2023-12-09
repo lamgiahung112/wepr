@@ -121,14 +121,17 @@
 												<div class="form-check form-switch ms-3 pb-3 pt-3">
 													<input class="form-check-input" type="checkbox"
 														id="enrollmentSwitch" name="darkmode" value="no">
-													<label class="form-check-label" for="enrollmentSwitch">Enrollment</label>
+													<label class="form-check-label"
+														for="enrollmentSwitch">Enrollment</label>
 													<div id="enrollment-select-container">
 														<div id="enrollment-range-select-sliders"
 															class="d-flex flex-row justify-content-around mt-3">
-															<label for="customEnrollmentMin" class="form-label">Min </label>
+															<label for="customEnrollmentMin" class="form-label">Min
+															</label>
 															<input type="range" class="form-range" min="0" step="100"
 																max="10000" value="0" id="customEnrollmentMin">
-															<label for="customEnrollmentMax" class="form-label">Max </label>
+															<label for="customEnrollmentMax" class="form-label">Max
+															</label>
 															<input type="range" class="form-range" min="0" step="100"
 																max="10000" value="10000" id="customEnrollmentMax">
 														</div>
@@ -166,6 +169,52 @@
 							<div id="collapseTwo" class="collapse">
 								<div class="card-body">
 									Sorting the result...
+
+									<div
+										class="form-check form-switch ms-3 pb-3 pt-3 d-flex flex-row justify-content-start">
+										<div>
+											<input class="form-check-input" type="checkbox" id="nameSortSwitch"
+												name="darkmode" value="no">
+											<label class="form-check-label" for="nameSortSwitch">Sort by name</label>
+										</div>
+
+										<div id="sort-mode-btn1" class="sort-mode-btn rotate0 ms-3" width="24px"
+											height="24px">
+											<img src="/images/arrow.png" width="24px" height="24px" alt="Arrow Icon"
+												class="arrow-icon clickable">
+										</div>
+									</div>
+
+									<div
+										class="form-check form-switch ms-3 pb-3 pt-3 d-flex flex-row justify-content-start">
+										<div>
+											<input class="form-check-input" type="checkbox" id="priceSortSwitch"
+												name="darkmode" value="no">
+											<label class="form-check-label" for="priceSortSwitch">Sort by price</label>
+										</div>
+
+										<div id="sort-mode-btn2" class="sort-mode-btn rotate0 ms-3" width="24px"
+											height="24px">
+											<img src="/images/arrow.png" width="24px" height="24px" alt="Arrow Icon"
+												class="arrow-icon clickable">
+										</div>
+									</div>
+
+									<div
+										class="form-check form-switch ms-3 pb-3 pt-3 d-flex flex-row justify-content-start">
+										<div>
+											<input class="form-check-input" type="checkbox" id="ratingSortSwitch"
+												name="darkmode" value="no">
+											<label class="form-check-label" for="ratingSortSwitch">Sort by
+												rating</label>
+										</div>
+
+										<div id="sort-mode-btn3" class="sort-mode-btn rotate0 ms-3" width="24px"
+											height="24px">
+											<img src="/images/arrow.png" width="24px" height="24px" alt="Arrow Icon"
+												class="arrow-icon clickable">
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -178,13 +227,18 @@
 							</div>
 							<div id="collapseThree" class="collapse">
 								<div class="card-body">
-									Paginating the result...
+									<h5 class="mb-3">Items per page:</h5>
+									<div class="input-group mb-3">
+										<span class="input-group-text" id="paginationLabel">6</span>
+										<button id="decreaseButton" class="btn btn-secondary" type="button">-</button>
+										<button id="increaseButton" class="btn btn-secondary" type="button">+</button>
+									</div>
 								</div>
 							</div>
 						</div>
 
 					</div>
-					<button type="button" class="btn btn-primary mt-3">Get results</button>
+					<button id="get-result-btn" type="button" class="btn btn-primary mt-3">Get results</button>
 				</div>
 			</div>
 			<!-- Content -->
