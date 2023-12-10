@@ -134,7 +134,7 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#immediate-btn').click(function(event) {
+	$('#intermediate-btn').click(function(event) {
 		var button = $(this);
 		if (button.hasClass('btn-warning')) {
 			button.removeClass('btn-warning').addClass('btn-outline-warning');
@@ -288,12 +288,71 @@ $(document).ready(function() {
 			success: function(response) {
 				// Handle the successful response
 				console.log('Success!', response);
-				// Do something with the response data
+
+				// Function to generate the HTML structure for a single course
+				function createCourseCard(course) {
+					return `
+                <div class="col-md-3 mb-4">
+                    <div class="card course-card">
+                        <div class="course-img-section">
+                            <img src="https://via.placeholder.com/200x200" class="card-img-top course-img" alt="Course Image">
+                            <div class="d-flex flex-row justify-content-around course-img-btns">
+                                <a href="#" class="p-3"><img src="/images/favorite.png"></a>
+                                <a href="#" class="p-3"><img src="/images/shopping_cart.png"></a>
+                                <a href="#" class="p-3"><img src="/images/add.png"></a>
+                            </div>
+                        </div>
+                        <div class="card-body" style="background-color: #f8d7da;">
+                            <h5 class="card-title">${course.courseName}</h5>
+                            <p class="card-text">Price: $${course.price}</p>
+                            <p class="card-text">Rating: ${course.rating}</p>
+                            <div class="collapse" id="detailsCollapse${course.courseId}">
+                                <p>Additional details here...</p>
+                                <button class="btn btn-primary btn-details">See Details</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+				}
+
+				// Function to render the courses onto the courses-container
+				function renderCourses(courses) {
+					var coursesContainer = $('#courses-container'); // Get the courses container element
+
+					// Iterate through the courses and create HTML for each course
+					courses.forEach(function(course) {
+						var courseHTML = createCourseCard(course); // Generate HTML for a single course
+						coursesContainer.append(courseHTML); // Append the course HTML to the container
+					});
+				}
+
+				// Call the renderCourses function with the fetched course data
+				renderCourses(response); // Assuming response contains an array of course objects
 			},
 			error: function(xhr, status, error) {
 				// Handle errors
 				console.error('Error:', status, error);
 			}
 		});
+
+
 	});
+
+	// courses section 
+	/*$('.course-card').hover(
+		function() {
+			$(this).find('.collapse').collapse('show');
+		},
+		function() {
+			$(this).find('.collapse').collapse('hide');
+		}
+	);*/
+});
+
+// Use event delegation with .on() for hover on .course-card elements
+$(document).on('mouseenter', '.course-card', function() {
+	$(this).find('.collapse').collapse('show');
+}).on('mouseleave', '.course-card', function() {
+	$(this).find('.collapse').collapse('hide');
 });

@@ -122,3 +122,46 @@
 	transition: transform 0.3s ease;
 	/* Smooth transition effect */
 }
+
+.course-card {
+	transition: box-shadow 0.3s ease;
+}
+
+.course-card:hover {
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+
+
+.course-card img {
+	transition: transform 0.3s ease;
+}
+
+.course-img-section {
+	position: relative;
+}
+
+.course-img {
+	position: relative;
+}
+
+.course-img-btns {
+	position: absolute;
+	margin-top: -58px;
+	background-color: deepskyblue;
+	width: 100%;
+	
+	opacity: 0; /* Initially hide the buttons */
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease; /
+}
+
+.course-img-btns a:hover {
+	background-color: dodgerblue;
+}
+
+.course-card:hover .course-img-btns {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Smooth transition for visibility */
+}
