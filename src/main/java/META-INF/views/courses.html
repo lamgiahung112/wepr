@@ -147,8 +147,8 @@
 											<div class="d-flex flex-row mt-3 justify-content-around mb-3">
 												<button id="beginner-btn" type="button"
 													class="btn btn-outline-success">BEGINNER</button>
-												<button id="immediate-btn" type="button"
-													class="btn btn-outline-warning">IMMEDIATE</button>
+												<button id="intermediate-btn" type="button"
+													class="btn btn-outline-warning">INTERMEDIATE</button>
 												<button id="advanced-btn" type="button"
 													class="btn btn-outline-danger">ADVANCED</button>
 											</div>
@@ -246,66 +246,27 @@
 				<h1>This is courses page</h1>
 				<!-- Main content -->
 				<p>Main content goes here...</p>
-				<div class="row">
-					<div class="col-md-4 mb-4">
-						<div class="card">
-							<img src="https://via.placeholder.com/200x200" class="card-img-top" alt="Course Image">
+				<div id="courses-container" class="row">
+					<div class="col-md-3 mb-4">
+						<div class="card course-card">
+							<div class="course-img-section">
+								<img src="https://via.placeholder.com/200x200" class="card-img-top course-img" alt="Course Image">
+								<div class="d-flex flex-row justify-content-around course-img-btns" >
+									<a href="#" class="p-3"><img src="/images/favorite.png"></a>
+									<a href="#" class="p-3"><img src="/images/shopping_cart.png"></a>
+									<a href="#" class="p-3"><img src="/images/add.png"></a>
+								</div>
+							</div>
 							<div class="card-body" style="background-color: #f8d7da;">
 								<h5 class="card-title">Introduction to Programming</h5>
-								<p class="card-text">Author: John Doe</p>
+								<p class="card-text">Author: <a href="#">John Doe</a></p>
 								<p class="card-text">Price: $49.99</p>
 								<p class="card-text">Rating: 4.5</p>
-							</div>
-						</div>
-					</div>
+								<div class="collapse" id="detailsCollapse">
+									<p>Additional details here...</p>
+									<button class="btn btn-primary btn-details">See Details</button>
+								</div>
 
-					<div class="col-md-4 mb-4">
-						<div class="card">
-							<img src="https://via.placeholder.com/200x200" class="card-img-top" alt="Course Image">
-							<div class="card-body" style="background-color: #d4edda;">
-								<h5 class="card-title">Web Development Fundamentals</h5>
-								<p class="card-text">Author: Jane Smith</p>
-								<p class="card-text">Price: $29.99</p>
-								<p class="card-text">Rating: 4.2</p>
-							</div>
-						</div>
-					</div>
-
-					<!-- Add more course cards as needed -->
-					<div class="col-md-4 mb-4">
-						<div class="card">
-							<img src="https://via.placeholder.com/200x200" class="card-img-top" alt="Course Image">
-							<div class="card-body" style="background-color: #cce5ff;">
-								<h5 class="card-title">Machine Learning Basics</h5>
-								<p class="card-text">Author: Emily Johnson</p>
-								<p class="card-text">Price: $59.99</p>
-								<p class="card-text">Rating: 4.8</p>
-							</div>
-						</div>
-					</div>
-
-					<!-- Repeat the above card structure for additional courses -->
-					<!-- Example of additional courses -->
-					<div class="col-md-4 mb-4">
-						<div class="card">
-							<img src="https://via.placeholder.com/200x200" class="card-img-top" alt="Course Image">
-							<div class="card-body" style="background-color: #fff3cd;">
-								<h5 class="card-title">Data Science Foundations</h5>
-								<p class="card-text">Author: Adam Lee</p>
-								<p class="card-text">Price: $39.99</p>
-								<p class="card-text">Rating: 4.6</p>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-md-4 mb-4">
-						<div class="card">
-							<img src="https://via.placeholder.com/200x200" class="card-img-top" alt="Course Image">
-							<div class="card-body" style="background-color: #d1ecf1;">
-								<h5 class="card-title">Digital Marketing Strategies</h5>
-								<p class="card-text">Author: Sarah Brown</p>
-								<p class="card-text">Price: $19.99</p>
-								<p class="card-text">Rating: 4.0</p>
 							</div>
 						</div>
 					</div>
