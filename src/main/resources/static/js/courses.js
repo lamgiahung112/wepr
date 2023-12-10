@@ -1,4 +1,33 @@
 $(document).ready(function() {
+	$.ajax({
+		url: 'http://localhost:8080/courses/getTeacherName',
+		type: 'GET',
+		dataType: 'json',
+		success: function(data) {
+			// On success, iterate through the received data and populate the dropdown
+			if (data && data.length > 0) {
+				var $authorDropdown = $('#authorDropdown');
+
+				// Clear previous options in the dropdown
+				$authorDropdown.empty();
+
+				// Loop through the data and append options to the dropdown
+				$.each(data, function(index, author) {
+					$authorDropdown.append($('<option>', {
+						value: author.username,
+						text: author.name
+					}));
+				});
+			} else {
+				// Handle empty data or error condition
+				console.log('No data received');
+			}
+		},
+		error: function(xhr, status, error) {
+			// Handle errors
+			console.error('Error:', status, error);
+		}
+	});
 	// Checkbox change event to toggle author filter
 	$('#authorFilterSwitch').change(function() {
 		if (this.checked) {
@@ -291,6 +320,21 @@ $(document).ready(function() {
 
 				// Function to generate the HTML structure for a single course
 				function createCourseCard(course) {
+					let difficultyClass = '';
+					switch (course.difficulty) {
+						case 'BEGINNER':
+							difficultyClass = 'badge bg-success';
+							break;
+						case 'INTERMEDIATE':
+							difficultyClass = 'badge bg-warning text-dark';
+							break;
+						case 'ADVANCED':
+							difficultyClass = 'badge bg-danger';
+							break;
+						default:
+							difficultyClass = 'badge bg-primary';
+							break;
+					}
 					return `
                 <div class="col-md-3 mb-4">
                     <div class="card course-card">
@@ -303,9 +347,12 @@ $(document).ready(function() {
                             </div>
                         </div>
                         <div class="card-body" style="background-color: #f8d7da;">
+                        	<p class="card-text">Author: <a href="#">${course.author}</a></p>
                             <h5 class="card-title">${course.courseName}</h5>
                             <p class="card-text">Price: $${course.price}</p>
                             <p class="card-text">Rating: ${course.rating}</p>
+                            <p class="card-text">Enrolled: ${course.enrolledNumber}</p>
+                			<span class="${difficultyClass}">${course.difficulty}</span>
                             <div class="collapse" id="detailsCollapse${course.courseId}">
                                 <p>Additional details here...</p>
                                 <button class="btn btn-primary btn-details">See Details</button>
@@ -319,6 +366,7 @@ $(document).ready(function() {
 				// Function to render the courses onto the courses-container
 				function renderCourses(courses) {
 					var coursesContainer = $('#courses-container'); // Get the courses container element
+					coursesContainer.empty();
 
 					// Iterate through the courses and create HTML for each course
 					courses.forEach(function(course) {

@@ -1,10 +1,12 @@
 package hcmute.wepr.ielts_app.Services;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -155,23 +157,54 @@ public class CourseService implements CourseServiceInterface {
 	}
 
 	@Override
-	public List<Course> getCourseWithSpecAndPaging(String authors, String difficulties, float minPrice, float maxPrice,
-			float minRating, float maxRating, Integer minEnrollment, Integer maxEnrollment, String nameSorting,
+	public List<Course> getCourseWithSpecAndPaging(String authors, String difficulties, boolean priceRangeFilter, float minPrice, float maxPrice,
+			boolean ratingRangeFilter, float minRating, float maxRating, Integer minEnrollment, Integer maxEnrollment, String nameSorting,
 			String priceSorting, String ratingSorting, Integer itemsPerPage, Integer page) {
-		// Create Sort object based on sorting parameters
-		Sort sort = Sort.by(nameSorting.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, "courseName")
-				.and(Sort.by(priceSorting.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, "price"))
-				.and(Sort.by(ratingSorting.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, "rating"));
-		
 		// Create Pageable object for pagination
-		Pageable pageable = PageRequest.of(page, itemsPerPage, sort);
-		
-		// Create Specification based on filtering criteria
-        Specification<Course> spec = CourseSpecifications.filterCourses(authors, minPrice, maxPrice,
-                minRating, maxRating, minEnrollment, maxEnrollment, difficulties);
+	    Pageable pageable = PageRequest.of(page, itemsPerPage);
 
-        // Fetch data using repository with Specification and Pageable
-        return courseRepository.findAll(spec, pageable).toList();
+	    // Create Specification based on filtering criteria
+	    Specification<Course> spec = CourseSpecifications.filterCourses(authors, priceRangeFilter, minPrice, maxPrice,
+	            ratingRangeFilter, minRating, maxRating, minEnrollment, maxEnrollment, difficulties);
+
+	    Sort sort = null;
+
+	    // Add sorting criteria for 'name' if 'nameSorting' is not "nosort"
+	    if (!"nosort".equalsIgnoreCase(nameSorting)) {
+	        Sort.Order nameOrder = "asc".equalsIgnoreCase(nameSorting) ? Sort.Order.asc("courseName") : Sort.Order.desc("courseName");
+	        sort = Sort.by(nameOrder);
+	    }
+
+	    // Add sorting criteria for 'price' if 'priceSorting' is not "nosort"
+	    if (!"nosort".equalsIgnoreCase(priceSorting)) {
+	        Sort.Order priceOrder = "asc".equalsIgnoreCase(priceSorting) ? Sort.Order.asc("price") : Sort.Order.desc("price");
+	        sort = sort != null ? sort.and(Sort.by(priceOrder)) : Sort.by(priceOrder);
+	    }
+
+	    // Add sorting criteria for 'rating' if 'ratingSorting' is not "nosort"
+	    if (!"nosort".equalsIgnoreCase(ratingSorting)) {
+	        Sort.Order ratingOrder = "asc".equalsIgnoreCase(ratingSorting) ? Sort.Order.asc("rating") : Sort.Order.desc("rating");
+	        sort = sort != null ? sort.and(Sort.by(ratingOrder)) : Sort.by(ratingOrder);
+	    }
+
+	 // Fetch data using repository with Specification, Sort, and Pageable
+	    Page<Course> coursePage = sort != null ?
+	            courseRepository.findAll(spec, PageRequest.of(page, itemsPerPage, sort)) :
+	            courseRepository.findAll(spec, pageable);
+
+	    // Initialize the courses list
+	    List<Course> courses = new ArrayList<>();
+
+	    // Iterate through the fetched page of courses
+	    coursePage.forEach(course -> {
+	        // Ensure the 'user' associated with the course is fetched eagerly
+	        ApplicationUser user = course.getUser(); // This will trigger lazy loading
+	        user.getUsername(); // Triggering access to avoid lazy initialization outside the transaction
+
+	        courses.add(course);
+	    });
+
+	    return courses;
 	}
 
 }

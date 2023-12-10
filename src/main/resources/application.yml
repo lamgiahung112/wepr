@@ -17,3 +17,8 @@ auth:
   cookie:
     name: auth
     
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
