@@ -1,9 +1,14 @@
 package hcmute.wepr.ielts_app.Services;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import hcmute.wepr.ielts_app.Models.ApplicationUser;
@@ -15,6 +20,7 @@ import hcmute.wepr.ielts_app.Utilities.Requests.CreateNewCourseRequest;
 import hcmute.wepr.ielts_app.repositories.CourseRepositoryInterface;
 import hcmute.wepr.ielts_app.repositories.LessonRepositoryInterface;
 import hcmute.wepr.ielts_app.repositories.UserRepositoryInterface;
+import hcmute.wepr.ielts_app.specifications.CourseSpecifications;
 
 @Service
 public class CourseService implements CourseServiceInterface {
@@ -95,25 +101,45 @@ public class CourseService implements CourseServiceInterface {
 				"Comprehensive program for English language proficiency."
 				// Add more course descriptions here if needed
 		};
-		
+
 		DifficultLevel[] difficultLevels = DifficultLevel.values();
 
-        for (int i = 1; i <= 200; i++) { // Generate 200 courses
-            Course course = Course.builder()
-                    .courseName(courseNames[i % courseNames.length])
-                    .description(courseDescriptions[i % courseDescriptions.length])
-                    .coverImage("image" + (i % 10) + ".jpg")
-                    .createdAt(LocalDateTime.now())
-                    .updatedAt(LocalDateTime.now())
-                    .price((float) Math.floor((Math.random() * 450) + 50)) // Random price between 50 and 500
-                    .level(difficultLevels[i % difficultLevels.length])
-                    .rating((float) Math.floor((Math.random() * 5) + 1)) // Random rating between 1 and 5
-                    .enrolledNumber((int) Math.floor(Math.random() * 1000)) // Random number of enrollments
-                    .user(teachers[i % 10])
-                    .build();
+		for (int i = 1; i <= 200; i++) { // Generate 200 courses
+			Course course = Course.builder().courseName(courseNames[i % courseNames.length])
+					.description(courseDescriptions[i % courseDescriptions.length])
+					.coverImage("image" + (i % 10) + ".jpg").createdAt(LocalDateTime.now())
+					.updatedAt(LocalDateTime.now()).price((float) Math.floor((Math.random() * 450) + 50)) // Random
+																											// price
+																											// between
+																											// 50 and
+																											// 500
+					.level(difficultLevels[i % difficultLevels.length])
+					.rating((float) Math.floor((Math.random() * 5) + 1)) // Random rating between 1 and 5
+					.enrolledNumber((int) Math.floor(Math.random() * 1000)) // Random number of enrollments
+					.user(teachers[i % 10]).build();
 
-            courseRepository.save(course);
-        }
+			courseRepository.save(course);
+		}
+	}
+
+	@Override
+	public List<Course> getCourseWithSpecAndPaging(String authors, String difficulties, float minPrice, float maxPrice,
+			float minRating, float maxRating, Integer minEnrollment, Integer maxEnrollment, String nameSorting,
+			String priceSorting, String ratingSorting, Integer itemsPerPage, Integer page) {
+		// Create Sort object based on sorting parameters
+		Sort sort = Sort.by(nameSorting.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, "courseName")
+				.and(Sort.by(priceSorting.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, "price"))
+				.and(Sort.by(ratingSorting.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC, "rating"));
+		
+		// Create Pageable object for pagination
+		Pageable pageable = PageRequest.of(page, itemsPerPage, sort);
+		
+		// Create Specification based on filtering criteria
+        Specification<Course> spec = CourseSpecifications.filterCourses(authors, minPrice, maxPrice,
+                minRating, maxRating, minEnrollment, maxEnrollment, difficulties);
+
+        // Fetch data using repository with Specification and Pageable
+        return courseRepository.findAll(spec, pageable).toList();
 	}
 
 }

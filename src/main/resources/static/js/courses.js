@@ -277,13 +277,13 @@ $(document).ready(function() {
 		const itemsPerPage = parseInt($('#paginationLabel').text());
 		paginationData += `itemsPerPage=${itemsPerPage}`;
 
-		const baseURL = 'http://localhost:8080/courses'; // Replace with your actual API endpoint
+		const baseURL = 'http://localhost:8080/courses/find'; // Replace with your actual API endpoint
 		const finalURL = `${baseURL}?${filterData}${sortData}${paginationData}`;
 		console.log(finalURL);
 
 		// Make an AJAX POST request to the URL
 		$.ajax({
-			type: 'POST',
+			type: 'GET',
 			url: finalURL,
 			success: function(response) {
 				// Handle the successful response
