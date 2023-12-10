@@ -17,6 +17,7 @@ import hcmute.wepr.ielts_app.Models.Lesson;
 import hcmute.wepr.ielts_app.Models.enums.DifficultLevel;
 import hcmute.wepr.ielts_app.Services.Interfaces.CourseServiceInterface;
 import hcmute.wepr.ielts_app.Utilities.Requests.CreateNewCourseRequest;
+import hcmute.wepr.ielts_app.Utilities.Requests.UpdateCourseRequest;
 import hcmute.wepr.ielts_app.repositories.CourseRepositoryInterface;
 import hcmute.wepr.ielts_app.repositories.LessonRepositoryInterface;
 import hcmute.wepr.ielts_app.repositories.UserRepositoryInterface;
@@ -51,6 +52,36 @@ public class CourseService implements CourseServiceInterface {
 	}
 
 	@Override
+	public Course updateCourse(UpdateCourseRequest request) {
+		Course course = courseRepository.findCourseWithLessonsByCourseId(request.getCourseId());
+		
+		course
+			.setCourseName(request.getCourseName())
+			.setCoverImage(request.getCoverImageLink())
+			.setDescription(request.getCourseDescription())
+			.setLevel(request.getDifficultyLevel())
+			.setPrice(request.getPrice());
+		
+		lessonRepository.deleteAllInBatch(course.getLessons());
+		
+		request.getLessons().stream().forEach(
+				lesson -> {
+					Lesson toBeSavedLesson = Lesson.builder()
+							.description(lesson.getDescription())
+							.title(lesson.getTitle())
+							.video(lesson.getVideoLink())
+							.course(course)
+							.build();
+					lessonRepository.save(toBeSavedLesson);
+				}
+		);
+		
+		return courseRepository.save(course);
+	}
+
+	@Override
+	public Course findCourseWithLessonsByCourseId(int courseId) {
+		return courseRepository.findCourseWithLessonsByCourseId(courseId);
 	public void generatesCourses() {
 		ApplicationUser[] teachers = new ApplicationUser[10];
 		for (int i = 1; i <= 10; i++) {

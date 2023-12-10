@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-<title>Create a new course</title>
+<title>Update your course</title>
 <link rel="stylesheet"
-	href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+	href="/webjars/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
-<script>
-var lessonIndex = 0;
-
+<script th:inline="javascript">
+/*<![CDATA[*/
+var lessonIndex = /*[[${#lists.size(course.lessons)}]]*/ 0;
 function addLesson() {
     lessonIndex++;
 
@@ -39,6 +39,7 @@ function removeLesson(index) {
 
 function submitForm() {
     // Retrieve values from the form and construct the request object
+    var courseId = /*[[${course.courseId}]]*/ ""
     var courseName = document.getElementById('courseName').value;
     var courseDescription = document.getElementById('description').value;
     var coverImageLink = document.getElementById('coverImage').value;
@@ -61,25 +62,27 @@ function submitForm() {
     });
 
     // Create the request object
-    var createNewCourseRequest = {
-        courseName: courseName,
-        courseDescription: courseDescription,
-        coverImageLink: coverImageLink,
-        price: price,
-        difficultyLevel: difficultyLevel,
-        lessons: lessons
+    var updateCourseRequest = {
+    	courseId,
+        courseName,
+        courseDescription,
+        coverImageLink,
+        price,
+        difficultyLevel,
+        lessons
     };
 
+    console.log(updateCourseRequest)
  // Make an AJAX request to send the data to the server
     var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/api/teacher/course", true); // Adjust the URL based on your server configuration
+    xhr.open("POST", "/api/teacher/course/update", true); // Adjust the URL based on your server configuration
     xhr.setRequestHeader("Content-Type", "application/json");
 
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
                 // Successful response
-                console.log("Course added successfully");
+                console.log("Course updated successfully");
                 
                 // Redirect to the teacher dashboard
                 window.location.href = "/teacher/dashboard";
@@ -91,26 +94,28 @@ function submitForm() {
     };
 
     // Convert the JavaScript object to JSON and send it in the request body
-    xhr.send(JSON.stringify(createNewCourseRequest));
+    xhr.send(JSON.stringify(updateCourseRequest));
 }
+/*]]>*/
 </script>
 <body>
 	<div th:replace="fragments/teacher/navbar :: nav"></div>
 	<div class="container mt-5">
-		<h2>Create a New Course</h2>
+		<h2>Update your Course</h2>
 
 		<form id="courseForm">
 			<!-- Course Name -->
 			<div class="form-group">
 				<label for="courseName">Course Name:</label> <input type="text"
-					class="form-control" id="courseName"
-					placeholder="Enter course name" required>
+					th:value="${course.courseName}" class="form-control"
+					id="courseName" placeholder="Enter course name" required />
 			</div>
 
 			<!-- Description -->
 			<div class="form-group">
 				<label for="description">Description:</label>
 				<textarea class="form-control" id="description" rows="3"
+					th:text="${course.description}"
 					placeholder="Enter course description" required></textarea>
 			</div>
 
@@ -118,22 +123,27 @@ function submitForm() {
 			<div class="form-group">
 				<label for="coverImage">Cover Image Link:</label> <input type="text"
 					class="form-control" id="coverImage"
+					th:value="${course.coverImage}"
 					placeholder="Enter cover image link" required>
 			</div>
 
 			<!-- Price -->
 			<div class="form-group">
 				<label for="price">Price:</label> <input type="number"
-					class="form-control" id="price" placeholder="Enter price" required>
+					th:value="${course.price}" class="form-control" id="price"
+					placeholder="Enter price" required>
 			</div>
 
 			<!-- Difficulty -->
 			<div class="form-group">
 				<label for="difficulty">Choose Difficulty:</label> <select
 					class="form-control" id="difficulty">
-					<option value="BEGINNER">BEGINNER</option>
-					<option value="INTERMEDIATE">INTERMEDIATE</option>
-					<option value="ADVANCED">ADVANCED</option>
+					<option value="BEGINNER"
+						th:selected="${course.level == 'BEGINNER'}">Beginner</option>
+					<option value="INTERMEDIATE"
+						th:selected="${course.level == 'INTERMEDIATE'}">Intermediate</option>
+					<option value="ADVANCED"
+						th:selected="${course.level == 'ADVANCED'}">Advanced</option>
 				</select>
 			</div>
 
@@ -145,22 +155,39 @@ function submitForm() {
 						onclick="addLesson()">Add More Lessons</button>
 				</div>
 
-				<!-- For simplicity, I'm using a single lesson as an example -->
-				<div class="lesson ml-4" data-lesson-index="0">
-					<label for="lessonTitle0">Lesson Title:</label> <input type="text"
-						class="form-control" id="lessonTitle0"
-						placeholder="Enter lesson title" required> <label
-						for="lessonDescription0">Lesson Description:</label>
-					<textarea class="form-control" id="lessonDescription0" rows="2"
+				<div th:each="item, index : ${course.lessons}" class="lesson ml-4"
+					th:data-lesson-index="${index.index}">
+					<label th:for="'lessonTitle' + ${index.index}">
+						Lesson Title:
+					</label> 
+					<input type="text" class="form-control"
+						th:value="${item.title}"
+						th:id="'lessonTitle' + ${index.index}"
+						placeholder="Enter lesson title" required> 
+					<label
+						th:for="'lessonDescription' + ${index.index}">
+						LessonDescription:
+					</label>
+					<textarea class="form-control"
+						th:text="${item.description}"
+						th:id="'lessonDescription' + ${index.index}" rows="2"
 						placeholder="Enter lesson description" required></textarea>
-					<label for="videoLink0">Video Link:</label> <input type="text"
-						class="form-control" id="videoLink0"
+
+					<label th:for="'videoLink' + ${index.index}">Video Link:</label> 
+					<input
+						th:value="${item.video}"
+						type="text" class="form-control"
+						th:id="'videoLink' + ${index.index}"
 						placeholder="Enter video link" required>
+
 					<!-- Button to remove the lesson -->
 					<button type="button" class="btn btn-danger mt-2"
-						onclick="removeLesson(0)">Remove Lesson</button>
+						th:onclick="'removeLesson(' + ${index.index} + ')'">Remove
+						Lesson</button>
 				</div>
 			</div>
+
+
 
 			<!-- Submit Button -->
 			<button type="button" class="btn btn-success" onclick="submitForm()">Submit</button>
