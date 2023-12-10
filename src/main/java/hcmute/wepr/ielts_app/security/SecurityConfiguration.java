@@ -29,6 +29,7 @@ public class SecurityConfiguration {
 							.requestMatchers("/uploads/**").permitAll()
 							.requestMatchers("/dashboard").permitAll()
 							.requestMatchers("/courses").permitAll()
+							.requestMatchers("/courses/**").permitAll()
 							.requestMatchers("/js/**").permitAll()
 							.requestMatchers("/css/**").permitAll()
 							.requestMatchers("/images/**").permitAll()
