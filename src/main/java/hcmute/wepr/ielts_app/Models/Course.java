@@ -15,6 +15,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -51,6 +52,13 @@ public class Course {
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR(20)")
 	private DifficultLevel level;
+	private float rating;
+	@Column(name = "enrolled_number")
+	private int enrolledNumber;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id")
+	private ApplicationUser user;
 	
 	@OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private Set<CartItem> cartItems = new HashSet<>();

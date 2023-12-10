@@ -27,7 +27,8 @@ import lombok.extern.slf4j.Slf4j;
 public class CookieSecurityContextRepository implements SecurityContextRepository {
 	private final Pattern[] STRICTLY_PUBLIC_ENDPOINT_WHITELIST = {
 		Pattern.compile("^/auth/.*$"),
-		Pattern.compile("^/webjars/.*$")
+		Pattern.compile("^/webjars/.*$"),
+		Pattern.compile("^/courses.*$")
 	};
 	
 	@Value("${auth.cookie.name}")
