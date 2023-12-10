@@ -37,9 +37,10 @@ public class CourseService implements CourseServiceInterface {
 
 	@Override
 	public Course createNewCourse(CreateNewCourseRequest request) {
+		ApplicationUser teacher = userRepository.findById(request.getUserId()).orElse(null);
 		Course course = Course.builder().courseName(request.getCourseName()).description(request.getCourseDescription())
 				.coverImage(request.getCoverImageLink()).level(request.getDifficultyLevel()).price(request.getPrice())
-				.createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).build();
+				.createdAt(LocalDateTime.now()).updatedAt(LocalDateTime.now()).user(teacher).build();
 
 		Course savedCourse = courseRepository.save(course);
 		if (savedCourse == null)
@@ -62,7 +63,8 @@ public class CourseService implements CourseServiceInterface {
 			.setCoverImage(request.getCoverImageLink())
 			.setDescription(request.getCourseDescription())
 			.setLevel(request.getDifficultyLevel())
-			.setPrice(request.getPrice());
+			.setPrice(request.getPrice())
+			.setUpdatedAt(LocalDateTime.now());
 		
 		lessonRepository.deleteAllInBatch(course.getLessons());
 		

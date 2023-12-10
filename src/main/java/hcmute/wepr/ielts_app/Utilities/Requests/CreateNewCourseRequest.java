@@ -4,9 +4,12 @@ import java.util.List;
 
 import hcmute.wepr.ielts_app.Models.enums.DifficultLevel;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
+@Accessors(chain = true)
 public class CreateNewCourseRequest {
+	private int userId;
 	private String courseName;
 	private String courseDescription;
 	private String coverImageLink;
