@@ -1,3 +1,4 @@
+
 $(document).ready(function() {
 	$.ajax({
 		url: 'http://localhost:8080/courses/getTeacherName',
@@ -26,14 +27,6 @@ $(document).ready(function() {
 		error: function(xhr, status, error) {
 			// Handle errors
 			console.error('Error:', status, error);
-		}
-	});
-	// Checkbox change event to toggle author filter
-	$('#authorFilterSwitch').change(function() {
-		if (this.checked) {
-			$('#filter-by-author').addClass('show'); // Show the author filter
-		} else {
-			$('#filter-by-author').removeClass('show'); // Hide the author filter
 		}
 	});
 
@@ -180,27 +173,7 @@ $(document).ready(function() {
 			button.removeClass('btn-outline-danger').addClass('btn-danger');
 		}
 	});
-
-	// Add Author button click event
-	$('#addAuthorBtn').click(function(event) {
-		// Get the selected author value
-		var selectedAuthor = $('#authorDropdown').val();
-		// Get the text of the selected author option
-		var selectedAuthorText = $('#authorDropdown option:selected').text();
-
-		// Create a new author element with a close button
-		var authorElement = '<div class="author-element m-2">' + selectedAuthorText +
-			'<button class="btn btn-sm btn-danger closeAuthorBtn">x</button></div>';
-
-		// Append the new author element to the authors container
-		$('#authors-container').append(authorElement);
-	});
-
-	// Event delegation for dynamically added close buttons
-	$('#authors-container').on('click', '.closeAuthorBtn', function() {
-		$(this).parent().remove(); // Remove the corresponding author element
-	});
-
+	
 	$('.sort-mode-btn').click(function(event) {
 		$(this).toggleClass('rotate180');
 		$(this).toggleClass('rotate0');
@@ -225,21 +198,9 @@ $(document).ready(function() {
 		let sortData = '';
 		let paginationData = '';
 
-		// Filter section
-		if ($('#authorFilterSwitch').is(':checked')) {
-			// Scan through authors container to get selected authors
-			const selectedAuthors = [];
-			$('#authors-container .author-element').each(function() {
-				const authorName = $(this).contents().filter(function() {
-					return this.nodeType === 3; // Select only text nodes
-				}).text().trim().replace(/ /g, '%20'); // Replace spaces with %20
-				selectedAuthors.push(authorName); // Collect selected authors
-			});
+		let teacherUsername = $('#username-holder').text();
 
-			if (selectedAuthors.length > 0) {
-				filterData += `authors=${selectedAuthors.join(',')}&`; // Construct authors filter parameter
-			}
-		}
+		filterData += `authors=${teacherUsername}&`; // Construct authors filter parameter
 
 		// Filter section for ranges
 		if ($('#rangeFilterSwitch').is(':checked')) {

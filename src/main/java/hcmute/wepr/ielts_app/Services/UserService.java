@@ -1,5 +1,7 @@
 package hcmute.wepr.ielts_app.Services;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import hcmute.wepr.ielts_app.Models.enums.Role;
 import hcmute.wepr.ielts_app.Services.Interfaces.UserServiceInterface;
 import hcmute.wepr.ielts_app.Utilities.JwtDataWrapper;
 import hcmute.wepr.ielts_app.Utilities.JwtUtils;
+import hcmute.wepr.ielts_app.Utilities.responses.TeacherNameDTO;
 import hcmute.wepr.ielts_app.repositories.UserRepositoryInterface;
 
 @Service
@@ -62,6 +65,25 @@ public class UserService implements UserServiceInterface {
 			// response error
 			return null;
 		}
+	}
+
+	@Override
+	public List<TeacherNameDTO> getTeacherNameAndUsername() {
+		List<ApplicationUser> teachers = userRepository.findWithUserProfileByRole(Role.ROLE_TEACHER);
+		List<TeacherNameDTO> teacherNameDTOs = new ArrayList<>();
+
+	    for (ApplicationUser teacher : teachers) {
+	        TeacherNameDTO dto = new TeacherNameDTO();
+	        dto.setUsername(teacher.getUsername());
+	        if (teacher.getProfile() != null) {
+		        dto.setName(teacher.getProfile().getName());
+	        } else {
+	        	dto.setName(teacher.getUsername());
+	        }
+	        System.out.println(teacher.getProfile());
+	        teacherNameDTOs.add(dto);
+	    }
+	    return teacherNameDTOs;
 	}
 
 	

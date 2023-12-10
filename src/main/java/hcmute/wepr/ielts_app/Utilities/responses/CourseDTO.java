@@ -13,10 +13,12 @@ import lombok.Setter;
 @Setter
 public class CourseDTO {
 	private int courseId;
-    private String courseName;
-    private String coverImage;
-    private LocalDateTime createdAt;
-    private float price;
-    private float rating;
-    private int enrolledNumber;
+	private String courseName;
+	private String coverImage;
+	private LocalDateTime createdAt;
+	private float price;
+	private float rating;
+	private int enrolledNumber;
+	private String author; // Add author field
+	private String difficulty; // Add difficulty field
 }
