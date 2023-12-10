@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Course browsing</title>
+	<link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/courses.css">
+	<script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+	<script src="/js/teacher-courses.js"></script>
+</head>
+
+<body>
+	<div class="container-fluid">
+		<div class="row">
+			<!-- Sidebar -->
+			<div class="sidebar col-md-3 bg-light">
+				<div class="d-flex justify-content-between align-items-center">
+					<h3>Sidebar</h3>
+				</div>
+				<!-- Sidebar content -->
+				<div class="sidebar-content">
+					<div id="accordion">
+						<div class="card">
+							<div class="card-header">
+								<a class="btn" data-bs-toggle="collapse" href="#collapseOne">
+									Filter
+								</a>
+							</div>
+							<div id="collapseOne" class="collapse">
+								<div class="card-body">
+									<h3>Courses filter</h3>
+									<!-- Filter Button -->
+									<button id="addFilterBtn" class="btn btn-primary mt-3" data-bs-toggle="collapse"
+										data-bs-target="#filter-enable-container">Enable filter</button>
+									<div id="filter-enable-container" class="container-fluid mt-3 collapse">
+										<div class="form-check form-switch ms-3 pt-3">
+											<input class="form-check-input" type="checkbox" id="rangeFilterSwitch"
+												name="darkmode" value="no">
+											<label class="form-check-label" for="rangeFilterSwitch">Filter by
+												range</label>
+										</div>
+										<div class="form-check form-switch ms-3 pb-3 pt-3">
+											<input class="form-check-input" type="checkbox" id="difficultyFilterSwitch"
+												name="darkmode" value="no">
+											<label class="form-check-label" for="difficultyFilterSwitch">Filter by
+												difficulty</label>
+										</div>
+									</div>
+
+									<!-- Container for selected filters -->
+									<div id="sidebar-filters" class="mt-3">
+										<div id="filter-by-range" class="ms-3">
+											<div id="range-filter-enable-container" class="container-fluid mt-3">
+												<h5>With range: </h5>
+												<div class="form-check form-switch ms-3 pt-3">
+													<input class="form-check-input" type="checkbox" id="priceSwitch"
+														name="darkmode" value="no">
+													<label class="form-check-label" for="priceSwitch">Price</label>
+													<div id="price-select-container">
+														<div id="price-range-select-sliders"
+															class="d-flex flex-row justify-content-around mt-3">
+															<label for="customRangeMin" class="form-label">Min
+																price</label>
+															<input type="range" class="form-range" min="0" step="100000"
+																max="10000000" value="0" id="customRangeMin">
+															<label for="customRangeMax" class="form-label">Max
+																price</label>
+															<input type="range" class="form-range" min="0" step="100000"
+																max="10000000" value="10000000" id="customRangeMax">
+														</div>
+														<div id="price-range-notify">
+															<p>Price from 0 to 10000000 VND</p>
+														</div>
+													</div>
+												</div>
+												<div class="form-check form-switch ms-3 pt-3">
+													<input class="form-check-input" type="checkbox" id="ratingSwitch"
+														name="darkmode" value="no">
+													<label class="form-check-label" for="ratingSwitch">Rating</label>
+													<div id="rating-select-container">
+														<div id="rating-range-select-sliders"
+															class="d-flex flex-row justify-content-around mt-3">
+															<label for="customRatingMin" class="form-label">Min
+																rating</label>
+															<input type="range" class="form-range" min="0" step="1"
+																max="5" value="0" id="customRatingMin">
+															<label for="customRangeMax" class="form-label">Max
+																rating</label>
+															<input type="range" class="form-range" min="0" step="1"
+																max="5" value="5" id="customRatingMax">
+														</div>
+														<div id="rating-range-notify">
+															<p>Rating from 0 to 5 stars</p>
+														</div>
+													</div>
+												</div>
+												<div class="form-check form-switch ms-3 pb-3 pt-3">
+													<input class="form-check-input" type="checkbox"
+														id="enrollmentSwitch" name="darkmode" value="no">
+													<label class="form-check-label"
+														for="enrollmentSwitch">Enrollment</label>
+													<div id="enrollment-select-container">
+														<div id="enrollment-range-select-sliders"
+															class="d-flex flex-row justify-content-around mt-3">
+															<label for="customEnrollmentMin" class="form-label">Min
+															</label>
+															<input type="range" class="form-range" min="0" step="100"
+																max="10000" value="0" id="customEnrollmentMin">
+															<label for="customEnrollmentMax" class="form-label">Max
+															</label>
+															<input type="range" class="form-range" min="0" step="100"
+																max="10000" value="10000" id="customEnrollmentMax">
+														</div>
+														<div id="enrollment-range-notify">
+															<p>0 to 10000 people enrolled</p>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<div id="filter-by-difficulty" class="ms-3">
+											<h5>With difficulty: </h5>
+											<div class="d-flex flex-row mt-3 justify-content-around mb-3">
+												<button id="beginner-btn" type="button"
+													class="btn btn-outline-success">BEGINNER</button>
+												<button id="intermediate-btn" type="button"
+													class="btn btn-outline-warning">INTERMEDIATE</button>
+												<button id="advanced-btn" type="button"
+													class="btn btn-outline-danger">ADVANCED</button>
+											</div>
+
+										</div>
+
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="card">
+							<div class="card-header">
+								<a class="collapsed btn" data-bs-toggle="collapse" href="#collapseTwo">
+									Sort
+								</a>
+							</div>
+							<div id="collapseTwo" class="collapse">
+								<div class="card-body">
+									Sorting the result...
+
+									<div
+										class="form-check form-switch ms-3 pb-3 pt-3 d-flex flex-row justify-content-start">
+										<div>
+											<input class="form-check-input" type="checkbox" id="nameSortSwitch"
+												name="darkmode" value="no">
+											<label class="form-check-label" for="nameSortSwitch">Sort by name</label>
+										</div>
+
+										<div id="sort-mode-btn1" class="sort-mode-btn rotate0 ms-3" width="24px"
+											height="24px">
+											<img src="/images/arrow.png" width="24px" height="24px" alt="Arrow Icon"
+												class="arrow-icon clickable">
+										</div>
+									</div>
+
+									<div
+										class="form-check form-switch ms-3 pb-3 pt-3 d-flex flex-row justify-content-start">
+										<div>
+											<input class="form-check-input" type="checkbox" id="priceSortSwitch"
+												name="darkmode" value="no">
+											<label class="form-check-label" for="priceSortSwitch">Sort by price</label>
+										</div>
+
+										<div id="sort-mode-btn2" class="sort-mode-btn rotate0 ms-3" width="24px"
+											height="24px">
+											<img src="/images/arrow.png" width="24px" height="24px" alt="Arrow Icon"
+												class="arrow-icon clickable">
+										</div>
+									</div>
+
+									<div
+										class="form-check form-switch ms-3 pb-3 pt-3 d-flex flex-row justify-content-start">
+										<div>
+											<input class="form-check-input" type="checkbox" id="ratingSortSwitch"
+												name="darkmode" value="no">
+											<label class="form-check-label" for="ratingSortSwitch">Sort by
+												rating</label>
+										</div>
+
+										<div id="sort-mode-btn3" class="sort-mode-btn rotate0 ms-3" width="24px"
+											height="24px">
+											<img src="/images/arrow.png" width="24px" height="24px" alt="Arrow Icon"
+												class="arrow-icon clickable">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="card">
+							<div class="card-header">
+								<a class="collapsed btn" data-bs-toggle="collapse" href="#collapseThree">
+									Pagination
+								</a>
+							</div>
+							<div id="collapseThree" class="collapse">
+								<div class="card-body">
+									<h5 class="mb-3">Items per page:</h5>
+									<div class="input-group mb-3">
+										<span class="input-group-text" id="paginationLabel">6</span>
+										<button id="decreaseButton" class="btn btn-secondary" type="button">-</button>
+										<button id="increaseButton" class="btn btn-secondary" type="button">+</button>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<button id="get-result-btn" type="button" class="btn btn-primary mt-3">Get results</button>
+				</div>
+			</div>
+			<!-- Content -->
+			<div class="col-md-9">
+				<h1>My courses</h1>
+				<div id="username-holder" th:text="${teacher_username}">
+					
+				</div>
+				<div id="courses-container" class="row">
+					<div class="col-md-3 mb-4">
+						<div class="card course-card">
+							<div class="course-img-section">
+								<img src="https://via.placeholder.com/200x200" class="card-img-top course-img"
+									alt="Course Image">
+								<div class="d-flex flex-row justify-content-around course-img-btns">
+									<a href="#" class="p-3"><img src="/images/favorite.png"></a>
+									<a href="#" class="p-3"><img src="/images/shopping_cart.png"></a>
+									<a href="#" class="p-3"><img src="/images/add.png"></a>
+								</div>
+							</div>
+							<div class="card-body" style="background-color: #f8d7da;">
+								<h5 class="card-title">Introduction to Programming</h5>
+								<p class="card-text">Author: <a href="#">John Doe</a></p>
+								<p class="card-text">Price: $49.99</p>
+								<p class="card-text">Rating: 4.5</p>
+								<p class="card-text">Enrolled: 120</p>
+								<span class="badge bg-success">Beginner</span>
+								<div class="collapse" id="detailsCollapse">
+									<p>Additional details here...</p>
+									<button class="btn btn-primary btn-details">See Details</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Bootstrap Bundle with Popper.js -->
+		<script src="/webjars/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

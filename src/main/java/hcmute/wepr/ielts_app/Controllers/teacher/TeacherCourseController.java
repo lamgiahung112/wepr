@@ -1,6 +1,7 @@
 package hcmute.wepr.ielts_app.Controllers.teacher;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,6 +28,13 @@ public class TeacherCourseController {
 	@IsTeacher
 	public String getNewCoursePage() {
 		return "teacher/new_course";
+	}
+	
+	@GetMapping
+	@IsTeacher
+	public String getCoursesPage(Model model, Authentication authentication) {
+		model.addAttribute("teacher_username", authentication.getName());
+		return "teacher/teacher-courses";
 	}
 	
 	@GetMapping("/update/{id}")
