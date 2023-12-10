@@ -82,6 +82,7 @@ public class CourseService implements CourseServiceInterface {
 	@Override
 	public Course findCourseWithLessonsByCourseId(int courseId) {
 		return courseRepository.findCourseWithLessonsByCourseId(courseId);
+	}
 	public void generatesCourses() {
 		ApplicationUser[] teachers = new ApplicationUser[10];
 		for (int i = 1; i <= 10; i++) {
