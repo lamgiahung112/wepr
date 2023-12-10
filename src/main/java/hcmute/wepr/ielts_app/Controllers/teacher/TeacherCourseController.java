@@ -35,6 +35,13 @@ public class TeacherCourseController {
 		return "teacher/course_details";
 	}
 	
+	@GetMapping
+	@IsTeacher
+	public String getCoursesPage(Model model, Authentication authentication) {
+		model.addAttribute("teacher_username", authentication.getName());
+		return "teacher/teacher-courses";
+	}
+	
 	@GetMapping("/{id}/update")
 	@IsTeacher
 	public String getUpdateCoursePage(Model model, @PathVariable(name = "id") int courseId) {
