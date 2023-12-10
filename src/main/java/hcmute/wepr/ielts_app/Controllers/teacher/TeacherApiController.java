@@ -1,14 +1,13 @@
 package hcmute.wepr.ielts_app.Controllers.teacher;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import hcmute.wepr.ielts_app.Models.Course;
 import hcmute.wepr.ielts_app.Services.Interfaces.CourseServiceInterface;
@@ -16,25 +15,29 @@ import hcmute.wepr.ielts_app.Utilities.Requests.CreateNewCourseRequest;
 import hcmute.wepr.ielts_app.Utilities.Requests.UpdateCourseRequest;
 import hcmute.wepr.ielts_app.security.annotations.IsTeacher;
 
-@Controller
-@RequestMapping("/teacher/courses")
+@RestController
 @CrossOrigin
-public class TeacherCourseController {
+@RequestMapping("/api/teacher")
+public class TeacherApiController {
 	@Autowired
 	private CourseServiceInterface courseService;
 	
-	@GetMapping("/new")
+	@PostMapping("/course")
 	@IsTeacher
-	public String getNewCoursePage() {
-		return "teacher/new_course";
+	public ResponseEntity<Course> createNewCourse(@RequestBody CreateNewCourseRequest request) {
+		Course savedCourse = courseService.createNewCourse(request);
+		
+		if (savedCourse == null) {
+			return ResponseEntity.badRequest().build();
+		}
+		
+		return ResponseEntity.ok(savedCourse);
 	}
 	
-	@GetMapping("/update/{id}")
+	@PostMapping("/course/update")
 	@IsTeacher
-	public String getUpdateCoursePage(Model model, @PathVariable(name = "id") int courseId) {
-		Course course = courseService.findCourseWithLessonsByCourseId(courseId);
-		
-		model.addAttribute("course", course);
-		return "teacher/update_course";
+	public ResponseEntity<?> updateCourse(@RequestBody UpdateCourseRequest request) {	
+		courseService.updateCourse(request);
+		return ResponseEntity.ok().build();
 	}
 }
