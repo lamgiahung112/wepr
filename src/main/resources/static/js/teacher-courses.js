@@ -1,5 +1,157 @@
+function updateCourses() {
+	let filterData = '';
+	let sortData = '';
+	let paginationData = '';
 
+	let teacherUsername = $('#username-holder').text();
+
+	filterData += `authors=${teacherUsername}&`; // Construct authors filter parameter
+
+	// Filter section for ranges
+	if ($('#rangeFilterSwitch').is(':checked')) {
+		if ($('#priceSwitch').is(':checked')) {
+			const minPrice = parseInt($('#customRangeMin').val());
+			const maxPrice = parseInt($('#customRangeMax').val());
+
+			if (!isNaN(minPrice) && !isNaN(maxPrice) && minPrice <= maxPrice) {
+				filterData += `minPrice=${minPrice}&maxPrice=${maxPrice}&`;
+			}
+		}
+
+		if ($('#ratingSwitch').is(':checked')) {
+			const minRating = parseInt($('#customRatingMin').val());
+			const maxRating = parseInt($('#customRatingMax').val());
+
+			if (!isNaN(minRating) && !isNaN(maxRating) && minRating <= maxRating) {
+				filterData += `minRating=${minRating}&maxRating=${maxRating}&`;
+			}
+		}
+
+		if ($('#enrollmentSwitch').is(':checked')) {
+			const minEnrollment = parseInt($('#customEnrollmentMin').val());
+			const maxEnrollment = parseInt($('#customEnrollmentMax').val());
+
+			if (!isNaN(minEnrollment) && !isNaN(maxEnrollment) && minEnrollment <= maxEnrollment) {
+				filterData += `minEnrollment=${minEnrollment}&maxEnrollment=${maxEnrollment}&`;
+			}
+		}
+	}
+
+	if ($('#difficultyFilterSwitch').is(':checked')) {
+		let selectedDifficulties = [];
+		$('#filter-by-difficulty button').each(function() {
+			const buttonClasses = $(this).attr('class'); // Get the class attribute of the button
+			const buttonText = $(this).text().toUpperCase();
+
+			// Check if the class attribute contains 'outline'
+			if (buttonClasses.indexOf('outline') === -1) {
+				selectedDifficulties.push(buttonText); // Add selected difficulty to the array
+			}
+		});
+		if (selectedDifficulties.length > 0) {
+			filterData += `difficulties=${selectedDifficulties.join(',')}&`; // Construct difficulty filter parameter
+		}
+	}
+
+	if ($('#nameSortSwitch').is(':checked')) {
+		const nameSortMode = $('#sort-mode-btn1').hasClass('rotate0') ? 'asc' : 'desc';
+		sortData += `name=${nameSortMode}&`;
+	}
+
+	if ($('#priceSortSwitch').is(':checked')) {
+		const priceSortMode = $('#sort-mode-btn2').hasClass('rotate0') ? 'asc' : 'desc';
+		sortData += `price=${priceSortMode}&`;
+	}
+
+	if ($('#ratingSortSwitch').is(':checked')) {
+		const ratingSortMode = $('#sort-mode-btn3').hasClass('rotate0') ? 'asc' : 'desc';
+		sortData += `rating=${ratingSortMode}&`;
+	}
+
+	// Pagination section
+	const itemsPerPage = parseInt($('#paginationLabel').text());
+	paginationData += `itemsPerPage=${itemsPerPage}`;
+
+	const baseURL = 'http://localhost:8080/courses/find'; // Replace with your actual API endpoint
+	const finalURL = `${baseURL}?${filterData}${sortData}${paginationData}`;
+	console.log(finalURL);
+
+	// Make an AJAX POST request to the URL
+	$.ajax({
+		type: 'GET',
+		url: finalURL,
+		success: function(response) {
+			// Handle the successful response
+			console.log('Success!', response);
+
+			// Function to generate the HTML structure for a single course
+			function createCourseCard(course) {
+				let difficultyClass = '';
+				switch (course.difficulty) {
+					case 'BEGINNER':
+						difficultyClass = 'badge bg-success';
+						break;
+					case 'INTERMEDIATE':
+						difficultyClass = 'badge bg-warning text-dark';
+						break;
+					case 'ADVANCED':
+						difficultyClass = 'badge bg-danger';
+						break;
+					default:
+						difficultyClass = 'badge bg-primary';
+						break;
+				}
+				return `
+                <div class="col-md-3 mb-4">
+                    <div class="card course-card">
+                        <div class="course-img-section">
+                            <img src="https://via.placeholder.com/200x200" class="card-img-top course-img" alt="Course Image">
+                            
+                        </div>
+                        <div class="card-body" style="background-color: #f8d7da;">
+                        	<p class="card-text">Author: <a href="#">${course.author}</a></p>
+                            <h5 class="card-title">${course.courseName}</h5>
+                            <p class="card-text">Price: $${course.price}</p>
+                            <p class="card-text">Rating: ${course.rating}</p>
+                            <p class="card-text">Enrolled: ${course.enrolledNumber}</p>
+                			<span class="${difficultyClass}">${course.difficulty}</span>
+                            <div class="collapse" id="detailsCollapse${course.courseId}">
+                                <p>Additional details here...</p>
+                                <button class="btn btn-primary btn-details">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+			}
+
+			// Function to render the courses onto the courses-container
+			function renderCourses(courses) {
+				var coursesContainer = $('#courses-container'); // Get the courses container element
+				coursesContainer.empty();
+
+				// Iterate through the courses and create HTML for each course
+				courses.forEach(function(course) {
+					var courseHTML = createCourseCard(course); // Generate HTML for a single course
+					coursesContainer.append(courseHTML); // Append the course HTML to the container
+				});
+			}
+
+			// Call the renderCourses function with the fetched course data
+			renderCourses(response); // Assuming response contains an array of course objects
+		},
+		error: function(xhr, status, error) {
+			// Handle errors
+			console.error('Error:', status, error);
+		}
+	});
+
+
+}
 $(document).ready(function() {
+
+	updateCourses();
+
 	$.ajax({
 		url: 'http://localhost:8080/courses/getTeacherName',
 		type: 'GET',
@@ -173,7 +325,7 @@ $(document).ready(function() {
 			button.removeClass('btn-outline-danger').addClass('btn-danger');
 		}
 	});
-	
+
 	$('.sort-mode-btn').click(function(event) {
 		$(this).toggleClass('rotate180');
 		$(this).toggleClass('rotate0');
@@ -193,160 +345,7 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#get-result-btn').click(function(event) {
-		let filterData = '';
-		let sortData = '';
-		let paginationData = '';
-
-		let teacherUsername = $('#username-holder').text();
-
-		filterData += `authors=${teacherUsername}&`; // Construct authors filter parameter
-
-		// Filter section for ranges
-		if ($('#rangeFilterSwitch').is(':checked')) {
-			if ($('#priceSwitch').is(':checked')) {
-				const minPrice = parseInt($('#customRangeMin').val());
-				const maxPrice = parseInt($('#customRangeMax').val());
-
-				if (!isNaN(minPrice) && !isNaN(maxPrice) && minPrice <= maxPrice) {
-					filterData += `minPrice=${minPrice}&maxPrice=${maxPrice}&`;
-				}
-			}
-
-			if ($('#ratingSwitch').is(':checked')) {
-				const minRating = parseInt($('#customRatingMin').val());
-				const maxRating = parseInt($('#customRatingMax').val());
-
-				if (!isNaN(minRating) && !isNaN(maxRating) && minRating <= maxRating) {
-					filterData += `minRating=${minRating}&maxRating=${maxRating}&`;
-				}
-			}
-
-			if ($('#enrollmentSwitch').is(':checked')) {
-				const minEnrollment = parseInt($('#customEnrollmentMin').val());
-				const maxEnrollment = parseInt($('#customEnrollmentMax').val());
-
-				if (!isNaN(minEnrollment) && !isNaN(maxEnrollment) && minEnrollment <= maxEnrollment) {
-					filterData += `minEnrollment=${minEnrollment}&maxEnrollment=${maxEnrollment}&`;
-				}
-			}
-		}
-
-		if ($('#difficultyFilterSwitch').is(':checked')) {
-			let selectedDifficulties = [];
-			$('#filter-by-difficulty button').each(function() {
-				const buttonClasses = $(this).attr('class'); // Get the class attribute of the button
-				const buttonText = $(this).text().toUpperCase();
-
-				// Check if the class attribute contains 'outline'
-				if (buttonClasses.indexOf('outline') === -1) {
-					selectedDifficulties.push(buttonText); // Add selected difficulty to the array
-				}
-			});
-			if (selectedDifficulties.length > 0) {
-				filterData += `difficulties=${selectedDifficulties.join(',')}&`; // Construct difficulty filter parameter
-			}
-		}
-
-		if ($('#nameSortSwitch').is(':checked')) {
-			const nameSortMode = $('#sort-mode-btn1').hasClass('rotate0') ? 'asc' : 'desc';
-			sortData += `name=${nameSortMode}&`;
-		}
-
-		if ($('#priceSortSwitch').is(':checked')) {
-			const priceSortMode = $('#sort-mode-btn2').hasClass('rotate0') ? 'asc' : 'desc';
-			sortData += `price=${priceSortMode}&`;
-		}
-
-		if ($('#ratingSortSwitch').is(':checked')) {
-			const ratingSortMode = $('#sort-mode-btn3').hasClass('rotate0') ? 'asc' : 'desc';
-			sortData += `rating=${ratingSortMode}&`;
-		}
-
-		// Pagination section
-		const itemsPerPage = parseInt($('#paginationLabel').text());
-		paginationData += `itemsPerPage=${itemsPerPage}`;
-
-		const baseURL = 'http://localhost:8080/courses/find'; // Replace with your actual API endpoint
-		const finalURL = `${baseURL}?${filterData}${sortData}${paginationData}`;
-		console.log(finalURL);
-
-		// Make an AJAX POST request to the URL
-		$.ajax({
-			type: 'GET',
-			url: finalURL,
-			success: function(response) {
-				// Handle the successful response
-				console.log('Success!', response);
-
-				// Function to generate the HTML structure for a single course
-				function createCourseCard(course) {
-					let difficultyClass = '';
-					switch (course.difficulty) {
-						case 'BEGINNER':
-							difficultyClass = 'badge bg-success';
-							break;
-						case 'INTERMEDIATE':
-							difficultyClass = 'badge bg-warning text-dark';
-							break;
-						case 'ADVANCED':
-							difficultyClass = 'badge bg-danger';
-							break;
-						default:
-							difficultyClass = 'badge bg-primary';
-							break;
-					}
-					return `
-                <div class="col-md-3 mb-4">
-                    <div class="card course-card">
-                        <div class="course-img-section">
-                            <img src="https://via.placeholder.com/200x200" class="card-img-top course-img" alt="Course Image">
-                            <div class="d-flex flex-row justify-content-around course-img-btns">
-                                <a href="#" class="p-3"><img src="/images/favorite.png"></a>
-                                <a href="#" class="p-3"><img src="/images/shopping_cart.png"></a>
-                                <a href="#" class="p-3"><img src="/images/add.png"></a>
-                            </div>
-                        </div>
-                        <div class="card-body" style="background-color: #f8d7da;">
-                        	<p class="card-text">Author: <a href="#">${course.author}</a></p>
-                            <h5 class="card-title">${course.courseName}</h5>
-                            <p class="card-text">Price: $${course.price}</p>
-                            <p class="card-text">Rating: ${course.rating}</p>
-                            <p class="card-text">Enrolled: ${course.enrolledNumber}</p>
-                			<span class="${difficultyClass}">${course.difficulty}</span>
-                            <div class="collapse" id="detailsCollapse${course.courseId}">
-                                <p>Additional details here...</p>
-                                <button class="btn btn-primary btn-details">See Details</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            `;
-				}
-
-				// Function to render the courses onto the courses-container
-				function renderCourses(courses) {
-					var coursesContainer = $('#courses-container'); // Get the courses container element
-					coursesContainer.empty();
-
-					// Iterate through the courses and create HTML for each course
-					courses.forEach(function(course) {
-						var courseHTML = createCourseCard(course); // Generate HTML for a single course
-						coursesContainer.append(courseHTML); // Append the course HTML to the container
-					});
-				}
-
-				// Call the renderCourses function with the fetched course data
-				renderCourses(response); // Assuming response contains an array of course objects
-			},
-			error: function(xhr, status, error) {
-				// Handle errors
-				console.error('Error:', status, error);
-			}
-		});
-
-
-	});
+	$('#get-result-btn').click(updateCourses);
 
 	// courses section 
 	/*$('.course-card').hover(
