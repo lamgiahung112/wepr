@@ -2,8 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>Update your course</title>
-<link rel="stylesheet"
-	href="/webjars/bootstrap/4.5.2/css/bootstrap.min.css">
+<link 
+	href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <script th:inline="javascript">
 /*<![CDATA[*/
@@ -13,7 +13,7 @@ function addLesson() {
 
     // Create a new lesson element with unique IDs
     var lessonHtml = `
-        <div class="lesson ml-4" data-lesson-index="${lessonIndex}">
+        <div class="lesson ms-4" data-lesson-index="${lessonIndex}">
             <label for="lessonTitle${lessonIndex}">Lesson Title:</label>
             <input type="text" class="form-control" id="lessonTitle${lessonIndex}" placeholder="Enter lesson title" required>
             <label for="lessonDescription${lessonIndex}">Lesson Description:</label>
@@ -22,6 +22,7 @@ function addLesson() {
             <input type="text" class="form-control" id="videoLink${lessonIndex}" placeholder="Enter video link" required>
             <!-- Button to remove the lesson -->
             <button type="button" class="btn btn-danger mt-2" onclick="removeLesson(${lessonIndex})">Remove Lesson</button>
+            <div style="width: 100%; height: 2px; margin-top: 20px;margin-bottom: 20px;background-color: #9A9A9A;"></div>
         </div>
     `;
 
@@ -32,8 +33,13 @@ function addLesson() {
 function removeLesson(index) {
     // Remove the lesson with the specified index
     var lessonElement = document.querySelector(`.lesson[data-lesson-index="${index}"]`);
-    if (lessonElement) {
+    var lessonCount = document.querySelectorAll('.lesson').length;
+    
+    if (lessonElement && lessonCount > 1) {
         lessonElement.remove();
+    }
+    else {
+		alert("Course must have at least 1 lesson")
     }
 }
 
@@ -155,7 +161,7 @@ function submitForm() {
 						onclick="addLesson()">Add More Lessons</button>
 				</div>
 
-				<div th:each="item, index : ${course.lessons}" class="lesson ml-4"
+				<div th:each="item, index : ${course.lessons}" class="lesson ms-4"
 					th:data-lesson-index="${index.index}">
 					<label th:for="'lessonTitle' + ${index.index}">
 						Lesson Title:
@@ -184,6 +190,7 @@ function submitForm() {
 					<button type="button" class="btn btn-danger mt-2"
 						th:onclick="'removeLesson(' + ${index.index} + ')'">Remove
 						Lesson</button>
+					<div style="width: 100%; height: 2px; margin-top: 20px;margin-bottom: 20px;background-color: #9A9A9A;"></div>
 				</div>
 			</div>
 

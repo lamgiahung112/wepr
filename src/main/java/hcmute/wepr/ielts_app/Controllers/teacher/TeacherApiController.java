@@ -2,6 +2,7 @@ package hcmute.wepr.ielts_app.Controllers.teacher;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -24,14 +25,14 @@ public class TeacherApiController {
 	
 	@PostMapping("/course")
 	@IsTeacher
-	public ResponseEntity<Course> createNewCourse(@RequestBody CreateNewCourseRequest request) {
-		Course savedCourse = courseService.createNewCourse(request);
+	public ResponseEntity<?> createNewCourse(Authentication auth, @RequestBody CreateNewCourseRequest request) {
+		Course savedCourse = courseService.createNewCourse(request.setUserId(Integer.parseInt(auth.getCredentials().toString())));
 		
 		if (savedCourse == null) {
 			return ResponseEntity.badRequest().build();
 		}
 		
-		return ResponseEntity.ok(savedCourse);
+		return ResponseEntity.ok().build();
 	}
 	
 	@PostMapping("/course/update")
