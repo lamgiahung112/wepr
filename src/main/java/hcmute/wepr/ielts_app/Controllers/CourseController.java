@@ -21,6 +21,7 @@ import hcmute.wepr.ielts_app.Services.Interfaces.CourseServiceInterface;
 import hcmute.wepr.ielts_app.Utilities.Requests.RateCourseRequest;
 import hcmute.wepr.ielts_app.Services.Interfaces.UserServiceInterface;
 import hcmute.wepr.ielts_app.Utilities.responses.CourseDTO;
+import hcmute.wepr.ielts_app.Utilities.responses.FilteredCourseResponse;
 import hcmute.wepr.ielts_app.Utilities.responses.TeacherNameDTO;
 
 @Controller
@@ -53,7 +54,7 @@ public class CourseController {
 	
 	@GetMapping("/find")
 	@ResponseBody
-	public ResponseEntity<List<CourseDTO>> getCourses(
+	public ResponseEntity<FilteredCourseResponse> getCourses(
 	        @RequestParam(value = "authors", required = false) String authors,
 	        @RequestParam(value = "minPrice", required = false) Float minPrice,
 	        @RequestParam(value = "maxPrice", required = false) Float maxPrice,
@@ -105,14 +106,14 @@ public class CourseController {
 		}
 		
 		List<Course> courses = courseService.getCourseWithSpecAndPaging(authors, difficulties, priceRangeFilter, minPrice, maxPrice, ratingRangeFilter, minRating, maxRating, minEnrollment, maxEnrollment, nameSorting, priceSorting, ratingSorting, itemsPerPage, page);
-		
+		Long totalResultNumber = courseService.countCourseWithSpecAndPaging(authors, difficulties, priceRangeFilter, minPrice, maxPrice, ratingRangeFilter, minRating, maxRating, minEnrollment, maxEnrollment, nameSorting, priceSorting, ratingSorting, itemsPerPage, page);
 		// Convert Course objects to CourseDTO objects
         List<CourseDTO> courseDTOs = courses.stream()
                 .map(this::convertToCourseDTO)
                 .collect(Collectors.toList());
 
         // Return CourseDTO objects as JSON
-        return new ResponseEntity<>(courseDTOs, HttpStatus.OK);
+        return ResponseEntity.status(HttpStatus.OK).body(new FilteredCourseResponse(courseDTOs, totalResultNumber));
 	}
 	
 	private CourseDTO convertToCourseDTO(Course course) {

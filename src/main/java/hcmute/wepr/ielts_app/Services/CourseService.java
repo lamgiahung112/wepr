@@ -220,6 +220,7 @@ public class CourseService implements CourseServiceInterface {
 
 	        courses.add(course);
 	    });
+	    
 
 	    return courses;
 	}
@@ -256,6 +257,15 @@ public class CourseService implements CourseServiceInterface {
 				.estimatedRevenue(course.getEnrolledNumber() * course.getPrice())
 				.ratingCount(ratingRepository.findByRatingIdCourseId(courseId).size())
 				.build();
+  }
+	public Long countCourseWithSpecAndPaging(String authors, String difficulties, boolean priceRangeFilter,
+			Float minPrice, Float maxPrice, boolean ratingRangeFilter, Float minRating, Float maxRating,
+			Integer minEnrollment, Integer maxEnrollment, String nameSorting, String priceSorting, String ratingSorting,
+			Integer itemsPerPage, Integer page) {
+		// Create Specification based on filtering criteria
+	    Specification<Course> spec = CourseSpecifications.filterCourses(authors, priceRangeFilter, minPrice, maxPrice,
+	            ratingRangeFilter, minRating, maxRating, minEnrollment, maxEnrollment, difficulties);
+	    return courseRepository.count(spec);
 	}
 
 }

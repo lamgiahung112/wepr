@@ -20,4 +20,8 @@ public interface CourseServiceInterface {
 	List<Course> getCourseWithSpecAndPaging(String authors, String difficulties, boolean priceRangeFilter, float minPrice, float maxPrice,
 			boolean ratingRangeFilter, float minRating, float maxRating, Integer minEnrollment, Integer maxEnrollment, String nameSorting,
 			String priceSorting, String ratingSorting, Integer itemsPerPage, Integer page);
+	Long countCourseWithSpecAndPaging(String authors, String difficulties, boolean priceRangeFilter, Float minPrice,
+			Float maxPrice, boolean ratingRangeFilter, Float minRating, Float maxRating, Integer minEnrollment,
+			Integer maxEnrollment, String nameSorting, String priceSorting, String ratingSorting, Integer itemsPerPage,
+			Integer page);
 }
