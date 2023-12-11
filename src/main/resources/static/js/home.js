@@ -5,7 +5,7 @@ function fetchCourses(page = 1) {
 
 
 	// Pagination section
-	const itemsPerPage = parseInt('6');
+	const itemsPerPage = parseInt('3');
 	paginationData += `itemsPerPage=${itemsPerPage}`;
 
 	const baseURL = 'http://localhost:8080/courses/find'; // Replace with your actual API endpoint
@@ -40,7 +40,7 @@ function fetchCourses(page = 1) {
 				return `
                 <div class="col-md-4 mb-4">
                 	<div class="card">
-                    <img src="https://via.placeholder.com/200x200" class="card-img-top" alt="Course Image">
+                    <img src="https://via.placeholder.com/100x100" class="card-img-top" alt="Course Image">
                     <div class="card-body">
                         <p class="card-text">Author: <a href="#">${course.author}</a></p>
                             <h5 class="card-title">${course.courseName}</h5>
