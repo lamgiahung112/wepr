@@ -455,7 +455,7 @@ $(document).ready(function() {
 	});
 
 	$('#get-result-btn').click( () => {
-		fetchCourses(0);
+		fetchCourses(1);
 	});
 });
 

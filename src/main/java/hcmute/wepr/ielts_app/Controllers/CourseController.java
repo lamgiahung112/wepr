@@ -1,5 +1,6 @@
 package hcmute.wepr.ielts_app.Controllers;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import hcmute.wepr.ielts_app.Models.ApplicationUser;
 import hcmute.wepr.ielts_app.Models.Course;
+import hcmute.wepr.ielts_app.Models.Lesson;
 import hcmute.wepr.ielts_app.Models.UserProgress;
 import hcmute.wepr.ielts_app.Services.Interfaces.CourseServiceInterface;
 import hcmute.wepr.ielts_app.Utilities.Requests.RateCourseRequest;
@@ -41,6 +43,19 @@ public class CourseController {
 	@GetMapping
 	public String coursePage() {
 		return "courses";
+	}
+	
+	@GetMapping("/{id}/learn")
+	public String lessonPage(Model model, @PathVariable("id") int courseId) {
+		Course courseWithLessons = courseService.getCouseWithAllLessons(courseId);
+		// Sort the lessons by lessonId (as an example)
+	    List<Lesson> sortedLessons = courseWithLessons.getLessons().stream()
+	            .sorted(Comparator.comparingInt(Lesson::getLessonId))
+	            .collect(Collectors.toList());
+		model.addAttribute("courseWithLessons", courseWithLessons);
+	    model.addAttribute("sortedLessons", sortedLessons);
+
+		return "lessons";
 	}
 	
 	@PostMapping("/rating")

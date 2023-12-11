@@ -28,4 +28,5 @@ public interface CourseServiceInterface {
 			Float maxPrice, boolean ratingRangeFilter, Float minRating, Float maxRating, Integer minEnrollment,
 			Integer maxEnrollment, String nameSorting, String priceSorting, String ratingSorting, Integer itemsPerPage,
 			Integer page);
+	Course getCouseWithAllLessons(int courseId);
 }
