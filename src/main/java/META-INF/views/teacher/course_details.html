@@ -4,6 +4,13 @@
 <title>Course details</title>
 <link href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css"
 	rel="stylesheet">
+<script th:inline="javascript">
+/*<![CDATA[*/
+function gotoupdatepage() {
+    window.location.href = /*[[@{/teacher/courses/{courseId}/update(courseId=${course.courseId})}]]*/ "/teacher/dashboard";
+}
+/*]]>*/
+</script>
 </head>
 <body>
 	<div th:replace="fragments/teacher/navbar :: nav"></div>
@@ -38,7 +45,7 @@
         </div>
 		<h2 class="col justify-content-between mt-4">
 			Course Details
-			<button type="button" class="btn btn-primary mt-2" th:onclick="window.location.href='/teacher/courses${course.courseId}/update'">Update</button>
+			<button type="button" class="btn btn-primary mt-2" th:onclick="gotoupdatepage()">Update</button>
 		</h2>
 		<!-- Course Name -->
 		<div class="form-group mb-4">

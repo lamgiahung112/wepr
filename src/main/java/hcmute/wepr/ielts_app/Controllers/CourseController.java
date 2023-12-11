@@ -52,6 +52,11 @@ public class CourseController {
 		return ResponseEntity.status(HttpStatus.OK).body(teacherNames);
 	}
 	
+	@GetMapping("/{courseId}")
+	public String getCourseDetail(Authentication authentication) {
+		return "";
+	}
+	
 	@GetMapping("/find")
 	@ResponseBody
 	public ResponseEntity<FilteredCourseResponse> getCourses(
