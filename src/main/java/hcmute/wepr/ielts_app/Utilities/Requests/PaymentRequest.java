@@ -8,4 +8,5 @@ import lombok.experimental.Accessors;
 public class PaymentRequest {
 	private String paypalOrderId;
 	private int userId;
+	private float amount;
 }
