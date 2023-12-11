@@ -15,8 +15,11 @@
 			<div id="courseIntro" class="d-flex flex-column m-3">
 				<div id="courseTitle" class=" h-25 d-flex flex-row justify-content-center align-items-center">
 					<div>
+						<div id="userIdHolder" th:attr="data-user-id=${userId}"></div>
+						<div id="courseIdHolder" th:attr="data-course-id=${courseWithLessons.courseId}"></div>
 						<h4 id="courseTitle" class="h-25 d-flex flex-row justify-content-center align-items-center"
-							th:text="${courseWithLessons.courseName}">
+							th:text="${courseWithLessons.courseName}" 
+							>
 							Course Title
 						</h4>
 					</div>
