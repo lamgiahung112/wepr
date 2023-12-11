@@ -9,4 +9,6 @@ import hcmute.wepr.ielts_app.Models.CartItemId;
 
 public interface CartItemRepositoryInterface extends JpaRepository<CartItem, CartItemId>{
 	List<CartItem> findByCartItemIdUserId(int userId);
+	List<CartItem> findWithCourseByCartItemIdUserId(int userId);
+	List<CartItem> findWithCourseWithUserByCartItemIdUserId(int userId);
 }
