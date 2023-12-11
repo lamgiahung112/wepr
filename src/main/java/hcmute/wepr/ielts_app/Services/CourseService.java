@@ -1,9 +1,12 @@
 package hcmute.wepr.ielts_app.Services;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -16,12 +19,18 @@ import org.springframework.stereotype.Service;
 import hcmute.wepr.ielts_app.Models.ApplicationUser;
 import hcmute.wepr.ielts_app.Models.Course;
 import hcmute.wepr.ielts_app.Models.Lesson;
+import hcmute.wepr.ielts_app.Models.Rating;
+import hcmute.wepr.ielts_app.Models.RatingId;
 import hcmute.wepr.ielts_app.Models.enums.DifficultLevel;
 import hcmute.wepr.ielts_app.Services.Interfaces.CourseServiceInterface;
 import hcmute.wepr.ielts_app.Utilities.Requests.CreateNewCourseRequest;
+import hcmute.wepr.ielts_app.Utilities.Requests.RateCourseRequest;
 import hcmute.wepr.ielts_app.Utilities.Requests.UpdateCourseRequest;
+import hcmute.wepr.ielts_app.Utilities.responses.CourseStatisticsResponse;
 import hcmute.wepr.ielts_app.repositories.CourseRepositoryInterface;
 import hcmute.wepr.ielts_app.repositories.LessonRepositoryInterface;
+import hcmute.wepr.ielts_app.repositories.RatingRepositoryInterface;
+import hcmute.wepr.ielts_app.repositories.UserProfileRepositoryInterface;
 import hcmute.wepr.ielts_app.repositories.UserRepositoryInterface;
 import hcmute.wepr.ielts_app.specifications.CourseSpecifications;
 
@@ -34,6 +43,12 @@ public class CourseService implements CourseServiceInterface {
 
 	@Autowired
 	private UserRepositoryInterface userRepository;
+	
+	@Autowired
+	private UserProfileRepositoryInterface userProfileRepository;
+	
+	@Autowired
+	private RatingRepositoryInterface ratingRepository;
 
 	@Override
 	public Course createNewCourse(CreateNewCourseRequest request) {
@@ -211,6 +226,38 @@ public class CourseService implements CourseServiceInterface {
 	}
 
 	@Override
+	public void rateCourse(RateCourseRequest request) {
+		Rating rating = Rating.builder()
+				.ratingId(new RatingId().setCourseId(request.getCourseId()).setUserId(request.getUserId()))
+				.rating(request.getRating())
+				.build();
+		ratingRepository.save(rating);
+		AtomicInteger totalRatingPoint = new AtomicInteger(0);
+		AtomicInteger totalRatingCount = new AtomicInteger(0);
+		ratingRepository.findByRatingIdCourseId(request.getCourseId())
+			.stream()
+			.forEach(r -> {
+				totalRatingCount.getAndIncrement();
+				totalRatingPoint.getAndAdd(r.getRating());
+			});
+		Course course = courseRepository.findById(request.getCourseId()).orElse(null);
+		course.setRating(totalRatingPoint.get()/totalRatingCount.get());
+		courseRepository.save(course);
+	}
+
+	@Override
+	public CourseStatisticsResponse getCourseStatistics(int courseId) {
+		Course course = courseRepository.findById(courseId).orElse(null);
+		
+		if (course == null) return null;
+		
+		return CourseStatisticsResponse.builder()
+				.numberOfStudents(course.getEnrolledNumber())
+				.averageRating(new BigDecimal(course.getRating()).setScale(2, RoundingMode.HALF_UP).floatValue())
+				.estimatedRevenue(course.getEnrolledNumber() * course.getPrice())
+				.ratingCount(ratingRepository.findByRatingIdCourseId(courseId).size())
+				.build();
+  }
 	public Long countCourseWithSpecAndPaging(String authors, String difficulties, boolean priceRangeFilter,
 			Float minPrice, Float maxPrice, boolean ratingRangeFilter, Float minRating, Float maxRating,
 			Integer minEnrollment, Integer maxEnrollment, String nameSorting, String priceSorting, String ratingSorting,
