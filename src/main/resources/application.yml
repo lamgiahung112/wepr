@@ -22,3 +22,7 @@ logging:
     org:
       hibernate:
         SQL: DEBUG
+paypal:
+  client:
+    id: AbprxemC7WDSdsJn8J0hxrW5WgjA0y2KT4XMYKxd5b6yjx9cMziWRf4OeZf3KHKP6K6CromupA_7I8vd
+    secret: EDB-1abglvW5aetec4trGka62y1pyctSZ2_6LrpPwoncTVsezzKw-nvSmo02wbV48SqvQnzYDzNtozIi
