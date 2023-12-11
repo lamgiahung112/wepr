@@ -2,6 +2,8 @@ package hcmute.wepr.ielts_app.Services;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,5 +38,16 @@ public class CartItemService implements CartItemServiceInterface {
 	public void clear(int userId) {
 		List<CartItem> cart = cartItemRepository.findByCartItemIdUserId(userId);
 		cartItemRepository.deleteAllInBatch(cart);
+	}
+
+	@Override
+	public float getTotalPriceOfCart(int userId) {
+		List<CartItem> cart = cartItemRepository.findWithCourseByCartItemIdUserId(userId);
+		AtomicReference<Float> price = new AtomicReference<>(0f);
+		
+		cart.forEach(item -> {
+			price.set(price.get() + item.getCourse().getPrice());
+		});
+		return price.get();
 	}
 }
