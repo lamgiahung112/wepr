@@ -10,4 +10,6 @@ public interface UserServiceInterface {
 	String authenticateAndGetCredentials(String username, String password);
 	ApplicationUser createUser(String username, String password, Role role, String email, float balance);
 	List<TeacherNameDTO> getTeacherNameAndUsername();
+	ApplicationUser findById(int id);
+	ApplicationUser findWithUserProfileById(int id);
 }

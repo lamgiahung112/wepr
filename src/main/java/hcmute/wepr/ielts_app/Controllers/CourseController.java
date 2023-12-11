@@ -1,5 +1,9 @@
 package hcmute.wepr.ielts_app.Controllers;
 
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,19 +12,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import hcmute.wepr.ielts_app.Models.ApplicationUser;
 import hcmute.wepr.ielts_app.Models.Course;
+import hcmute.wepr.ielts_app.Models.UserProgress;
 import hcmute.wepr.ielts_app.Services.Interfaces.CourseServiceInterface;
+import hcmute.wepr.ielts_app.Utilities.Requests.BuyCourseRequest;
 import hcmute.wepr.ielts_app.Utilities.Requests.RateCourseRequest;
 import hcmute.wepr.ielts_app.Services.Interfaces.UserServiceInterface;
 import hcmute.wepr.ielts_app.Utilities.responses.CourseDTO;
+import hcmute.wepr.ielts_app.Utilities.responses.CourseStatisticsResponse;
 import hcmute.wepr.ielts_app.Utilities.responses.FilteredCourseResponse;
 import hcmute.wepr.ielts_app.Utilities.responses.TeacherNameDTO;
 
@@ -32,6 +42,7 @@ public class CourseController {
 	CourseServiceInterface courseService;
 	@Autowired
 	UserServiceInterface userService;
+	
 	@GetMapping
 	public String coursePage() {
 		return "courses";
@@ -53,8 +64,34 @@ public class CourseController {
 	}
 	
 	@GetMapping("/{courseId}")
-	public String getCourseDetail(Authentication authentication) {
-		return "";
+	public String getCourseDetail(Authentication authentication, Model model,@PathVariable(name = "courseId") int courseId) {
+		Integer userid = Integer.valueOf(authentication.getCredentials().toString());
+		System.out.println(userid);
+		Course course = courseService.findCourseWithLessonsAndWithUserByCourseId(courseId);
+		ApplicationUser author = userService.findWithUserProfileById(course.getUser().getUserId());
+		CourseStatisticsResponse stats = courseService.getCourseStatistics(courseId);
+		UserProgress progress = null;
+		if (userid != null) {
+			progress = courseService.getUserCourseProgress(userid, courseId);
+		}
+
+		model.addAttribute("course", course);
+		model.addAttribute("author", author.getProfile().getName());
+		model.addAttribute("stats", stats);
+		model.addAttribute("lessons", course.getLessons());
+		model.addAttribute("userId", userid);
+		model.addAttribute("hasBoughtCourse", progress != null);
+		
+		return "course_details";
+	}
+	
+	@PostMapping("/buy")
+	@ResponseBody
+	public ResponseEntity<?> buyCourse(@RequestBody BuyCourseRequest request) {
+		if (courseService.buyCourse(request) == false) {
+			return ResponseEntity.badRequest().build();
+		}
+		return ResponseEntity.ok().build();
 	}
 	
 	@GetMapping("/find")

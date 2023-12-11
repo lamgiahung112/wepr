@@ -21,8 +21,11 @@ import hcmute.wepr.ielts_app.Models.Course;
 import hcmute.wepr.ielts_app.Models.Lesson;
 import hcmute.wepr.ielts_app.Models.Rating;
 import hcmute.wepr.ielts_app.Models.RatingId;
+import hcmute.wepr.ielts_app.Models.UserProgress;
+import hcmute.wepr.ielts_app.Models.UserProgressId;
 import hcmute.wepr.ielts_app.Models.enums.DifficultLevel;
 import hcmute.wepr.ielts_app.Services.Interfaces.CourseServiceInterface;
+import hcmute.wepr.ielts_app.Utilities.Requests.BuyCourseRequest;
 import hcmute.wepr.ielts_app.Utilities.Requests.CreateNewCourseRequest;
 import hcmute.wepr.ielts_app.Utilities.Requests.RateCourseRequest;
 import hcmute.wepr.ielts_app.Utilities.Requests.UpdateCourseRequest;
@@ -31,6 +34,7 @@ import hcmute.wepr.ielts_app.repositories.CourseRepositoryInterface;
 import hcmute.wepr.ielts_app.repositories.LessonRepositoryInterface;
 import hcmute.wepr.ielts_app.repositories.RatingRepositoryInterface;
 import hcmute.wepr.ielts_app.repositories.UserProfileRepositoryInterface;
+import hcmute.wepr.ielts_app.repositories.UserProgressRepositoryInterface;
 import hcmute.wepr.ielts_app.repositories.UserRepositoryInterface;
 import hcmute.wepr.ielts_app.specifications.CourseSpecifications;
 
@@ -49,6 +53,9 @@ public class CourseService implements CourseServiceInterface {
 	
 	@Autowired
 	private RatingRepositoryInterface ratingRepository;
+	
+	@Autowired
+	private UserProgressRepositoryInterface userProgressRepository;
 
 	@Override
 	public Course createNewCourse(CreateNewCourseRequest request) {
@@ -266,6 +273,46 @@ public class CourseService implements CourseServiceInterface {
 	    Specification<Course> spec = CourseSpecifications.filterCourses(authors, priceRangeFilter, minPrice, maxPrice,
 	            ratingRangeFilter, minRating, maxRating, minEnrollment, maxEnrollment, difficulties);
 	    return courseRepository.count(spec);
+	}
+
+	@Override
+	public int getUserCourseRating(int userId, int courseId) {
+		return ratingRepository.findById(new RatingId().setUserId(userId).setCourseId(courseId)).get().getRating();
+	}
+
+	@Override
+	public UserProgress getUserCourseProgress(int userId, int courseId) {
+		return userProgressRepository.findById(new UserProgressId().setCourseId(courseId).setUserId(userId)).orElse(null);
+	}
+
+	@Override
+	public Course findCourseWithLessonsAndWithUserByCourseId(int courseId) {
+		return courseRepository.findCourseWithLessonsAndWithUserByCourseId(courseId);
+	}
+
+	@Override
+	public boolean buyCourse(BuyCourseRequest request) {
+		Course course = courseRepository.findCourseWithLessonsAndWithUserByCourseId(request.getCourseId());
+		ApplicationUser user = userRepository.findById(request.getUserId()).orElse(null);
+		
+		
+		if (course == null || user == null || user.getBalance() < course.getPrice() || course.getUser().getUserId() == user.getUserId()) return false;
+		
+		UserProgress courseProgress = userProgressRepository.findById(new UserProgressId().setCourseId(request.getCourseId()).setUserId(request.getUserId())).orElse(null);
+		
+		if (courseProgress != null) return false;
+		
+		user.setBalance(user.getBalance() - course.getPrice());
+		course.getUser().setBalance(course.getUser().getBalance() + course.getPrice());
+		UserProgress progress = UserProgress.builder()
+				.user(user)
+				.course(course)
+				.build();
+		
+		userRepository.save(user);
+		userRepository.save(course.getUser());
+		userProgressRepository.save(progress);
+		return true;
 	}
 
 }
