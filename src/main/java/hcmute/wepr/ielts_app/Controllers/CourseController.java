@@ -1,9 +1,5 @@
 package hcmute.wepr.ielts_app.Controllers;
 
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +22,6 @@ import hcmute.wepr.ielts_app.Models.ApplicationUser;
 import hcmute.wepr.ielts_app.Models.Course;
 import hcmute.wepr.ielts_app.Models.UserProgress;
 import hcmute.wepr.ielts_app.Services.Interfaces.CourseServiceInterface;
-import hcmute.wepr.ielts_app.Utilities.Requests.BuyCourseRequest;
 import hcmute.wepr.ielts_app.Utilities.Requests.RateCourseRequest;
 import hcmute.wepr.ielts_app.Services.Interfaces.UserServiceInterface;
 import hcmute.wepr.ielts_app.Utilities.responses.CourseDTO;
@@ -83,15 +78,6 @@ public class CourseController {
 		model.addAttribute("hasBoughtCourse", progress != null);
 		
 		return "course_details";
-	}
-	
-	@PostMapping("/buy")
-	@ResponseBody
-	public ResponseEntity<?> buyCourse(@RequestBody BuyCourseRequest request) {
-		if (courseService.buyCourse(request) == false) {
-			return ResponseEntity.badRequest().build();
-		}
-		return ResponseEntity.ok().build();
 	}
 	
 	@GetMapping("/find")
