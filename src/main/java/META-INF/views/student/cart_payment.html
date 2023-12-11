@@ -7,41 +7,6 @@
 
 <script
 	src="https://www.paypal.com/sdk/js?client-id=AbprxemC7WDSdsJn8J0hxrW5WgjA0y2KT4XMYKxd5b6yjx9cMziWRf4OeZf3KHKP6K6CromupA_7I8vd&currency=USD"></script>
-
-<script th:inline="javascript">
-/*<![CDATA[*/
-	function onActionButtonClick() {
-		const btn = document.querySelector("#action-button")
-		
-		
-		const data = {
-		}
-
-		var xhr = new XMLHttpRequest();
-	    xhr.open("POST", "/api/courses/buy", true); // Adjust the URL based on your server configuration
-	    xhr.setRequestHeader("Content-Type", "application/json");
-
-	    xhr.onreadystatechange = function () {
-	        if (xhr.readyState === 4) {
-	            if (xhr.status === 200) {
-	                // Successful response
-	                console.log("Course updated successfully");
-	                
-	                // Redirect to the teacher dashboard
-	                
-	            } else {
-	                // Handle error response
-	                window.location.href = "/auth/login/student";
-	                console.error("Error adding course");
-	            }
-	        }
-	    };
-
-	    // Convert the JavaScript object to JSON and send it in the request body
-	    xhr.send(JSON.stringify(data));
-	}
-/*]]>*/
-</script>
 </head>
 <body>
 	<div id="paypal-button-container"></div>
@@ -54,7 +19,7 @@
       return actions.order.create({
         purchase_units: [{
           amount: {
-            value: '1.00' // Set the payment amount
+            value: /*[[@{'{total}'(total=${total})}]]*/ '1.00'
           }
         }]
       });
@@ -67,9 +32,10 @@
 	       const payerId = details.payer.payer_id;
 
 	       const paymentData = {
-	    	paypalOrderId: orderId,
-	    	userId: /*[[${userId}]]*/ "",
-	   	   }
+	   			amount: /*[[${total}]]*/ 0,
+				userId: /*[[${userId}]]*/ "",
+				paypalOrderId: orderId	
+			}
 	
 	       var xhr = new XMLHttpRequest();
 		    xhr.open("POST", "/payment", true); // Adjust the URL based on your server configuration
@@ -79,7 +45,8 @@
 		        if (xhr.readyState === 4) {
 		            if (xhr.status === 200) {
 		                // Successful response
-		                console.log("Course updated successfully");
+		                alert("Payment accepted!");
+		                window.location.href = "/courses"
 		                
 		            } else {
 		                console.error("Error adding course");

@@ -54,6 +54,9 @@ public class CartController {
 	@GetMapping("/details")
 	@IsAuthenticated
 	public String getCartDetailsPage(Model model, Authentication authentication) {
+		float totalPriceCart = cartItemService.getTotalPriceOfCart(Integer.valueOf(authentication.getCredentials().toString()));
+		
+		model.addAttribute("total", totalPriceCart);
 		model.addAttribute("clientId", paypalClientId);
 		model.addAttribute("userId", Integer.valueOf(authentication.getCredentials().toString()));
 		return "student/cart_payment";
