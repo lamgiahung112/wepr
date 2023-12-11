@@ -17,7 +17,7 @@ public interface CourseServiceInterface {
 
 	void generatesCourses();
 
-	List<Course> getCourseWithSpecAndPaging(String authors, String difficulties, float minPrice, float maxPrice,
-			float minRating, float maxRating, Integer minEnrollment, Integer maxEnrollment, String nameSorting,
+	List<Course> getCourseWithSpecAndPaging(String authors, String difficulties, boolean priceRangeFilter, float minPrice, float maxPrice,
+			boolean ratingRangeFilter, float minRating, float maxRating, Integer minEnrollment, Integer maxEnrollment, String nameSorting,
 			String priceSorting, String ratingSorting, Integer itemsPerPage, Integer page);
 }
