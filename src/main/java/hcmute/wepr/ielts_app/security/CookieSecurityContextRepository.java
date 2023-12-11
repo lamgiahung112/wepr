@@ -64,14 +64,20 @@ public class CookieSecurityContextRepository implements SecurityContextRepositor
 		HttpServletRequest request = requestResponseHolder.getRequest();
 		HttpServletResponse response = requestResponseHolder.getResponse();
 		
+		Optional<Cookie> cookie = readCookieFromRequest(request);
+		
 		for (Pattern endpoint : STRICTLY_PUBLIC_ENDPOINT_WHITELIST) {
 			String currentEndpoint = request.getRequestURI();
 			if (endpoint.matcher(currentEndpoint).matches()) {
-				return new SecurityContextImpl();
+				try {
+					return new SecurityContextImpl(cookieAuthenticationManager
+							.authenticate(new UsernamePasswordAuthenticationToken(cookie.get().getValue(), cookie.get().getValue())));
+				}
+				catch (Exception e) {		
+					return new SecurityContextImpl();
+				}
 			}
 		}
-
-		Optional<Cookie> cookie = readCookieFromRequest(request);
 		
 		if (cookie.isEmpty()) {
 			throw new AccessDeniedException("Invalid Credentials");

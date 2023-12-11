@@ -9,4 +9,5 @@ import hcmute.wepr.ielts_app.Models.Course;
 
 public interface CourseRepositoryInterface extends JpaRepository<Course, Integer>, JpaSpecificationExecutor<Course> {
 	Course findCourseWithLessonsByCourseId(int courseId);
+	Course findCourseWithLessonsAndWithUserByCourseId(int courseId);
 }

@@ -34,7 +34,6 @@ public class CookieAuthenticationManager implements AuthenticationManager {
 		String role = jwtData.getRole();
 		String username = jwtData.getUsername();
 		String userId = jwtData.getId();
-		
 		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
 		authorities.add(new SimpleGrantedAuthority(role));
 		return new UsernamePasswordAuthenticationToken(username, userId, authorities);

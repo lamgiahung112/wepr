@@ -86,6 +86,16 @@ public class UserService implements UserServiceInterface {
 	    return teacherNameDTOs;
 	}
 
+	@Override
+	public ApplicationUser findById(int id) {
+		return userRepository.findById(id).orElse(null);
+	}
+
+	@Override
+	public ApplicationUser findWithUserProfileById(int id) {
+		return userRepository.findUserWithProfileByUserId(id);
+	}
+
 	
 
 }
