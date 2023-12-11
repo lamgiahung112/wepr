@@ -37,7 +37,11 @@ public class SecurityConfiguration {
 							.anyRequest().authenticated()
 				)
 				.formLogin(customizer -> customizer.disable())
-				.csrf(customizer -> customizer.disable()).build();
+				.csrf(customizer -> customizer.disable())
+				.exceptionHandling(customizer -> {
+					customizer.accessDeniedPage("/auth/login/student");
+				})
+				.build();
 	}
 
 	@Bean
