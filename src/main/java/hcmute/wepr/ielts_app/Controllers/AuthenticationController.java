@@ -63,6 +63,6 @@ public class AuthenticationController {
 		cookie.setPath("/");
 		cookie.setMaxAge(Integer.MAX_VALUE);
 		response.addCookie(cookie);
-		response.sendRedirect("/dashboard");
+		response.sendRedirect("/home/courses");
 	}
 }
