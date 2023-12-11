@@ -10,12 +10,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import hcmute.wepr.ielts_app.Models.Course;
 import hcmute.wepr.ielts_app.Services.Interfaces.CourseServiceInterface;
+import hcmute.wepr.ielts_app.Utilities.Requests.RateCourseRequest;
 import hcmute.wepr.ielts_app.Utilities.responses.CourseDTO;
 
 @Controller
@@ -27,6 +29,14 @@ public class CourseController {
 	@GetMapping
 	public String coursePage() {
 		return "courses";
+	}
+	
+	@PostMapping("/rating")
+	@ResponseBody
+	public ResponseEntity<?> rateCourse(@RequestBody RateCourseRequest request) {
+		courseService.rateCourse(request);
+		
+		return ResponseEntity.ok().build();
 	}
 	
 	@GetMapping("/find")

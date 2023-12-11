@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import hcmute.wepr.ielts_app.Models.Course;
 import hcmute.wepr.ielts_app.Services.Interfaces.CourseServiceInterface;
+import hcmute.wepr.ielts_app.Utilities.responses.CourseStatisticsResponse;
 import hcmute.wepr.ielts_app.security.annotations.IsTeacher;
 
 @Controller
@@ -30,8 +31,10 @@ public class TeacherCourseController {
 	@IsTeacher
 	public String getCourseDetailsPage(Authentication authentication, Model model,@PathVariable("id") int courseId) {
 		Course course = courseService.findCourseWithLessonsByCourseId(courseId);
+		CourseStatisticsResponse stats = courseService.getCourseStatistics(courseId);
 		
 		model.addAttribute("course", course);
+		model.addAttribute("stats", stats);
 		return "teacher/course_details";
 	}
 	
