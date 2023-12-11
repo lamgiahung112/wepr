@@ -1,4 +1,4 @@
-function updateCourses() {
+function updateCourses(page = 1) {
 	let filterData = '';
 	let sortData = '';
 	let paginationData = '';
@@ -73,7 +73,7 @@ function updateCourses() {
 	paginationData += `itemsPerPage=${itemsPerPage}`;
 
 	const baseURL = 'http://localhost:8080/courses/find'; // Replace with your actual API endpoint
-	const finalURL = `${baseURL}?${filterData}${sortData}${paginationData}`;
+	const finalURL = `${baseURL}?${filterData}${sortData}${paginationData}&page=${page - 1}`;
 	console.log(finalURL);
 
 	// Make an AJAX POST request to the URL
@@ -138,7 +138,75 @@ function updateCourses() {
 			}
 
 			// Call the renderCourses function with the fetched course data
-			renderCourses(response); // Assuming response contains an array of course objects
+			renderCourses(response.courses); // Assuming response contains an array of course objects
+
+			const container = $("#paginationButtonContainer");
+			container.empty(); // Clear previous buttons
+			let totalNumber = response.totalNumber;
+			let currentPage = page;
+			const totalPages = Math.ceil(totalNumber / itemsPerPage);
+
+			if (totalPages <= 1) {
+				return; // No need for pagination if there's only one page
+			}
+
+			const pagination = $("<ul>").addClass("pagination");
+
+			// Function to create pagination button
+			function createPaginationButton(label, page) {
+				const button = $("<li>").addClass("page-item");
+				const link = $("<a>")
+					.addClass("page-link")
+					.attr("href", "#")
+					.text(label)
+					.on("click", function() {
+						currentPage = page; // Update current page when a button is clicked
+						renderPagination(); // Re-render pagination buttons
+						updateCoursesCourses(currentPage);
+					});
+
+				if (page === currentPage) {
+					button.addClass("active"); // Add 'active' class to the current page button
+				}
+
+				button.append(link);
+				return button;
+			}
+
+			const maxVisibleButtons = 5; // Maximum number of visible pagination buttons
+
+			// Function to render pagination buttons
+			function renderPagination() {
+				pagination.empty(); // Clear previous pagination buttons
+
+				// Add Previous button
+				if (currentPage > 1) {
+					pagination.append(createPaginationButton("Previous", currentPage - 1));
+				}
+
+				// Calculate starting and ending page numbers for pagination display
+				let startPage = Math.max(1, currentPage - Math.floor(maxVisibleButtons / 2));
+				let endPage = Math.min(totalPages, startPage + maxVisibleButtons - 1);
+
+				if (endPage - startPage + 1 < maxVisibleButtons) {
+					startPage = Math.max(1, endPage - maxVisibleButtons + 1);
+				}
+
+				// Add numeric page buttons within the range
+				for (let i = startPage; i <= endPage; i++) {
+					pagination.append(createPaginationButton(i, i));
+				}
+
+				// Add Next button
+				if (currentPage < totalPages) {
+					pagination.append(createPaginationButton("Next", currentPage + 1));
+				}
+
+				container.append(pagination);
+			}
+
+			// Initial rendering of pagination buttons
+			renderPagination();
 		},
 		error: function(xhr, status, error) {
 			// Handle errors
@@ -345,17 +413,10 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#get-result-btn').click(updateCourses);
+	$('#get-result-btn').click( () => {
+		updateCourses(0);
+	});
 
-	// courses section 
-	/*$('.course-card').hover(
-		function() {
-			$(this).find('.collapse').collapse('show');
-		},
-		function() {
-			$(this).find('.collapse').collapse('hide');
-		}
-	);*/
 });
 
 // Use event delegation with .on() for hover on .course-card elements
