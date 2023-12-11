@@ -235,7 +235,7 @@ public class CourseService implements CourseServiceInterface {
 	public void rateCourse(RateCourseRequest request) {
 		Rating rating = Rating.builder()
 				.ratingId(new RatingId().setCourseId(request.getCourseId()).setUserId(request.getUserId()))
-				.rating(request.getRating())
+				.rating(request.getRating()).comment(request.getComment())
 				.build();
 		ratingRepository.save(rating);
 		AtomicInteger totalRatingPoint = new AtomicInteger(0);
@@ -287,5 +287,10 @@ public class CourseService implements CourseServiceInterface {
 	@Override
 	public Course findCourseWithLessonsAndWithUserByCourseId(int courseId) {
 		return courseRepository.findCourseWithLessonsAndWithUserByCourseId(courseId);
+	}
+
+	@Override
+	public Course getCouseWithAllLessons(int courseId) {
+		return courseRepository.findCourseWithLessonsByCourseId(courseId);
 	}
 }

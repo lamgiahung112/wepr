@@ -1,0 +1,70 @@
+#courseIntro {
+	border: 4px solid black;
+	border-radius: 20px;
+	height: 150px;
+	width: 350px;
+}
+
+#courseTitle {
+	text-align: center;
+	vertical-align: middle;
+
+}
+
+#lessonSidebar {
+	border: 4px solid black;
+	border-radius: 20px;
+}
+
+#lessonContainer {
+	border: 4px solid black;
+	border-radius: 20px;
+	width: 400px;
+	row-gap: 20px;
+}
+
+.lesson {
+	width: 350px;
+	
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+#lessonMainContent {
+	row-gap: 20px;
+}
+
+#lessonSummary {
+	width: 1200px;
+	height: 100px;
+}
+
+#lessonVideo {
+	width: 1200px;
+	height: 650px;
+}
+
+#userOperations {
+	width: 1200px;
+}
+
+#leftUserOps {
+	width: 300px;
+}
+
+.enable-border {
+	border: 4px solid black;
+	border-radius: 10px;
+}
+
+/* Add this to your lessons.css or your CSS file */
+.lesson-link {
+    text-decoration: none;
+    color: #000; /* Change the color as needed */
+    transition: all 0.3s ease;
+}
+
+.lesson-link:hover {
+    transform: scale(1.05); /* Increase the scale as needed */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add shadow or other effects as desired */
+}

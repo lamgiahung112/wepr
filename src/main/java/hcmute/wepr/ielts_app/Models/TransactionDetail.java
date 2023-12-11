@@ -7,26 +7,21 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
-import lombok.Builder;
-import lombok.Data;
 
 @Entity
-@Table(name = "rating")
-@Data
-@Builder
-public class Rating {
+@Table(name = "transaction_detail")
+public class TransactionDetail {
 	@EmbeddedId
-	private RatingId ratingId;
-	private int rating;
-	private String comment;
+	private TransactionDetailId transactionDetailId;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@MapsId("userId")
-	@JoinColumn(name = "user_id")
-	private ApplicationUser user;
+	@MapsId("paypalTransactionId")
+	@JoinColumn(name = "paypal_transaction_id")
+	private PurchaseTransaction purchaseTransaction;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("courseId")
 	@JoinColumn(name = "course_id")
 	private Course course;
+	
 }

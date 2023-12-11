@@ -414,7 +414,7 @@ $(document).ready(function() {
 	});
 
 	$('#get-result-btn').click( () => {
-		updateCourses(0);
+		updateCourses(1);
 	});
 
 });
