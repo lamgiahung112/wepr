@@ -30,6 +30,7 @@ import hcmute.wepr.ielts_app.Utilities.responses.CourseDTO;
 import hcmute.wepr.ielts_app.Utilities.responses.CourseStatisticsResponse;
 import hcmute.wepr.ielts_app.Utilities.responses.FilteredCourseResponse;
 import hcmute.wepr.ielts_app.Utilities.responses.TeacherNameDTO;
+import hcmute.wepr.ielts_app.security.annotations.IsStudent;
 
 @Controller
 @CrossOrigin
@@ -45,8 +46,12 @@ public class CourseController {
 		return "courses";
 	}
 	
+	@IsStudent
 	@GetMapping("/{id}/learn")
-	public String lessonPage(Model model, @PathVariable("id") int courseId) {
+	public String lessonPage(Authentication auth, Model model, @PathVariable("id") int courseId) {
+		int studentId = Integer.valueOf(auth.getCredentials().toString());
+		
+		
 		Course courseWithLessons = courseService.getCouseWithAllLessons(courseId);
 		// Sort the lessons by lessonId (as an example)
 	    List<Lesson> sortedLessons = courseWithLessons.getLessons().stream()

@@ -1,6 +1,8 @@
 package hcmute.wepr.ielts_app.Models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -36,7 +38,7 @@ public class Lesson {
 	private String title;
 	@Column(columnDefinition = "NVARCHAR(255)")
 	private String description;
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "course_id")
 	private Course course;
