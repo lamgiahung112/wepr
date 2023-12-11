@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Cart details</title>
+<link rel="stylesheet"
+	href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+
+<script
+	src="https://www.paypal.com/sdk/js?client-id=AbprxemC7WDSdsJn8J0hxrW5WgjA0y2KT4XMYKxd5b6yjx9cMziWRf4OeZf3KHKP6K6CromupA_7I8vd&currency=USD"></script>
+</head>
+<body>
+	<div id="paypal-button-container"></div>
+</body>
+<script th:inline="javascript" defer="defer">
+/*<![CDATA[*/
+  paypal.Buttons({
+    createOrder: function(data, actions) {
+      // Set up the transaction
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: /*[[@{'{total}'(total=${total})}]]*/ '1.00'
+          }
+        }]
+      });
+    },
+    onApprove: function(data, actions) {
+      // Capture the funds from the transaction
+    	return actions.order.capture().then(function(details) {
+	       // Send the payment details to your Spring Boot backend
+	       const orderId = data.orderID;
+	       const payerId = details.payer.payer_id;
+
+	       const paymentData = {
+	   			amount: /*[[${total}]]*/ 0,
+				userId: /*[[${userId}]]*/ "",
+				paypalOrderId: orderId	
+			}
+	
+	       var xhr = new XMLHttpRequest();
+		    xhr.open("POST", "/payment", true); // Adjust the URL based on your server configuration
+		    xhr.setRequestHeader("Content-Type", "application/json");
+
+		    xhr.onreadystatechange = function () {
+		        if (xhr.readyState === 4) {
+		            if (xhr.status === 200) {
+		                // Successful response
+		                alert("Payment accepted!");
+		                window.location.href = "/courses"
+		                
+		            } else {
+		                console.error("Error adding course");
+		            }
+		        }
+		    };
+
+		    // Convert the JavaScript object to JSON and send it in the request body
+		    xhr.send(JSON.stringify(paymentData));
+	     });
+    }
+  }).render('#paypal-button-container');
+  /*]]>*/
+</script>
+</html>

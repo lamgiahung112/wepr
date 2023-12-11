@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Update your course</title>
+<link 
+	href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<script th:inline="javascript">
+/*<![CDATA[*/
+var lessonIndex = /*[[${#lists.size(course.lessons)}]]*/ 0;
+function addLesson() {
+    lessonIndex++;
+
+    // Create a new lesson element with unique IDs
+    var lessonHtml = `
+        <div class="lesson ms-4" data-lesson-index="${lessonIndex}">
+            <label for="lessonTitle${lessonIndex}">Lesson Title:</label>
+            <input type="text" class="form-control" id="lessonTitle${lessonIndex}" placeholder="Enter lesson title" required>
+            <label for="lessonDescription${lessonIndex}">Lesson Description:</label>
+            <textarea class="form-control" id="lessonDescription${lessonIndex}" rows="2" placeholder="Enter lesson description" required></textarea>
+            <label for="videoLink${lessonIndex}">Video Link:</label>
+            <input type="text" class="form-control" id="videoLink${lessonIndex}" placeholder="Enter video link" required>
+            <!-- Button to remove the lesson -->
+            <button type="button" class="btn btn-danger mt-2" onclick="removeLesson(${lessonIndex})">Remove Lesson</button>
+            <div style="width: 100%; height: 2px; margin-top: 20px;margin-bottom: 20px;background-color: #9A9A9A;"></div>
+        </div>
+    `;
+
+    // Append the new lesson to the container
+    document.getElementById('lessonsContainer').insertAdjacentHTML('beforeend', lessonHtml);
+}
+
+function removeLesson(index) {
+    // Remove the lesson with the specified index
+    var lessonElement = document.querySelector(`.lesson[data-lesson-index="${index}"]`);
+    var lessonCount = document.querySelectorAll('.lesson').length;
+    
+    if (lessonElement && lessonCount > 1) {
+        lessonElement.remove();
+    }
+    else {
+		alert("Course must have at least 1 lesson")
+    }
+}
+
+function submitForm() {
+    // Retrieve values from the form and construct the request object
+    var courseId = /*[[${course.courseId}]]*/ ""
+    var courseName = document.getElementById('courseName').value;
+    var courseDescription = document.getElementById('description').value;
+    var coverImageLink = document.getElementById('coverImage').value;
+    var price = parseFloat(document.getElementById('price').value);
+    var difficultyLevel = document.getElementById('difficulty').value;
+
+    // Construct lessons array
+    var lessons = [];
+    document.querySelectorAll('.lesson').forEach(function (lessonElement) {
+        var lessonTitle = document.getElementById(`lessonTitle${lessonElement.dataset.lessonIndex}`).value;
+        var lessonDescription = document.getElementById(`lessonDescription${lessonElement.dataset.lessonIndex}`).value;
+        var videoLink = document.getElementById(`videoLink${lessonElement.dataset.lessonIndex}`).value;
+        
+        var lesson = {
+            title: lessonTitle,
+            description: lessonDescription,
+            videoLink: videoLink
+        };
+        lessons.push(lesson);
+    });
+
+    // Create the request object
+    var updateCourseRequest = {
+    	courseId,
+        courseName,
+        courseDescription,
+        coverImageLink,
+        price,
+        difficultyLevel,
+        lessons
+    };
+
+    console.log(updateCourseRequest)
+ // Make an AJAX request to send the data to the server
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/api/teacher/course/update", true); // Adjust the URL based on your server configuration
+    xhr.setRequestHeader("Content-Type", "application/json");
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                // Successful response
+                console.log("Course updated successfully");
+                
+                // Redirect to the teacher dashboard
+                window.location.href = "/teacher/dashboard";
+            } else {
+                // Handle error response
+                console.error("Error adding course");
+            }
+        }
+    };
+
+    // Convert the JavaScript object to JSON and send it in the request body
+    xhr.send(JSON.stringify(updateCourseRequest));
+}
+/*]]>*/
+</script>
+<body>
+	<div th:replace="fragments/teacher/navbar :: nav"></div>
+	<div class="container mt-5">
+		<h2>Update your Course</h2>
+
+		<form id="courseForm">
+			<!-- Course Name -->
+			<div class="form-group">
+				<label for="courseName">Course Name:</label> <input type="text"
+					th:value="${course.courseName}" class="form-control"
+					id="courseName" placeholder="Enter course name" required />
+			</div>
+
+			<!-- Description -->
+			<div class="form-group">
+				<label for="description">Description:</label>
+				<textarea class="form-control" id="description" rows="3"
+					th:text="${course.description}"
+					placeholder="Enter course description" required></textarea>
+			</div>
+
+			<!-- Cover Image Link -->
+			<div class="form-group">
+				<label for="coverImage">Cover Image Link:</label> <input type="text"
+					class="form-control" id="coverImage"
+					th:value="${course.coverImage}"
+					placeholder="Enter cover image link" required>
+			</div>
+
+			<!-- Price -->
+			<div class="form-group">
+				<label for="price">Price:</label> <input type="number"
+					th:value="${course.price}" class="form-control" id="price"
+					placeholder="Enter price" required>
+			</div>
+
+			<!-- Difficulty -->
+			<div class="form-group">
+				<label for="difficulty">Choose Difficulty:</label> <select
+					class="form-control" id="difficulty">
+					<option value="BEGINNER"
+						th:selected="${course.level == 'BEGINNER'}">Beginner</option>
+					<option value="INTERMEDIATE"
+						th:selected="${course.level == 'INTERMEDIATE'}">Intermediate</option>
+					<option value="ADVANCED"
+						th:selected="${course.level == 'ADVANCED'}">Advanced</option>
+				</select>
+			</div>
+
+			<!-- Lessons -->
+			<div class="form-group" id="lessonsContainer">
+				<div class="d-flex justify-content-between align-items-center">
+					<div class="mr-3">Lessons:</div>
+					<button type="button" class="btn btn-primary mt-3"
+						onclick="addLesson()">Add More Lessons</button>
+				</div>
+
+				<div th:each="item, index : ${course.lessons}" class="lesson ms-4"
+					th:data-lesson-index="${index.index}">
+					<label th:for="'lessonTitle' + ${index.index}">
+						Lesson Title:
+					</label> 
+					<input type="text" class="form-control"
+						th:value="${item.title}"
+						th:id="'lessonTitle' + ${index.index}"
+						placeholder="Enter lesson title" required> 
+					<label
+						th:for="'lessonDescription' + ${index.index}">
+						LessonDescription:
+					</label>
+					<textarea class="form-control"
+						th:text="${item.description}"
+						th:id="'lessonDescription' + ${index.index}" rows="2"
+						placeholder="Enter lesson description" required></textarea>
+
+					<label th:for="'videoLink' + ${index.index}">Video Link:</label> 
+					<input
+						th:value="${item.video}"
+						type="text" class="form-control"
+						th:id="'videoLink' + ${index.index}"
+						placeholder="Enter video link" required>
+
+					<!-- Button to remove the lesson -->
+					<button type="button" class="btn btn-danger mt-2"
+						th:onclick="'removeLesson(' + ${index.index} + ')'">Remove
+						Lesson</button>
+					<div style="width: 100%; height: 2px; margin-top: 20px;margin-bottom: 20px;background-color: #9A9A9A;"></div>
+				</div>
+			</div>
+
+
+
+			<!-- Submit Button -->
+			<button type="button" class="btn btn-success" onclick="submitForm()">Submit</button>
+		</form>
+
+	</div>
+</body>
+</html>

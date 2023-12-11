@@ -1,0 +1,28 @@
+spring:
+  datasource:
+    url:  jdbc:sqlserver://localhost;databaseName=ielts_app_db;trustServerCertificate=true;
+    username: sa
+    password: sqlserverdeveloper
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    hibernate:
+      ddl-auto: update # You can use "create", "create-drop", "update", or "validate", see readme.md #1
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServerDialect
+auth:
+  jwt:
+    secret: 2nVd'rOOx0O![#K|lBnfYPKeME/@3)A9aX4&QuoWMX!=z?%.E(B~JKV](gV]8KN
+    exp_time: 30000000
+  cookie:
+    name: auth
+    
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+paypal:
+  client:
+    id: AbprxemC7WDSdsJn8J0hxrW5WgjA0y2KT4XMYKxd5b6yjx9cMziWRf4OeZf3KHKP6K6CromupA_7I8vd
+    secret: EDB-1abglvW5aetec4trGka62y1pyctSZ2_6LrpPwoncTVsezzKw-nvSmo02wbV48SqvQnzYDzNtozIi
