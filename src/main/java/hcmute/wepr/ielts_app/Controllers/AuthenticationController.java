@@ -30,30 +30,30 @@ public class AuthenticationController {
 	@Autowired
 	private UserServiceInterface userService;
 
-	@GetMapping("/login/student")
+	@GetMapping("/student/login")
 	public String getLoginStudentPage() {
 		return "student/login_student";
 	}
 	
-	@GetMapping("/signup/student")
+	@GetMapping("/student/signup")
 	public String getSignupStudentPage() {
 		return "student/signup_student";
 	}
 	
-	@PostMapping("/signup/student")
+	@PostMapping("/student/signup")
 	public String signupStudent(@ModelAttribute SignUpUserRequest params) {
 		userService.createUser(params.getUsername(), params.getPassword(), Role.ROLE_STUDENT, params.getEmail(), 0);
-		return "redirect:/auth/login/student";
+		return "redirect:/auth/student/login";
 	}
 	
-	@PostMapping("/login/student")
+	@PostMapping("/student/login")
 	public void loginStudent(@RequestParam(value = "username", required = true) String username,
 			@RequestParam(value = "password", required = true) String password,
 			HttpServletResponse response) throws IOException {
 		String cookieToken = userService.authenticateAndGetCredentials(username, password);
 		
 		if (cookieToken == null) {
-			response.sendRedirect("/auth/login/student");
+			response.sendRedirect("/auth/student/login");
 			return;
 		}
 		

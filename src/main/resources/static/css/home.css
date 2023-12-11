@@ -24,13 +24,7 @@ header img {
   background-size: cover;
 }
 
-.footer {
-	background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3) 0%, rgba(0, 128, 255,0.7) 75%, rgb(0, 128, 255) 100%);
-	background-position: center;
-  	background-repeat: no-repeat;
-  	background-attachment: scroll;
-  	background-size: cover;
-}
+
 
 .courses-section{
 	background: linear-gradient(to top, rgb(0, 128, 255) 0%, rgba(0, 128, 255,0.7) 25%,rgba(0, 128, 255,0.3) 50%,rgba(255, 255, 255, 0.3) 75%, rgb(0, 128, 255) 100%);
