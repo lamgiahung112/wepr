@@ -9,5 +9,5 @@ import hcmute.wepr.ielts_app.Models.PurchaseTransaction;
 
 public interface PurchaseTransactionRepositoryInterface extends JpaRepository<PurchaseTransaction, String> {
 	PurchaseTransaction findWithTransactionDetailsAndCourseByUserUserId(int userId);
-	List<PurchaseTransaction> findWithTransactionDetailsByCreatedAtBetween(LocalDateTime startTime, LocalDateTime endTime);
+	List<PurchaseTransaction> findWithTransactionDetailsWithCourseByCreatedAtBetween(LocalDateTime startTime, LocalDateTime endTime);
 }
