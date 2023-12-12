@@ -479,32 +479,49 @@ function handleAddToCartResponse() {
 
 // Event handler for clicking on the "Add to Cart" button
 $(document).on('click', '#courses-container #addToCartLink', function(event) {
-	event.preventDefault(); // Prevent the default action of the anchor tag
+    event.preventDefault(); // Prevent the default action of the anchor tag
 
-	// Get the courseId from the data attribute of the parent course card
-	const courseId = $(this).closest('.course-card').data('course-id');
-	console.log(courseId);
-	// Make a POST request to add the course to the cart
-	$.ajax({
-		type: 'POST',
-		url: `/cart/add`,
-		data: JSON.stringify({
+    // Get the courseId from the data attribute of the parent course card
+    const courseId = $(this).closest('.course-card').data('course-id');
+    console.log(courseId);
+
+    // Make a GET request to check if the user has progress in the course
+    $.ajax({
+        type: 'GET',
+		url: '/userprogress/getUserProgress',
+		data: {
 			courseId: courseId
-		}),
-		contentType: 'application/json',
-		success: function(response) {
-			// Handle success (if needed)
-			console.log('Course added to cart successfully:', response);
-			handleAddToCartResponse();
-			// Optionally, you can show a success message or update the UI
 		},
-		error: function(xhr, status, error) {
-			// Handle errors
-			console.error('Error adding course to cart:', status, error);
-			window.location.href = "/auth/student/login";
-			// Optionally, you can show an error message or handle the error
-		}
-	});
-
-
+        success: function(response) {
+            // If the user has progress, do not add the course to the cart
+            console.log('User has already made progress in this course');
+            // Optionally, show a message indicating the user's progress
+        },
+        error: function(xhr, status, error) {
+            // If the user doesn't have progress, add the course to the cart
+            console.error('Error checking user progress:', status, error);
+            if (xhr.status === 400) {
+                console.log('Course will be added to cart');
+                // Make a POST request to add the course to the cart
+                $.ajax({
+                    type: 'POST',
+                    url: `/cart/add`,
+                    data: JSON.stringify({
+                        courseId: courseId
+                    }),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        console.log('Course added to cart successfully:', response);
+                        handleAddToCartResponse();
+                        // Optionally, show a success message or update the UI
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error adding course to cart:', status, error);
+                        window.location.href = "/auth/student/login";
+                        // Optionally, show an error message or handle the error
+                    }
+                });
+            }
+        }
+    });
 });
