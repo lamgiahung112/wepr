@@ -1,0 +1,11 @@
+#teacherResponse {
+	border-left: 2px solid black;
+}
+
+#studentAnswer, #teacherResponse {
+	border-top: 2px solid black;
+}
+
+#answerSection {
+	border: 2px solid black;
+}

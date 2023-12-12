@@ -72,7 +72,7 @@ function updateCourses(page = 1) {
 	const itemsPerPage = parseInt($('#paginationLabel').text());
 	paginationData += `itemsPerPage=${itemsPerPage}`;
 
-	const baseURL = 'http://localhost:8080/courses/find'; // Replace with your actual API endpoint
+	const baseURL = 'http://localhost:8080/home/courses/find'; // Replace with your actual API endpoint
 	const finalURL = `${baseURL}?${filterData}${sortData}${paginationData}&page=${page - 1}`;
 	console.log(finalURL);
 
@@ -221,7 +221,7 @@ $(document).ready(function() {
 	updateCourses();
 
 	$.ajax({
-		url: 'http://localhost:8080/courses/getTeacherName',
+		url: 'http://localhost:8080/home/courses/getTeacherName',
 		type: 'GET',
 		dataType: 'json',
 		success: function(data) {
