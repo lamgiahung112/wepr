@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>Admin Dashboard</title>
+<link rel="stylesheet"
+	href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+</head>
+
+<script th:inline="javascript" defer>
+	
+</script>
+
+<body>
+	<div class="container mt-5">
+		<h2>Statistics</h2>
+		<div class="col" style="height:40px;display: flex;justify-content: start;column-gap: 8px;">
+			<select id="stats-range" style="height:40px;">
+				<option value="DAY" selected="selected">Today</option>
+				<option value="MONTH">This month</option>
+				<option value="YEAR">This Year</option>
+			</select>
+			<button style="height:40px;" class="btn btn-primary">Find</button>
+		</div>
+
+		<div class="row mt-4">
+			<div class="col-4 font-weight-bold">Number of sold courses</div>
+			<div class="col-1 text-center">:</div>
+			<div class="col-7" id="courses-sold"></div>
+		</div>
+		<h2 class="col justify-content-between mt-4">
+			Course Details
+		</h2>
+	</div>
+</body>
+
+</html>

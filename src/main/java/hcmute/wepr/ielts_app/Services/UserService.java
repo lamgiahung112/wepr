@@ -36,7 +36,7 @@ public class UserService implements UserServiceInterface {
 		}
 		
 		boolean isPasswordMatched = passwordEncoder.matches(password, user.get().getHashPassword());
-		if (!isPasswordMatched) {
+		if (!isPasswordMatched || !user.get().isEnabled()) {
 			return null;
 		}
 		
@@ -59,6 +59,7 @@ public class UserService implements UserServiceInterface {
 			user.setRole(role);
 			user.setEmail(email);
 			user.setBalance(balance);
+			user.setEnabled(true);
 			
 			return userRepository.save(user);
 		} else {
