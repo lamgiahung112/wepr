@@ -20,7 +20,8 @@ function addLesson() {
             <textarea class="form-control" id="lessonDescription${lessonIndex}" rows="2" placeholder="Enter lesson description" required></textarea>
             <label for="videoLink${lessonIndex}">Video Link:</label>
             <input type="text" class="form-control" id="videoLink${lessonIndex}" placeholder="Enter video link" required>
-            <!-- Button to remove the lesson -->
+            <label for="exercise${lessonIndex}">Exercise title:</label>
+            <input type="text" class="form-control" id="exercise${lessonIndex}" placeholder="Enter exercise title" />
             <button type="button" class="btn btn-danger mt-2" onclick="removeLesson(${lessonIndex})">Remove Lesson</button>
             <div style="width: 100%; height: 2px; margin-top: 20px;margin-bottom: 20px;background-color: #9A9A9A;"></div>
         </div>
@@ -57,11 +58,13 @@ function submitForm() {
         var lessonTitle = document.getElementById(`lessonTitle${lessonElement.dataset.lessonIndex}`).value;
         var lessonDescription = document.getElementById(`lessonDescription${lessonElement.dataset.lessonIndex}`).value;
         var videoLink = document.getElementById(`videoLink${lessonElement.dataset.lessonIndex}`).value;
+		var exerciseTitle = document.getElementById(`exercise${lessonElement.dataset.lessonIndex}`).value;
         
         var lesson = {
             title: lessonTitle,
             description: lessonDescription,
-            videoLink: videoLink
+            videoLink: videoLink,
+            exerciseTitle,
         };
         lessons.push(lesson);
     });
@@ -162,6 +165,9 @@ function submitForm() {
 					<label for="videoLink0">Video Link:</label> <input type="text"
 						class="form-control" id="videoLink0"
 						placeholder="Enter video link" required>
+					<label for="exercise0">Exercise Title:</label>
+            		<input type="text" class="form-control" id="exercise0" 
+            			placeholder="Enter exercise title" />
 					<!-- Button to remove the lesson -->
 					<button type="button" class="btn btn-danger mt-2"
 						onclick="removeLesson(0)">Remove Lesson</button>
