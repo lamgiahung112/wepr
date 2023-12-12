@@ -15,8 +15,11 @@
 			<div id="courseIntro" class="d-flex flex-column m-3">
 				<div id="courseTitle" class=" h-25 d-flex flex-row justify-content-center align-items-center">
 					<div>
+						<div id="userIdHolder" th:attr="data-user-id=${userId}"></div>
+						<div id="courseIdHolder" th:attr="data-course-id=${courseWithLessons.courseId}"></div>
 						<h4 id="courseTitle" class="h-25 d-flex flex-row justify-content-center align-items-center"
-							th:text="${courseWithLessons.courseName}">
+							th:text="${courseWithLessons.courseName}" 
+							>
 							Course Title
 						</h4>
 					</div>
@@ -36,12 +39,11 @@
 
 			</div>
 			<div id="lessonContainer" class="d-flex flex-column justify-content-around align-items-center m-3">
-				<!-- Lessons -->
 				<div th:each="lesson : ${sortedLessons}" class="lesson card mb-2">
-					<a th:href="@{'/lessons/' + ${lesson.lessonId} + '/details'}" class="lesson-link">
+					<a href="#" class="lesson-link" th:attr="data-lesson-id=${lesson.lessonId}">
 						<div class="card-body">
 							<h5 class="card-title" th:text="${'Lesson ' + lesson.lessonId + ' - ' + lesson.title}"></h5>
-							<p class="card-text" th:text="${'Duration: '  }"></p>
+							<p class="card-text" th:text="${'Description: ' + lesson.description  }"></p>
 						</div>
 					</a>
 				</div>
@@ -52,14 +54,14 @@
 			class="w-75 d-flex flex-column justify-content-center align-items-center enable-border">
 			<div id="lessonSummary" class="enable-border d-flex flex-row justify-content-between">
 				<div class="enable-border m-3 d-flex flex-row justify-content-center align-items-center ps-3 pe-3">
-					<div>
+					<div id="lessonTitleRight">
 						Lesson title
 					</div>
 				</div>
 				<div id="lessonDuration"
 					class="enable-border m-3 d-flex flex-row justify-content-center align-items-center ps-3 pe-3">
-					<div>
-						Duration
+					<div id="lessonDescriptionRight">
+						Description
 					</div>
 				</div>
 			</div>

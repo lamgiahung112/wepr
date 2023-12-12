@@ -24,12 +24,14 @@ import hcmute.wepr.ielts_app.Models.Course;
 import hcmute.wepr.ielts_app.Models.Lesson;
 import hcmute.wepr.ielts_app.Models.UserProgress;
 import hcmute.wepr.ielts_app.Services.Interfaces.CourseServiceInterface;
+import hcmute.wepr.ielts_app.Services.Interfaces.UserProgressServiceInterface;
 import hcmute.wepr.ielts_app.Utilities.Requests.RateCourseRequest;
 import hcmute.wepr.ielts_app.Services.Interfaces.UserServiceInterface;
 import hcmute.wepr.ielts_app.Utilities.responses.CourseDTO;
 import hcmute.wepr.ielts_app.Utilities.responses.CourseStatisticsResponse;
 import hcmute.wepr.ielts_app.Utilities.responses.FilteredCourseResponse;
 import hcmute.wepr.ielts_app.Utilities.responses.TeacherNameDTO;
+import hcmute.wepr.ielts_app.security.annotations.IsStudent;
 
 @Controller
 @CrossOrigin
@@ -39,14 +41,24 @@ public class CourseController {
 	CourseServiceInterface courseService;
 	@Autowired
 	UserServiceInterface userService;
+	@Autowired
+	UserProgressServiceInterface userProgressService;
 	
 	@GetMapping
 	public String coursePage() {
 		return "courses";
 	}
 	
+	@IsStudent
 	@GetMapping("/{id}/learn")
-	public String lessonPage(Model model, @PathVariable("id") int courseId) {
+	public String lessonPage(Authentication auth, Model model, @PathVariable("id") int courseId) {
+		int studentId = Integer.valueOf(auth.getCredentials().toString());
+		
+		UserProgress userProgress = userProgressService.findByUserProgressId(studentId, courseId);
+		if (userProgress == null) {
+			return "lesson_access_denied";
+		}
+		
 		Course courseWithLessons = courseService.getCouseWithAllLessons(courseId);
 		// Sort the lessons by lessonId (as an example)
 	    List<Lesson> sortedLessons = courseWithLessons.getLessons().stream()
@@ -54,9 +66,11 @@ public class CourseController {
 	            .collect(Collectors.toList());
 		model.addAttribute("courseWithLessons", courseWithLessons);
 	    model.addAttribute("sortedLessons", sortedLessons);
+	    model.addAttribute("userId", studentId);
 
 		return "lessons";
 	}
+	
 	
 	@PostMapping("/rating")
 	@ResponseBody
