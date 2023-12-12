@@ -1,395 +1,144 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Shopping-cart</title>
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/reponsive.css" />
+	<title>Cart details</title>
+	<link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/cart-payment.css">
 
-    <style>
-       * {
-	padding: 0;
-	margin: 0;
-	box-sizing: border-box;
-	font-family: 'Muli', -apple-system, BlinkMacSystemFont, 'Segoe UI',
-		Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji',
-		'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
-}
-
-li {
-	list-style: none;
-}
-
-/* header */
-nav {
-	padding: 15px;
-	width: 100%;
-	display: flex;
-	background: white;
-}
-
-nav .content-nav {
-	display: flex;
-	line-height: 2rem;
-	flex-direction: row;
-	justify-content: flex-end;
-	width: 60%;
-}
-
-nav .content-nav ul {
-	display: flex;
-}
-
-nav .content-nav ul li a {
-	text-decoration: none;
-	color: #43433e;
-	text-transform: uppercase;
-	padding: 0 15px;
-	font-weight: 800;
-}
-
-nav .content-nav ul li a:hover {
-	color: black;
-}
-
-.content-nav form {
-	position: relative;
-}
-
-.content-nav form input {
-	border: none;
-	background: #fff;
-	padding: 7px;
-	outline: none;
-	border-radius: 12px;
-}
-
-.content-nav form button {
-	padding: 5px;
-	border-radius: 12px;
-	position: absolute;
-	right: 0;
-	top: 2px;
-	border: none;
-	outline: none;
-	background: #fff;
-}
-
-/* modal */
-.modal {
-	display: none;
-	position: fixed;
-	z-index: 1;
-	padding-top: 100px;
-	left: 0;
-	top: 0;
-	width: 100%;
-	height: 100%;
-	overflow: auto;
-	background-color: rgb(0, 0, 0);
-	background-color: rgba(0, 0, 0, 0.4);
-}
-
-.modal-content {
-	margin: 0 auto;
-	width: 50%;
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	background-color: #fff;
-	background-clip: padding-box;
-	border: 1px solid rgba(0, 0, 0, .2);
-	border-radius: .3rem;
-	outline: 0;
-}
-
-#cart {
-	font-size: 20px;
-	color: black;
-	background-color: white;
-	border: 1px solid transparent;
-	border-radius: 10px;
-	outline: none;
-	margin-left: -53rem;
-	padding: 20px;
-	cursor: pointer;
-}
-
-.footer-item .social-footer {
-	display: flex;
-	align-items: center;
-	width: 100%;
-	justify-content: flex-end;
-}
-
-.footer-item .social-footer li a {
-	color: #000000;
-	font-size: 2rem;
-}
-
-.footer-item .social-footer li:last-child {
-	margin-left: .5rem;
-}
-/* footer */
-.footer-item {
-	padding: .5rem 2rem;
-	background: whitesmoke;
-	display: flex;
-}
-
-body {
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-	margin: 20px;
-	background-color: #f4f4f4;
-}
-
-h2 {
-	color: #333;
-}
-
-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: 15px 20px;
-}
-
-header img {
-	max-height: 40px;
-}
-
-.cart-container {
-	display: flex;
-	align-items: center;
-}
-
-.cart-icon {
-	font-size: 24px;
-	margin-right: 5px;
-}
-table {
-	width: 100%;
-	border-collapse: collapse;
-	margin-top: 20px;
-}
-
-th, td {
-	border: 1px solid #ddd;
-	padding: 10px;
-	text-align: left;
-}
-
-th {
-	color: #000000;
-}
-
-.img-nav {
-        width: 100px; /* Set the desired width */
-        height: 100px; /* Maintain aspect ratio */
-
-    }
-
-    .img-nav img {
-        width: auto; /* Make the image fill the entire width of the container */
-        max-width: 80px;
-        height: auto; /* Maintain aspect ratio */
-        max-height: 80px; /* Set the maximum height if needed */
-    }
-
-.checkout-btn {
-	background-color: white;
-	color: black;
-	padding: 10px;
-	border: none;
-	cursor: pointer;
-	border-radius: 4px;
-	margin-top: 10px;
-}
-
-.checkout-btn:hover {
-	background-color: #00FFFF;
-}
-
-.delete-btn {
-	background-color: transparent;
-	border: none;
-	cursor: pointer;
-}
-
-    </style>
+	<script
+		src="https://www.paypal.com/sdk/js?client-id=AbprxemC7WDSdsJn8J0hxrW5WgjA0y2KT4XMYKxd5b6yjx9cMziWRf4OeZf3KHKP6K6CromupA_7I8vd&currency=USD"></script>
 </head>
 
 <body>
-    <!-- header -->
-    <header>
-		<nav>
-			<div class="img-nav">
-				<img src="https://static.ybox.vn/2023/7/3/1690370041651-unnamed.png"
-					alt="" />
-			</div>
-			<div class="content-nav">
-				<ul>
-					<li><a href="#">Trang Chủ</a></li>
-					<li><a href="#">Sản Phẩm</a></li>
-					<li><a href="#">Liên Hệ</a></li>
-					<li><a href="#">Giới Thiệu</a></li>
-				</ul>
-				<form>
-					<input type="text" name="search" placeholder="Tìm kiếm sản phẩm..." />
-					<button type="submit">
-						<i class="fa fa-search" aria-hidden="true"></i>
+	<div id="parent-container" class="d-flex flex-row justify-content-center">
+		<div class="w-75 d-flex flex-column justify-content-center" id="container">
+			<div class="d-flex flex-row justify-content-between align-items-center" id="pageTitleSection">
+				<div>
+					<h3>Cart</h3>
+				</div>
+				<div>
+					<button type="button" class="btn btn-light">
+						<h5>Home</h5>
 					</button>
-				</form>
+				</div>
 			</div>
-			<!-- The Modal -->
-			<button id="cart">
-				<i class="fa fa-shopping-basket" aria-hidden="true"></i> Giỏ Hàng
-			</button>
-			<div id="myModal" class="modal">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">Giỏ Hàng</h5>
-						<span class="close">&times;</span>
-					</div>
-					<div class="modal-body">
-						<div class="cart-row">
-							<span class="cart-item cart-header cart-column">Sản Phẩm</span> <span
-								class="cart-price cart-header cart-column">Giá</span> <span
-								class="cart-quantity cart-header cart-column">Số Lượng</span>
-						</div>
-						<div class="cart-items"></div>
-						<div class="cart-total">
-							<strong class="cart-total-title">Tổng Cộng:</strong> <span
-								class="cart-total-price">0VNĐ</span>
-						</div>
-					</div>
-
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary close-footer">Đóng</button>
-						<button type="button" class="btn btn-primary order">Thanh
-							Toán</button>
+			<div id="mainSection" class="bg-secondary bg-gradient d-flex flex-column justify-content-center">
+				<table class="table table-striped mt-5">
+					<thead>
+						<tr>
+							<th>Course Image</th>
+							<th>Course Name</th>
+							<th>Price</th>
+							<th>Action</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td><img src="https://via.placeholder.com/200x200" alt="Course Image" style="width: 80px; height: 80px;" class="m-3"></td>
+							<td>Course Name</td>
+							<td>$99.99</td>
+							<td>
+								<button class="btn btn-danger">X</button>
+							</td>
+						</tr>
+						<tr>
+							<td><img src="https://via.placeholder.com/200x200" alt="Course Image" style="width: 80px; height: 80px;" class="m-3"></td>
+							<td>Course Name</td>
+							<td>$99.99</td>
+							<td>
+								<button class="btn btn-danger">X</button>
+							</td>
+						</tr>
+						<tr>
+							<td><img src="https://via.placeholder.com/200x200" alt="Course Image" style="width: 80px; height: 80px;" class="m-3"></td>
+							<td>Course Name</td>
+							<td>$99.99</td>
+							<td>
+								<button class="btn btn-danger">X</button>
+							</td>
+						</tr>
+						<tr>
+							<td><img src="https://via.placeholder.com/200x200" alt="Course Image" style="width: 80px; height: 80px;" class="m-3"></td>
+							<td>Course Name</td>
+							<td>$99.99</td>
+							<td>
+								<button class="btn btn-danger">X</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div>
+					<div class="d-flex flex-row justify-content-end">
+						<button type="button" class="btn btn-primary mb-3 me-3">BUY MORE COURSES</button>
 					</div>
 				</div>
 			</div>
-		</nav>
-
-	</header>
-
-
-    <table>
-        <thead>
-            <tr>
-                <th>Hình Ảnh</th>
-                <th>Tên</th>
-                <th>Giá</th>
-                <th>Thao tác</th>
-            </tr>
-        </thead>
-        <tbody id="courseTableBody">
-            <!-- Data will be added by JavaScript -->
-        </tbody>
-    </table>
-
-    <div id="totalPrice" style="margin-top: 20px;">
-        <strong>Tổng Giá Tiền:</strong> <span id="cart-total-price">0VNĐ</span>
-    </div>
-
-    <button class="checkout-btn" onclick="openCheckoutModal()">Thanh toán</button>
-
-    <script>
-        var courses = [
-            { id: 1, name: "Khóa học A", price: 50, image:"https://rikkei.edu.vn/wp-content/uploads/2022/08/Untitled-3-01-16-300x300.png" },
-            { id: 2, name: "Khóa học B", price: 30, image: "https://rikkei.edu.vn/wp-content/uploads/2022/08/Untitled-3-01-16-300x300.png" },
-            { id: 3, name: "Khóa học C", price: 40, image: "https://rikkei.edu.vn/wp-content/uploads/2022/08/Untitled-3-01-16-300x300.png" }
-        ]
-
-        function displayCourses() {
-            var courseTableBody = document.getElementById("courseTableBody");
-            var totalPriceElement = document.getElementById("cart-total-price");
-            var totalPrice = 0;
-
-            courseTableBody.innerHTML = "";
-
-            courses.forEach(function (course) {
-                var row = document.createElement("tr");
-
-                // Add image column
-                var imageCell = document.createElement("td");
-                var img = document.createElement("img");
-                img.src = course.image;
-                img.alt = course.name;
-                img.className = "img-thumbnail"; // Customize class to display images nicely
-                imageCell.appendChild(img);
-
-                var nameCell = document.createElement("td");
-                nameCell.textContent = course.name;
-
-                var priceCell = document.createElement("td");
-                priceCell.textContent = `$${course.price}`;
-
-                var actionsCell = document.createElement("td");
-
-                var deleteButton = document.createElement("button");
-                deleteButton.className = "delete-btn";
-                deleteButton.innerHTML = '<i class="fa fa-trash"></i>';
-                deleteButton.onclick = function () {
-                    deleteCourse(course.id);
-                };
-
-                actionsCell.appendChild(deleteButton);
-
-                row.appendChild(imageCell); // Add image column to the row
-                row.appendChild(nameCell);
-                row.appendChild(priceCell);
-                row.appendChild(actionsCell);
-
-                courseTableBody.appendChild(row);
-
-                totalPrice += course.price; // Add each course price to the total
-            });
-
-            // Update total price
-            totalPriceElement.textContent = totalPrice + "VNĐ";
-        }
-
-        function deleteCourse(courseId) {
-            var courseIndex = courses.findIndex(c => c.id === courseId);
-
-            if (courseIndex !== -1) {
-                courses.splice(courseIndex, 1);
-            }
-
-            displayCourses();
-        }
-
-        displayCourses();
-    </script>
-
-    <!-- footer -->
-	<footer>
-		<div class="footer-item">
-			<div class="img-footer">
-				<img src="img/logo.png" alt="" />
-			</div>
-			<div class="social-footer">
-				<li><a target="_blank"
-					href="https://facebook.com/IELTSAdvantage"> <i
-						class="fa fa-facebook-square" aria-hidden="true"></i>
-				</a></li>
-				<li><a target="_blank"
-					href="https://www.youtube.com/@Ieltsadvantage"> <i
-						class="fa fa-youtube-square" aria-hidden="true"></i>
-				</a></li>
-                
+			<div id="checkoutSection" class="d-flex flex-row justify-content-between">
+				<div id="totalContainter" class="d-flex flex-row justify-content-around align-items-center">
+					<div>
+						<h4>Total value</h4>
+					</div>
+					<div class="ms-3">
+						<h3>$300</h3>
+					</div>
+				</div>
+				<div id="paypal-button-container" class="flex-shrink-0 m-3"></div>
 			</div>
 		</div>
-	</footer>
+	</div>
+
 
 </body>
+<script th:inline="javascript" defer="defer">
+	/*<![CDATA[*/
+	paypal.Buttons({
+		createOrder: function (data, actions) {
+			// Set up the transaction
+			return actions.order.create({
+				purchase_units: [{
+					amount: {
+						value: /*[[@{'{total}'(total=${total})}]]*/ '1.00'
+					}
+				}]
+			});
+		},
+		onApprove: function (data, actions) {
+			// Capture the funds from the transaction
+			return actions.order.capture().then(function (details) {
+				// Send the payment details to your Spring Boot backend
+				const orderId = data.orderID;
+				const payerId = details.payer.payer_id;
+
+				const paymentData = {
+					amount: /*[[${total}]]*/ 0,
+					userId: /*[[${userId}]]*/ "",
+					paypalOrderId: orderId
+				}
+
+				var xhr = new XMLHttpRequest();
+				xhr.open("POST", "/payment", true); // Adjust the URL based on your server configuration
+				xhr.setRequestHeader("Content-Type", "application/json");
+
+				xhr.onreadystatechange = function () {
+					if (xhr.readyState === 4) {
+						if (xhr.status === 200) {
+							// Successful response
+							alert("Payment accepted!");
+							window.location.href = "/courses"
+
+						} else {
+							console.error("Error adding course");
+						}
+					}
+				};
+
+				// Convert the JavaScript object to JSON and send it in the request body
+				xhr.send(JSON.stringify(paymentData));
+			});
+		}
+	}).render('#paypal-button-container');
+  /*]]>*/
+</script>
 
 </html>
-
