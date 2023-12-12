@@ -24,6 +24,7 @@
 				</div>
 			</div>
 			<div id="mainSection" class="bg-secondary bg-gradient d-flex flex-column justify-content-center">
+				<div id="userIdHolder" th:attr="data-user-id=${userId}"></div>
 				<table class="table table-striped mt-5">
 					<thead>
 						<tr>
@@ -35,7 +36,8 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td><img src="https://via.placeholder.com/200x200" alt="Course Image" style="width: 80px; height: 80px;" class="m-3"></td>
+							<td><img src="https://via.placeholder.com/200x200" alt="Course Image"
+									style="width: 80px; height: 80px;" class="m-3"></td>
 							<td>Course Name</td>
 							<td>$99.99</td>
 							<td>
@@ -43,7 +45,8 @@
 							</td>
 						</tr>
 						<tr>
-							<td><img src="https://via.placeholder.com/200x200" alt="Course Image" style="width: 80px; height: 80px;" class="m-3"></td>
+							<td><img src="https://via.placeholder.com/200x200" alt="Course Image"
+									style="width: 80px; height: 80px;" class="m-3"></td>
 							<td>Course Name</td>
 							<td>$99.99</td>
 							<td>
@@ -51,7 +54,8 @@
 							</td>
 						</tr>
 						<tr>
-							<td><img src="https://via.placeholder.com/200x200" alt="Course Image" style="width: 80px; height: 80px;" class="m-3"></td>
+							<td><img src="https://via.placeholder.com/200x200" alt="Course Image"
+									style="width: 80px; height: 80px;" class="m-3"></td>
 							<td>Course Name</td>
 							<td>$99.99</td>
 							<td>
@@ -59,7 +63,8 @@
 							</td>
 						</tr>
 						<tr>
-							<td><img src="https://via.placeholder.com/200x200" alt="Course Image" style="width: 80px; height: 80px;" class="m-3"></td>
+							<td><img src="https://via.placeholder.com/200x200" alt="Course Image"
+									style="width: 80px; height: 80px;" class="m-3"></td>
 							<td>Course Name</td>
 							<td>$99.99</td>
 							<td>
@@ -70,7 +75,9 @@
 				</table>
 				<div>
 					<div class="d-flex flex-row justify-content-end">
-						<button type="button" class="btn btn-primary mb-3 me-3">BUY MORE COURSES</button>
+						<button id="clearCartButton" type="button" class="btn btn-danger mb-3 me-3">Clear cart</button>
+						<a href="/home/courses"><button type="button" class="btn btn-primary mb-3 me-3">BUY MORE
+								COURSES</button></a>
 					</div>
 				</div>
 			</div>
@@ -80,7 +87,7 @@
 						<h4>Total value</h4>
 					</div>
 					<div class="ms-3">
-						<h3>$300</h3>
+						<h3 id="totalCartValueText">$300</h3>
 					</div>
 				</div>
 				<div id="paypal-button-container" class="flex-shrink-0 m-3"></div>
@@ -90,6 +97,7 @@
 
 
 </body>
+<script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
 <script th:inline="javascript" defer="defer">
 	/*<![CDATA[*/
 	paypal.Buttons({
@@ -109,10 +117,12 @@
 				// Send the payment details to your Spring Boot backend
 				const orderId = data.orderID;
 				const payerId = details.payer.payer_id;
+				
+				let userId = /*[[${userId}]]*/ "";
 
 				const paymentData = {
 					amount: /*[[${total}]]*/ 0,
-					userId: /*[[${userId}]]*/ "",
+					userId: userId,
 					paypalOrderId: orderId
 				}
 
@@ -125,7 +135,7 @@
 						if (xhr.status === 200) {
 							// Successful response
 							alert("Payment accepted!");
-							window.location.href = "/courses"
+							window.location.href = "/paymentHistory/" + userId;
 
 						} else {
 							console.error("Error adding course");
@@ -138,7 +148,93 @@
 			});
 		}
 	}).render('#paypal-button-container');
-  /*]]>*/
+	/*]]>*/
+
+	$(document).ready(function () {
+		// AJAX call to retrieve cart items for a specific user
+		var userId = $('#userIdHolder').data('user-id'); // Replace this with your actual user ID
+
+		$.ajax({
+			url: "http://localhost:8080/cart/cartItems/" + userId,
+			type: "GET",
+			success: function (data) {
+				// Function to populate the cart items into the table
+				populateCartItems(data.cartItems);
+			},
+			error: function () {
+				console.error('Error loading cart items.');
+			}
+		});
+
+
+	});
+
+	$('#clearCartButton').on('click', function () {
+		$.ajax({
+			url: "/cart/clear",
+			type: "POST",
+			success: function () {
+
+				console.log('Cart cleared successfully.');
+				$('table tbody').hide();
+				$('#totalCartValueText').text("$ " + 0);
+			},
+			error: function () {
+				console.error('Error clearing the cart.');
+			}
+		});
+	});
+
+	$('table tbody').on('click', 'button.btn-danger', function () {
+		var courseId = $(this).closest('tr').data('user-id');
+		var requestData = {courseId: courseId}; // Create the request payload
+
+		$.ajax({
+			url: "/cart/remove",
+			type: "POST",
+			contentType: "application/json",
+			data: JSON.stringify(requestData),
+			success: function () {
+				console.log('Course removed from cart successfully.');
+				let userId = $('#userIdHolder').data('user-id');
+				$.ajax({
+					url: "http://localhost:8080/cart/cartItems/" + userId,
+					type: "GET",
+					success: function (data) {
+						// Function to populate the cart items into the table
+						populateCartItems(data.cartItems);
+					},
+					error: function () {
+						console.error('Error loading cart items.');
+					}
+				});
+			},
+			error: function () {
+				console.error('Error removing the course from cart.');
+			}
+		});
+	});
+
+	// Function to populate cart items into the table
+	function populateCartItems(cartItems) {
+		var tableBody = $('table tbody');
+		tableBody.empty(); // Clear existing table rows
+		let totalCartValue = 0;
+		$.each(cartItems, function (index, cartItem) {
+			var newRow = '<tr data-user-id="' + cartItem.courseId + '">' +
+				'<td><img src="' + cartItem.courseImage + '" alt="Course Image" style="width: 80px; height: 80px;" class="m-3"></td>' +
+				'<td>' + cartItem.courseName + '</td>' +
+				'<td>$' + cartItem.price + '</td>' +
+				'<td>' +
+				'<button id="removeCartItemButton" class="btn btn-danger">X</button>' +
+				'</td>' +
+				'</tr>';
+			totalCartValue += cartItem.price;
+			tableBody.append(newRow);
+
+		});
+		$('#totalCartValueText').text("$ " + totalCartValue);
+	}
 </script>
 
 </html>

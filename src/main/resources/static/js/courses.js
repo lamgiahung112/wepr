@@ -85,7 +85,7 @@ function fetchCourses(page = 1) {
 	paginationData += `itemsPerPage=${itemsPerPage}`;
 
 	const baseURL = 'http://localhost:8080/home/courses/find'; // Replace with your actual API endpoint
-	const finalURL = `${baseURL}?${filterData}${sortData}${paginationData}&page=${page-1}`;
+	const finalURL = `${baseURL}?${filterData}${sortData}${paginationData}&page=${page - 1}`;
 	console.log(finalURL);
 
 	// Make an AJAX POST request to the URL
@@ -454,7 +454,7 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#get-result-btn').click( () => {
+	$('#get-result-btn').click(() => {
 		fetchCourses(1);
 	});
 });
@@ -466,31 +466,45 @@ $(document).on('mouseenter', '.course-card', function() {
 	$(this).find('.collapse').collapse('hide');
 });
 
+
+function handleAddToCartResponse() {
+	// Show the success modal when a course is added to the cart
+	$('#addToCartModal').modal('show');
+
+	// Handle the "Go to Cart" button click
+	$('#goToCartBtn').click(function() {
+		window.location.href = '/cart/details'; // Redirect to cart/cartDetails
+	});
+}
+
 // Event handler for clicking on the "Add to Cart" button
 $(document).on('click', '#courses-container #addToCartLink', function(event) {
-    event.preventDefault(); // Prevent the default action of the anchor tag
+	event.preventDefault(); // Prevent the default action of the anchor tag
 
-    // Get the courseId from the data attribute of the parent course card
-    const courseId = $(this).closest('.course-card').data('course-id');
+	// Get the courseId from the data attribute of the parent course card
+	const courseId = $(this).closest('.course-card').data('course-id');
 	console.log(courseId);
-    // Make a POST request to add the course to the cart
-    $.ajax({
-        type: 'POST',
-        url: `/cart/add`,
-        data: JSON.stringify({
+	// Make a POST request to add the course to the cart
+	$.ajax({
+		type: 'POST',
+		url: `/cart/add`,
+		data: JSON.stringify({
 			courseId: courseId
 		}),
 		contentType: 'application/json',
-        success: function(response) {
-            // Handle success (if needed)
-            console.log('Course added to cart successfully:', response);
-            // Optionally, you can show a success message or update the UI
-        },
-        error: function(xhr, status, error) {
-            // Handle errors
-            console.error('Error adding course to cart:', status, error);
-            window.location.href = "/auth/student/login";
-            // Optionally, you can show an error message or handle the error
-        }
-    });
+		success: function(response) {
+			// Handle success (if needed)
+			console.log('Course added to cart successfully:', response);
+			handleAddToCartResponse();
+			// Optionally, you can show a success message or update the UI
+		},
+		error: function(xhr, status, error) {
+			// Handle errors
+			console.error('Error adding course to cart:', status, error);
+			window.location.href = "/auth/student/login";
+			// Optionally, you can show an error message or handle the error
+		}
+	});
+
+
 });
