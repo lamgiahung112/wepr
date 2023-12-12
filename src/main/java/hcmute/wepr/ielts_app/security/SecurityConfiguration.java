@@ -35,6 +35,7 @@ public class SecurityConfiguration {
 							.requestMatchers("/css/**").permitAll()
 							.requestMatchers("/images/**").permitAll()
 							.requestMatchers("/webjars/**").permitAll()
+							.requestMatchers("/admin/login").permitAll()
 							.anyRequest().authenticated()
 				)
 				.formLogin(customizer -> customizer.disable())

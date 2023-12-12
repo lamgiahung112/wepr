@@ -31,7 +31,7 @@ public class IeltsAppApplication {
 			userService.createUser("teacher8", "password", Role.ROLE_TEACHER, "teacher8@example.com", 0);
 			userService.createUser("teacher9", "password", Role.ROLE_TEACHER, "teacher9@example.com", 0);
 			userService.createUser("teacher10", "password", Role.ROLE_TEACHER, "teacher10@example.com", 0);
-			
+			userService.createUser("admin", "admin", Role.ROLE_ADMIN, "lamgiahung112@gmail.com", 0);
 			//courseService.generatesCourses();
 		};
 	}
