@@ -30,7 +30,8 @@ public class CookieSecurityContextRepository implements SecurityContextRepositor
 		Pattern.compile("^/auth/.*$"),
 		Pattern.compile("^/webjars/.*$"),
 		Pattern.compile("^/home/.*$"),
-		Pattern.compile("^/home")
+		Pattern.compile("^/home"),
+		Pattern.compile("/admin/login")
 	};
 	
 	@Value("${auth.cookie.name}")

@@ -33,6 +33,8 @@ logging:
     org:
       hibernate:
         SQL: DEBUG
+config:
+  share_percentage: 0.7
 paypal:
   client:
     id: AbprxemC7WDSdsJn8J0hxrW5WgjA0y2KT4XMYKxd5b6yjx9cMziWRf4OeZf3KHKP6K6CromupA_7I8vd

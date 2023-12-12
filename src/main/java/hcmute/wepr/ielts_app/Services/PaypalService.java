@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import hcmute.wepr.ielts_app.Models.ApplicationUser;
@@ -21,6 +22,8 @@ import hcmute.wepr.ielts_app.repositories.UserRepositoryInterface;
 
 @Service
 public class PaypalService implements PaypalServiceInterface {
+	@Value("${config.share_percentage}")
+	private float AUTHOR_REVENUE_PERCENTAGE;
 	@Autowired
 	private CartItemRepositoryInterface cartItemRepository;
 	@Autowired
@@ -47,7 +50,7 @@ public class PaypalService implements PaypalServiceInterface {
 		List<CartItem> userCart = cartItemRepository.findWithCourseWithUserByCartItemIdUserId(request.getUserId());
 		userCart.stream().forEach(cartItem -> {
 			ApplicationUser author = cartItem.getCourse().getUser();
-			author.setBalance(author.getBalance() + cartItem.getCourse().getPrice());
+			author.setBalance(author.getBalance() + cartItem.getCourse().getPrice() * AUTHOR_REVENUE_PERCENTAGE);
 			TransactionDetail transDetail = new TransactionDetail();
 			transDetail.setTransactionDetailId(
 					new TransactionDetailId(

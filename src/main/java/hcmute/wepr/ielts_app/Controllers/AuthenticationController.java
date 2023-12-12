@@ -65,7 +65,7 @@ public class AuthenticationController {
 	@GetMapping("/reset")
 	public String getResetPasswordPage(Model model, @RequestParam(name = "requestId", required = true) String requestId) {
 		if (!forgetPasswordService.isValidRequest(requestId)) {
-			return "redirect:/";
+			return "redirect:/auth/forgetpassword";
 		}
 		ApplicationUser user = forgetPasswordService.getUserOfRequest(requestId);
 		model.addAttribute("requestId", requestId);
