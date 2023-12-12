@@ -27,4 +27,29 @@ public class TeacherService implements TeacherServiceInterface {
 		return userProfileRepository.save(userProfile);
 	}
 
+    public TeacherService(UserProfileRepositoryInterface userProfileRepository) {
+        this.userProfileRepository = userProfileRepository;
+    }
+	
+	@Override
+	public UserProfile getTeacherByID (Integer id) {
+		return userProfileRepository.findByUserUserId(id);
+	}
+	
+	@Override 
+	public UserProfile updateTeacherProfile(Integer id, UserProfile updateTeacher) {
+        UserProfile userProfile = userProfileRepository.findById(id).orElse(null);
+
+        if (userProfile != null) {
+            userProfile.setName(updateTeacher.getName());
+            userProfile.setAddress(updateTeacher.getAddress());
+            userProfile.setCvLink(updateTeacher.getCvLink());
+            userProfile.setExperienceDescription(updateTeacher.getExperienceDescription());
+            userProfile.setPhoneNumber(updateTeacher.getPhoneNumber());
+
+            return userProfileRepository.save(userProfile);
+        }
+
+        return null; // Handle if user is not found or other error cases
+    }
 }
