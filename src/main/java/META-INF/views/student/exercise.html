@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Exercise</title>
+	<link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/exercise.css">
+	<script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+	<script src="/js/exercise.js"></script>
+</head>
+
+<body>
+
+	<!-- Navigation Bar -->
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">Exercise App</a>
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+				data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav me-auto mb-2 mb-lg-0">
+					<li class="nav-item">
+						<a class="nav-link active" href="#">Home</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Courses</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">Dashboard</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link disabled">Exercise</a>
+					</li>
+				</ul>
+				<form class="d-flex">
+					<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+					<button class="btn btn-outline-success" type="submit">Search</button>
+				</form>
+			</div>
+		</div>
+	</nav>
+
+	<div class="container-fluid mt-4">
+		<div class="row">
+			<!-- Sidebar -->
+			<div class="col-md-3">
+				<!-- Hints for Writing Exercise -->
+				<div class="card mb-3">
+					<div class="card-header">
+						Hints for Writing Exercise
+					</div>
+					<div class="card-body">
+						<ul class="list-group">
+							<li class="list-group-item">Use descriptive language</li>
+							<li class="list-group-item">Check grammar and punctuation</li>
+							<li class="list-group-item">Organize your thoughts</li>
+						</ul>
+					</div>
+				</div>
+
+				<!-- Lesson Information -->
+				<div class="card mb-3">
+					<div class="card-header">
+						Lesson Information
+					</div>
+					<div class="card-body">
+						<p><strong>Lesson:</strong> Writing Techniques</p>
+						<p><strong>Topic:</strong> Descriptive Writing</p>
+						<p><strong>Duration:</strong> 60 minutes</p>
+					</div>
+				</div>
+
+				<div class="card">
+					<div class="card-header">
+						Timer
+					</div>
+					<div class="card-body">
+						<h1 id="timer">01:00:00</h1>
+						<button id="startTimerBtn" class="btn btn-primary">Start Timer</button>
+					</div>
+				</div>
+			</div>
+
+			<!-- Main Content (Exercise Area) -->
+			<div class="col-md-9">
+				<div class="container ">
+					<!-- Exercise Prompt Section -->
+					<div class="card mb-4">
+						<div class="card-header">
+							Exercise Prompt
+						</div>
+						<div class="card-body">
+							<!-- Display Exercise Prompt -->
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis vel nulla at
+								condimentum.
+								Donec vitae est id turpis facilisis viverra. Nam consequat lectus vel risus posuere, nec
+								ullamcorper justo porttitor.</p>
+						</div>
+					</div>
+
+					<!-- Writing Area -->
+					<div class="card mb-4">
+						<div class="card-header">
+							Your Response
+						</div>
+						<div class="card-body">
+							<!-- Text Area for Writing -->
+							<textarea class="form-control" rows="15"
+								placeholder="Write your response here..."></textarea>
+						</div>
+					</div>
+
+					<!-- Submission Button -->
+					<button class="btn btn-primary mb-4">Submit Exercise</button>
+
+					<!-- View Previous Attempts -->
+					<div class="card">
+						<div class="card-header">
+							Previous Attempts
+						</div>
+						<div class="card-body">
+							<ul class="list-group">
+								<!-- Sample List of Previous Attempts -->
+								<li class="list-group-item">Attempt 1 - <span class="text-muted">Submitted on: January
+										1,
+										2023</span></li>
+								<li class="list-group-item">Attempt 2 - <span class="text-muted">Submitted on: January
+										5,
+										2023</span></li>
+								<!-- Add more list items for previous attempts -->
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+			<!-- Bootstrap Bundle with Popper.js -->
+			<script src="/webjars/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
