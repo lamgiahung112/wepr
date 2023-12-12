@@ -24,8 +24,4 @@ public class DashboardController {
 	public String getProfile() {
 		return "student/profile_student";
 	}
-	@GetMapping("/profile_edit")
-	public String getEditProfile() {
-		return "student/editprofile_student";
-	}
 }
