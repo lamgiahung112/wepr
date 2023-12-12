@@ -84,7 +84,7 @@ function fetchCourses(page = 1) {
 	const itemsPerPage = parseInt($('#paginationLabel').text());
 	paginationData += `itemsPerPage=${itemsPerPage}`;
 
-	const baseURL = 'http://localhost:8080/courses/find'; // Replace with your actual API endpoint
+	const baseURL = 'http://localhost:8080/home/courses/find'; // Replace with your actual API endpoint
 	const finalURL = `${baseURL}?${filterData}${sortData}${paginationData}&page=${page-1}`;
 	console.log(finalURL);
 
@@ -115,12 +115,12 @@ function fetchCourses(page = 1) {
 				}
 				return `
                 <div class="col-md-3 mb-4">
-                    <div class="card course-card">
+                    <div class="card course-card" data-course-id="${course.courseId}">
                         <div class="course-img-section">
                             <img src="https://via.placeholder.com/200x200" class="card-img-top course-img" alt="Course Image">
                             <div class="d-flex flex-row justify-content-around course-img-btns">
                                 <a href="#" class="p-3"><img src="/images/favorite.png"></a>
-                                <a href="#" class="p-3"><img src="/images/shopping_cart.png"></a>
+                                <a id="addToCartLink" href="#" class="p-3"><img src="/images/shopping_cart.png"></a>
                                 <a href="#" class="p-3"><img src="/images/add.png"></a>
                             </div>
                         </div>
@@ -234,7 +234,7 @@ function fetchCourses(page = 1) {
 $(document).ready(function() {
 	fetchCourses();
 	$.ajax({
-		url: 'http://localhost:8080/courses/getTeacherName',
+		url: 'http://localhost:8080/home/courses/getTeacherName',
 		type: 'GET',
 		dataType: 'json',
 		success: function(data) {
@@ -464,4 +464,33 @@ $(document).on('mouseenter', '.course-card', function() {
 	$(this).find('.collapse').collapse('show');
 }).on('mouseleave', '.course-card', function() {
 	$(this).find('.collapse').collapse('hide');
+});
+
+// Event handler for clicking on the "Add to Cart" button
+$(document).on('click', '#courses-container #addToCartLink', function(event) {
+    event.preventDefault(); // Prevent the default action of the anchor tag
+
+    // Get the courseId from the data attribute of the parent course card
+    const courseId = $(this).closest('.course-card').data('course-id');
+	console.log(courseId);
+    // Make a POST request to add the course to the cart
+    $.ajax({
+        type: 'POST',
+        url: `/cart/add`,
+        data: JSON.stringify({
+			courseId: courseId
+		}),
+		contentType: 'application/json',
+        success: function(response) {
+            // Handle success (if needed)
+            console.log('Course added to cart successfully:', response);
+            // Optionally, you can show a success message or update the UI
+        },
+        error: function(xhr, status, error) {
+            // Handle errors
+            console.error('Error adding course to cart:', status, error);
+            window.location.href = "/auth/student/login";
+            // Optionally, you can show an error message or handle the error
+        }
+    });
 });

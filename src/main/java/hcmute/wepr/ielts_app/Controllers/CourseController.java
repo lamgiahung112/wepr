@@ -44,10 +44,7 @@ public class CourseController {
 	@Autowired
 	UserProgressServiceInterface userProgressService;
 	
-	@GetMapping
-	public String coursePage() {
-		return "courses";
-	}
+	
 	
 	@IsStudent
 	@GetMapping("/{id}/learn")
@@ -80,12 +77,7 @@ public class CourseController {
 		return ResponseEntity.ok().build();
 	}
 	
-	@GetMapping("/getTeacherName") 
-	@ResponseBody
-	public ResponseEntity<List<TeacherNameDTO>> getAllTeacherNameAndUsername(){
-		List<TeacherNameDTO> teacherNames = userService.getTeacherNameAndUsername();
-		return ResponseEntity.status(HttpStatus.OK).body(teacherNames);
-	}
+	
 	
 	@GetMapping("/{courseId}")
 	public String getCourseDetail(Authentication authentication, Model model,@PathVariable(name = "courseId") int courseId) {
@@ -109,90 +101,7 @@ public class CourseController {
 		return "course_details";
 	}
 	
-	@GetMapping("/find")
-	@ResponseBody
-	public ResponseEntity<FilteredCourseResponse> getCourses(
-	        @RequestParam(value = "authors", required = false) String authors,
-	        @RequestParam(value = "minPrice", required = false) Float minPrice,
-	        @RequestParam(value = "maxPrice", required = false) Float maxPrice,
-	        @RequestParam(value = "minRating", required = false) Float minRating,
-	        @RequestParam(value = "maxRating", required = false) Float maxRating,
-	        @RequestParam(value = "minEnrollment", required = false) Integer minEnrollment,
-	        @RequestParam(value = "maxEnrollment", required = false) Integer maxEnrollment,
-	        @RequestParam(value = "difficulties", required = false) String difficulties,
-	        @RequestParam(value = "name", defaultValue = "nosort") String nameSorting,
-	        @RequestParam(value = "price", defaultValue = "nosort") String priceSorting,
-	        @RequestParam(value = "rating", defaultValue = "nosort") String ratingSorting,
-	        @RequestParam(value = "itemsPerPage", defaultValue = "0") Integer itemsPerPage,
-	        @RequestParam(value = "page", defaultValue = "0") Integer page
-	) {
-		System.out.println(authors);
-		System.out.println(minPrice);
-		System.out.println(maxPrice);
-		System.out.println(minRating);
-		System.out.println(maxRating);
-		System.out.println(minEnrollment);
-		System.out.println(maxEnrollment);
-		System.out.println(difficulties);
-		System.out.println(nameSorting);
-		System.out.println(priceSorting);
-		System.out.println(ratingSorting);
-		System.out.println(itemsPerPage);
-		
-		boolean priceRangeFilter = true;
-		boolean ratingRangeFilter = true;
-		
-		if (minPrice == null) {
-			minPrice = 0.0f;
-			priceRangeFilter = false;
-		}
-		
-		if (maxPrice == null) {
-			priceRangeFilter = false;
-			maxPrice = 0.0f;
-		}
-		
-		if (minRating == null) {
-			minRating = 0.0f;
-			ratingRangeFilter = false;
-		}
-		
-		if (maxRating == null) {
-			maxRating = 0.0f;
-			ratingRangeFilter = false;
-		}
-		
-		List<Course> courses = courseService.getCourseWithSpecAndPaging(authors, difficulties, priceRangeFilter, minPrice, maxPrice, ratingRangeFilter, minRating, maxRating, minEnrollment, maxEnrollment, nameSorting, priceSorting, ratingSorting, itemsPerPage, page);
-		Long totalResultNumber = courseService.countCourseWithSpecAndPaging(authors, difficulties, priceRangeFilter, minPrice, maxPrice, ratingRangeFilter, minRating, maxRating, minEnrollment, maxEnrollment, nameSorting, priceSorting, ratingSorting, itemsPerPage, page);
-		// Convert Course objects to CourseDTO objects
-        List<CourseDTO> courseDTOs = courses.stream()
-                .map(this::convertToCourseDTO)
-                .collect(Collectors.toList());
-
-        // Return CourseDTO objects as JSON
-        return ResponseEntity.status(HttpStatus.OK).body(new FilteredCourseResponse(courseDTOs, totalResultNumber));
-	}
 	
-	private CourseDTO convertToCourseDTO(Course course) {
-	    CourseDTO courseDTO = new CourseDTO();
-	    courseDTO.setCourseId(course.getCourseId());
-	    courseDTO.setCourseName(course.getCourseName());
-	    courseDTO.setCoverImage(course.getCoverImage());
-	    courseDTO.setCreatedAt(course.getCreatedAt());
-	    courseDTO.setPrice(course.getPrice());
-	    courseDTO.setRating(course.getRating());
-	    courseDTO.setEnrolledNumber(course.getEnrolledNumber());
-	    
-	    // Assuming author is retrieved from the associated ApplicationUser
-	    if (course.getUser() != null) {
-	        courseDTO.setAuthor(course.getUser().getUsername());
-	    } else {
-	        courseDTO.setAuthor(""); // Set default value if author is not present
-	    }
-
-	    // Assuming difficulty is retrieved from the DifficultLevel enum
-	    courseDTO.setDifficulty(course.getLevel().toString());
-
-	    return courseDTO;
-	}
+	
+	
 }
