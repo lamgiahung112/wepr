@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import hcmute.wepr.ielts_app.Models.ApplicationUser;
+import hcmute.wepr.ielts_app.Models.enums.Role;
 import hcmute.wepr.ielts_app.Services.Interfaces.AdminServiceInterface;
 import hcmute.wepr.ielts_app.Services.Interfaces.UserServiceInterface;
 import hcmute.wepr.ielts_app.Utilities.Requests.AdminGetUserListRequest;
@@ -49,7 +50,7 @@ public class AdminController {
 				@RequestParam(name = "password", required = true) String password,
 				HttpServletResponse response
 		) throws IOException {
-		String cookieToken = userService.authenticateAndGetCredentials(username, password);
+		String cookieToken = userService.authenticateAndGetCredentials(username, password, Role.ROLE_ADMIN);
 		if (cookieToken == null) {
 			response.sendRedirect("/auth/student/login");
 			return "redirect:/admin/login";

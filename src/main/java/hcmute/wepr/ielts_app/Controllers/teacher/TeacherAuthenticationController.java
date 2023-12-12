@@ -68,7 +68,7 @@ public class TeacherAuthenticationController {
 	public void loginStudent(@RequestParam(value = "username", required = true) String username,
 			@RequestParam(value = "password", required = true) String password,
 			HttpServletResponse response) throws IOException {
-		String cookieToken = userService.authenticateAndGetCredentials(username, password);
+		String cookieToken = userService.authenticateAndGetCredentials(username, password, Role.ROLE_TEACHER);
 		
 		if (cookieToken == null) {
 			response.sendRedirect("/auth/teacher/login");
