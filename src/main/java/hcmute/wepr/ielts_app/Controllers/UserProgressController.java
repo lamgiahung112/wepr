@@ -21,36 +21,36 @@ import hcmute.wepr.ielts_app.security.annotations.IsStudent;
 @CrossOrigin
 @RequestMapping("/userprogress")
 public class UserProgressController {
-	
+
 	@Autowired
 	UserProgressServiceInterface userProgressService;
-	
+
 	@IsStudent
 	@PostMapping("/updateUserProgress")
 	@ResponseBody
 	public ResponseEntity<?> updateUserProgress(Authentication auth, @RequestParam("userId") int userId,
-            @RequestParam("courseId") int courseId,
-            @RequestParam("lessonId") int lessonId) {
+			@RequestParam("courseId") int courseId, @RequestParam("lessonId") int lessonId) {
 		int studentId = Integer.valueOf(auth.getCredentials().toString());
-		if (studentId != userId) return ResponseEntity.status(HttpStatus.OK).body("You not have permission");
+		if (studentId != userId)
+			return ResponseEntity.status(HttpStatus.OK).body("You not have permission");
 		userProgressService.updateUserProgress(userId, courseId, lessonId);
 		return ResponseEntity.status(HttpStatus.OK).body("Update user progress successfully");
 	}
-	
+
 	@IsStudent
 	@GetMapping("/getUserProgress")
 	@ResponseBody
-	public ResponseEntity<UserProgressResponse> getUserProgress(Authentication auth, @RequestParam("userId") int userId,
-            @RequestParam("courseId") int courseId) {
+	public ResponseEntity<UserProgressResponse> getUserProgress(Authentication auth, @RequestParam("courseId") int courseId) {
 		int studentId = Integer.valueOf(auth.getCredentials().toString());
-		if (studentId != userId) return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		UserProgress userProgress = userProgressService.findByUserProgressId(userId, courseId);
+		UserProgress userProgress = userProgressService.findByUserProgressId(studentId, courseId);
 		if (userProgress != null) {
-			UserProgressResponse userProgressResponse = new UserProgressResponse(userProgress.getUserProgressId().getUserId(), userProgress.getUserProgressId().getCourseId(), userProgress.getLesson().getLessonId());
+			UserProgressResponse userProgressResponse = new UserProgressResponse(
+					userProgress.getUserProgressId().getUserId(), userProgress.getUserProgressId().getCourseId(),
+					userProgress.getLesson().getLessonId());
 			return ResponseEntity.status(HttpStatus.OK).body(userProgressResponse);
 		} else {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
 		}
 	}
-	
+
 }

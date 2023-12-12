@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import hcmute.wepr.ielts_app.Models.PurchaseTransaction;
 
 public interface PurchaseTransactionRepositoryInterface extends JpaRepository<PurchaseTransaction, String> {
-	PurchaseTransaction findWithTransactionDetailsAndCourseByUserUserId(int userId);
-	List<PurchaseTransaction> findWithTransactionDetailsWithCourseByCreatedAtBetween(LocalDateTime startTime, LocalDateTime endTime);
+	List<PurchaseTransaction> findWithTransactionDetailsAndCourseByUserUserId(int userId);
+	List<PurchaseTransaction> findWithTransactionDetailsByCreatedAtBetween(LocalDateTime startTime, LocalDateTime endTime);
+  PurchaseTransaction findFirstByUserUserIdOrderByCreatedAtDesc(int userId);
 }

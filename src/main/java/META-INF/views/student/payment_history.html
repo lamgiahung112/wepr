@@ -31,9 +31,9 @@
 			</div>
 			<div class="card-body">
 				<!-- Display the latest payment information -->
-				<p><strong>Payment ID:</strong> ABC123</p>
-				<p><strong>Amount:</strong> $99.99</p>
-				<p><strong>Date:</strong> January 1, 2023</p>
+				<p><strong>Payment ID:</strong> <span th:text="${latestTransaction.paypalTransactionId}"></span></p>
+				<p><strong>Amount:</strong> <span th:text="${latestTransaction.amount}"></span></p>
+				<p><strong>Date:</strong> <span th:text="${latestTransaction.createdAt}"></span></p>
 				<!-- Add more details as needed -->
 			</div>
 		</div>
@@ -41,116 +41,61 @@
 		<!-- Courses in the Latest Payment -->
 		<div class="mt-4">
 			<h2>Courses in the Latest Payment</h2>
-			<div class="d-flex flex-wrap mt-3">
-				<!-- Course items related to the latest payment -->
-				<div class="card me-3 mb-3" style="width: 200px;">
-					<img src="course_image_1.jpg" class="card-img-top" alt="Course Image 1">
-					<div class="card-body">
-						<h5 class="card-title">Course Name 1</h5>
-						<p class="card-text">$49.99</p>
+			<div class="row row-cols-1 row-cols-md-4 g-4 mt-3">
+				<!-- Iterate over latest payment courses and display each -->
+				<div th:each="detail : ${latestTransaction.transactionDetails}">
+					<div class="col">
+						<div class="card h-100">
+							<img src="course_image.jpg" class="card-img-top" alt="Course Image">
+							<div class="card-body">
+								<h5 class="card-title" th:text="${detail.course.courseName}"></h5>
+								<p class="card-text" th:text="'$' + ${detail.course.price}"></p>
+							</div>
+						</div>
 					</div>
 				</div>
-
-				<div class="card me-3 mb-3" style="width: 200px;">
-					<img src="course_image_2.jpg" class="card-img-top" alt="Course Image 2">
-					<div class="card-body">
-						<h5 class="card-title">Course Name 2</h5>
-						<p class="card-text">$59.99</p>
-					</div>
-				</div>
-
-				<div class="card me-3 mb-3" style="width: 200px;">
-					<img src="course_image_2.jpg" class="card-img-top" alt="Course Image 2">
-					<div class="card-body">
-						<h5 class="card-title">Course Name 2</h5>
-						<p class="card-text">$59.99</p>
-					</div>
-				</div>
-
-				<div class="card me-3 mb-3" style="width: 200px;">
-					<img src="course_image_2.jpg" class="card-img-top" alt="Course Image 2">
-					<div class="card-body">
-						<h5 class="card-title">Course Name 2</h5>
-						<p class="card-text">$59.99</p>
-					</div>
-				</div>
-
-				<div class="card me-3 mb-3" style="width: 200px;">
-					<img src="course_image_2.jpg" class="card-img-top" alt="Course Image 2">
-					<div class="card-body">
-						<h5 class="card-title">Course Name 2</h5>
-						<p class="card-text">$59.99</p>
-					</div>
-				</div>
-
-				<div class="card me-3 mb-3" style="width: 200px;">
-					<img src="course_image_2.jpg" class="card-img-top" alt="Course Image 2">
-					<div class="card-body">
-						<h5 class="card-title">Course Name 2</h5>
-						<p class="card-text">$59.99</p>
-					</div>
-				</div>
-
-				<div class="card me-3 mb-3" style="width: 200px;">
-					<img src="course_image_2.jpg" class="card-img-top" alt="Course Image 2">
-					<div class="card-body">
-						<h5 class="card-title">Course Name 2</h5>
-						<p class="card-text">$59.99</p>
-					</div>
-				</div>
-
-				<!-- Add more course cards related to the latest payment -->
 			</div>
 			<!-- Total Price of the Latest Payment -->
 			<div class="mt-3">
-				<p><strong>Total Price:</strong> $109.98</p>
+				<p><strong>Total Price:</strong> </p>
 			</div>
 		</div>
 
-		<!-- List of Older Payments -->
-		<div class="mt-4">
-			<h2>Older Payments</h2>
-			<div class="list-group mt-3">
-				<!-- Older payment list items (example) -->
-				<a href="#olderPaymentDetails1" class="list-group-item list-group-item-action"
-					data-bs-toggle="collapse">Payment ID: XYZ456 - January 2, 2023</a>
-				<div class="collapse" id="olderPaymentDetails1">
-					<div class="card card-body">
-						<!-- Older payment details -->
-						<p><strong>Payment ID:</strong> XYZ456</p>
-						<p><strong>Amount:</strong> $99.99</p>
-						<p><strong>Date:</strong> January 2, 2023</p>
-						<!-- Add more details as needed -->
+		<!-- Loop through purchaseTransactions and display each transaction -->
+		<div th:each="transaction, iterStat : ${purchaseTransactions}">
+			<!-- Display details of each transaction -->
+			<div class="card mt-4">
+				<div class="card-header">
+					<h5 class="mb-0">
+						<button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse"
+							th:data-bs-target="'#transactionDetails_' + ${iterStat.index}" aria-expanded="false"
+							aria-controls="transactionDetails">
+							Payment ID: <span th:text="${transaction.paypalTransactionId}"></span>
+						</button>
+					</h5>
+				</div>
+				<div th:id="'transactionDetails_' + ${iterStat.index}" class="collapse" aria-labelledby="headingOne"
+					data-bs-parent="#purchaseTransactionAccordion">
+					<div class="card-body">
+						<!-- Display other transaction details -->
+						<p><strong>Amount:</strong> <span th:text="${transaction.amount}"></span></p>
+						<p><strong>Date:</strong> <span th:text="${transaction.createdAt}"></span></p>
+						<!-- Add more transaction details as needed -->
+
+						<!-- Iterate through transactionDetails for each transaction -->
+						<div th:each="detail : ${transaction.transactionDetails}">
+							<!-- Display details of each transaction detail -->
+							<div class="mt-3 border p-3 rounded">
+								<p><strong>Course Name:</strong> <span th:text="${detail.course.courseName}"></span></p>
+								<p><strong>Course Price:</strong> <span th:text="${detail.course.price}"></span></p>
+								<!-- Add more details of the course or transaction detail as needed -->
+							</div>
+						</div>
 					</div>
 				</div>
-				<a href="#olderPaymentDetails2" class="list-group-item list-group-item-action"
-					data-bs-toggle="collapse">Payment ID: DEF789 - December 25, 2022</a>
-				<div class="collapse" id="olderPaymentDetails2">
-					<div class="card card-body">
-						<!-- Older payment details -->
-						<p><strong>Payment ID:</strong> DEF789</p>
-						<p><strong>Amount:</strong> $59.99</p>
-						<p><strong>Date:</strong> December 25, 2022</p>
-						<!-- Add more details as needed -->
-					</div>
-				</div>
-				<!-- Add more list items for older payments -->
 			</div>
 		</div>
 
-		<!-- Display the selected older payment details -->
-		<div class="card mt-4" style="display: none;" id="olderPaymentDetails">
-			<div class="card-header">
-				Older Payment Details
-			</div>
-			<div class="card-body">
-				<!-- Placeholder content for older payment details (to be filled via JavaScript) -->
-				<p><strong>Payment ID:</strong> <span id="paymentIdPlaceholder"></span></p>
-				<p><strong>Amount:</strong> <span id="amountPlaceholder"></span></p>
-				<p><strong>Date:</strong> <span id="datePlaceholder"></span></p>
-				<!-- Add more details as needed -->
-			</div>
-		</div>
 	</div>
 
 	<!-- Bootstrap Bundle with Popper.js -->
