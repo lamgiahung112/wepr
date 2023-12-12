@@ -9,4 +9,5 @@ public class LessonRequest {
 	private String title;
 	private String description;
 	private String videoLink;
+	private String exerciseTitle;
 }

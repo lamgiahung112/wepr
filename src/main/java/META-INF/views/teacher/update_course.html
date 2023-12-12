@@ -2,12 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>Update your course</title>
-<link 
-	href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css"
+	rel="stylesheet">
 </head>
 <script th:inline="javascript">
 /*<![CDATA[*/
-var lessonIndex = /*[[${#lists.size(course.lessons)}]]*/ 0;
+var lessonIndex = /*[[${#lists.size(course.lessons) - 1}]]*/ 0;
 function addLesson() {
     lessonIndex++;
 
@@ -20,7 +20,8 @@ function addLesson() {
             <textarea class="form-control" id="lessonDescription${lessonIndex}" rows="2" placeholder="Enter lesson description" required></textarea>
             <label for="videoLink${lessonIndex}">Video Link:</label>
             <input type="text" class="form-control" id="videoLink${lessonIndex}" placeholder="Enter video link" required>
-            <!-- Button to remove the lesson -->
+            <label for="exercise${lessonIndex}">Exercise title:</label>
+            <input type="text" class="form-control" id="exercise${lessonIndex}" placeholder="Enter exercise title" />
             <button type="button" class="btn btn-danger mt-2" onclick="removeLesson(${lessonIndex})">Remove Lesson</button>
             <div style="width: 100%; height: 2px; margin-top: 20px;margin-bottom: 20px;background-color: #9A9A9A;"></div>
         </div>
@@ -58,11 +59,13 @@ function submitForm() {
         var lessonTitle = document.getElementById(`lessonTitle${lessonElement.dataset.lessonIndex}`).value;
         var lessonDescription = document.getElementById(`lessonDescription${lessonElement.dataset.lessonIndex}`).value;
         var videoLink = document.getElementById(`videoLink${lessonElement.dataset.lessonIndex}`).value;
+        var exerciseTitle = document.getElementById(`exercise${lessonElement.dataset.lessonIndex}`).value;
         
         var lesson = {
             title: lessonTitle,
             description: lessonDescription,
-            videoLink: videoLink
+            videoLink: videoLink,
+            exerciseTitle,
         };
         lessons.push(lesson);
     });
@@ -163,34 +166,33 @@ function submitForm() {
 
 				<div th:each="item, index : ${course.lessons}" class="lesson ms-4"
 					th:data-lesson-index="${index.index}">
-					<label th:for="'lessonTitle' + ${index.index}">
-						Lesson Title:
-					</label> 
-					<input type="text" class="form-control"
-						th:value="${item.title}"
-						th:id="'lessonTitle' + ${index.index}"
-						placeholder="Enter lesson title" required> 
-					<label
+					<label th:for="'lessonTitle' + ${index.index}"> Lesson
+						Title: </label> <input type="text" class="form-control"
+						th:value="${item.title}" th:id="'lessonTitle' + ${index.index}"
+						placeholder="Enter lesson title" required> <label
 						th:for="'lessonDescription' + ${index.index}">
-						LessonDescription:
-					</label>
-					<textarea class="form-control"
-						th:text="${item.description}"
+						LessonDescription: </label>
+					<textarea class="form-control" th:text="${item.description}"
 						th:id="'lessonDescription' + ${index.index}" rows="2"
 						placeholder="Enter lesson description" required></textarea>
 
-					<label th:for="'videoLink' + ${index.index}">Video Link:</label> 
-					<input
-						th:value="${item.video}"
-						type="text" class="form-control"
+					<label th:for="'videoLink' + ${index.index}">Video Link:</label> <input
+						th:value="${item.video}" type="text" class="form-control"
 						th:id="'videoLink' + ${index.index}"
-						placeholder="Enter video link" required>
+						placeholder="Enter video link" required> 
+					<label
+						th:for="'exercise' + ${index.index}">Exercise Title:</label> 
+					<input
+						th:value="${item.writingExercise != null ? item.writingExercise.title : ''}"
+						type="text" class="form-control" th:id="'exercise' + ${index.index}"
+						placeholder="Enter exercise title" />
 
 					<!-- Button to remove the lesson -->
 					<button type="button" class="btn btn-danger mt-2"
 						th:onclick="'removeLesson(' + ${index.index} + ')'">Remove
 						Lesson</button>
-					<div style="width: 100%; height: 2px; margin-top: 20px;margin-bottom: 20px;background-color: #9A9A9A;"></div>
+					<div
+						style="width: 100%; height: 2px; margin-top: 20px; margin-bottom: 20px; background-color: #9A9A9A;"></div>
 				</div>
 			</div>
 
