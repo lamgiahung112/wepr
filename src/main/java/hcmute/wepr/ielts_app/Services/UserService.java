@@ -28,10 +28,10 @@ public class UserService implements UserServiceInterface {
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Override
-	public String authenticateAndGetCredentials(String username, String password) {
+	public String authenticateAndGetCredentials(String username, String password, Role role) {
 		Optional<ApplicationUser> user = userRepository.findByUsername(username);
 		
-		if (user.isEmpty()) {
+		if (user.isEmpty() || user.get().getRole() != role) {
 			return null;
 		}
 		
