@@ -63,4 +63,10 @@ public class CartItemService implements CartItemServiceInterface {
 		});
 		return price.get();
 	}
+
+	@Override
+	public List<CartItem> getAllUserCartItems(int userId) {
+		List<CartItem> cartItems = cartItemRepository.findWithCourseWithUserByCartItemIdUserId(userId);
+		return cartItems;
+	}
 }
