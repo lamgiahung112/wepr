@@ -18,6 +18,7 @@ public class Rating {
 	@EmbeddedId
 	private RatingId ratingId;
 	private int rating;
+	private String comment;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@MapsId("userId")

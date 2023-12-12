@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>Admin Dashboard</title>
+<link rel="stylesheet"
+	href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+</head>
+
+<script th:inline="javascript" defer>
+/*<![CDATA[*/
+	function getStats() {
+		const rangeElement = document.getElementById("stats-range")
+		let range;
+		if (rangeElement == null) {
+			range = "DAY"
+		}
+		else range = document.getElementById("stats-range").value;
+
+		var xhr = new XMLHttpRequest();
+	    xhr.open("POST", "/admin/stats", true); // Adjust the URL based on your server configuration
+	    xhr.setRequestHeader("Content-Type", "application/json");
+
+	    xhr.onreadystatechange = function () {
+	        if (xhr.readyState === 4) {
+	            if (xhr.status === 200) {
+	            	const response = JSON.parse(xhr.responseText);
+	            	console.log(response)
+		            document.getElementById("courses-sold").innerText = response.numberOfSoldCourses 
+		            document.getElementById("total-course-value").innerText = response.totalCourseValue
+		            document.getElementById("total-revenue").innerText = response.totalRevenue
+		        } else {
+	                // Handle error response
+	                console.error("Error getting stats");
+	            }
+	        }
+	    };
+
+	    // Convert the JavaScript object to JSON and send it in the request body
+	    xhr.send(JSON.stringify({range}));
+	}
+
+	let page = 0
+	let userList = []
+	function getUserListRequestData() {
+		// Get selected value from the select element
+        var roleOption = document.getElementById("roleOption").value;
+
+        // Get selected value from the radio buttons
+        var radioButtons = document.getElementsByName("enableOption");
+		var enableOption = "ALL"; // Initialize with a default value
+		
+		for (var i = 0; i < radioButtons.length; i++) {
+		    if (radioButtons[i].checked) {
+		    	enableOption = radioButtons[i].value;
+		        break;
+		    }
+		}
+
+        const data = { page, roleOption, enableOption }
+		return data
+	}
+
+	function updateUserListUI() {
+		const userTableBody = document.getElementById('user-table');
+
+	    // Clear existing rows
+	    userTableBody.innerHTML = '';
+
+	    // Loop through users and create table rows
+	    userList.forEach(user => {
+	      const row = document.createElement('tr');
+	      const isEnable = user.enabled
+	      row.innerHTML = `
+	        <td>${user.userId}</td>
+	        <td>${user.username}</td>
+	        <td>${user.email}</td>
+	        <td>${user.balance}</td>
+	        <td>${user.role}</td>
+	        <td>
+	          ${isEnable ? `<button class="btn btn-danger" onclick="disableUser(${user.userId})">Disable</button>` : ''}
+	          ${!isEnable ? `<button class="btn btn-primary" onclick="enableUser(${user.userId})">Enable</button>` : ''}
+	        </td>
+	      `;
+
+	      userTableBody.appendChild(row);
+	    });
+	}
+	function getUserList(callback) {
+        const data = getUserListRequestData()
+        var xhr = new XMLHttpRequest();
+	    xhr.open("POST", "/admin/users", true); // Adjust the URL based on your server configuration
+	    xhr.setRequestHeader("Content-Type", "application/json");
+
+	    xhr.onreadystatechange = function () {
+	        if (xhr.readyState === 4) {
+	            if (xhr.status === 200) {
+	                let response = xhr.responseText;
+	                callback(JSON.parse(response))
+	            } else {
+		            callback([])
+	            }
+	        }
+	    };
+
+	    // Convert the JavaScript object to JSON and send it in the request body
+	    xhr.send(JSON.stringify(data));
+    }
+
+    function onFindButtonClick() {
+        page = 0
+        getUserList((l) => {
+        	userList = l
+			updateUserListUI()
+        })
+    }
+
+    function onGetMoreClick() {
+		page++
+		getUserList((l) => {
+        	userList = [...userList, ...l]
+			updateUserListUI()
+        })
+    }
+
+    function enableUser(userId) {
+    	var xhr = new XMLHttpRequest();
+	    xhr.open("POST", `/admin/users/${userId}/enable`, true); // Adjust the URL based on your server configuration
+	    xhr.setRequestHeader("Content-Type", "application/json");
+
+	    xhr.onreadystatechange = function () {
+	        if (xhr.readyState === 4) {
+	            if (xhr.status === 200) {
+		            alert("Enabled user successfully")
+	            } else {
+		            alert("Unexpected error")
+	            }
+	        }
+	    };
+
+	    // Convert the JavaScript object to JSON and send it in the request body
+	    xhr.send();
+    }
+
+    function disableUser(userId) {
+    	var xhr = new XMLHttpRequest();
+	    xhr.open("POST", `/admin/users/${userId}/disable`, true); // Adjust the URL based on your server configuration
+	    xhr.setRequestHeader("Content-Type", "application/json");
+
+	    xhr.onreadystatechange = function () {
+	        if (xhr.readyState === 4) {
+	            if (xhr.status === 200) {
+		            alert("Disabled user successfully")
+	            } else {
+		            alert("Unexpected error")
+	            }
+	        }
+	    };
+
+	    // Convert the JavaScript object to JSON and send it in the request body
+	    xhr.send();
+    }
+    
+	getStats()
+/*]]>*/
+</script>
+
+<body>
+	<div class="container mt-5">
+		<h2>Statistics</h2>
+		<div class="col"
+			style="height: 40px; display: flex; justify-content: start; column-gap: 8px;">
+			<select id="stats-range" style="height: 40px;">
+				<option value="DAY" selected>Today</option>
+				<option value="MONTH">This month</option>
+				<option value="YEAR">This Year</option>
+			</select>
+			<button onclick="getStats()" style="height: 40px;"
+				class="btn btn-primary">Find</button>
+		</div>
+
+		<div class="row mt-4">
+			<div class="col-2 font-weight-bold">Number of sold courses</div>
+			<div class="col-1 text-center">:</div>
+			<div class="col-7" id="courses-sold"></div>
+		</div>
+		<div class="row mt-4">
+			<div class="col-2 font-weight-bold">Total course value</div>
+			<div class="col-1 text-center">:</div>
+			<div class="col-7" id="total-course-value"></div>
+		</div>
+		<div class="row mt-4">
+			<div class="col-2 font-weight-bold">Total course value</div>
+			<div class="col-1 text-center">:</div>
+			<div class="col-7" id="total-revenue"></div>
+		</div>
+		<h2 class="col justify-content-between mt-4">User management</h2>
+		<div class="col"
+			style="height: 40px; display: flex; align-items: center; justify-content: start; column-gap: 8px;">
+			<select id="roleOption" style="height: 40px;">
+				<option value="ALL">All</option>
+				<option value="STUDENT">Student</option>
+				<option value="TEACHER">Teacher</option>
+			</select> 
+			<input type="radio" id="enabled" name="enableOption" value="ENABLED">
+			<label for="enabled">Enabled</label><br> 
+			<input type="radio"
+				id="disabled" name="enableOption" value="DISABLED"> 
+			<label
+				for="disabled">Disabled</label><br> 
+			<input type="radio"
+				id="all" name="enableOption" value="ALL" checked> 
+			<label for="all">All</label>
+			<button onclick="onFindButtonClick()" style="height: 40px;"
+				class="btn btn-primary">Find</button>
+		</div>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>User ID</th>
+					<th>Username</th>
+					<th>Email</th>
+					<th>Balance</th>
+					<th>Role</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody id="user-table">
+				
+			</tbody>
+		</table>
+		<button class="btn btn-primary" onclick="onGetMoreClick()">Get
+			more</button>
+	</div>
+</body>
+
+</html>

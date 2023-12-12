@@ -7,4 +7,5 @@ public class RateCourseRequest {
 	private int courseId;
 	private int userId;
 	private int rating;
+	private String comment;
 }

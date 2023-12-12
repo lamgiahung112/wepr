@@ -29,17 +29,19 @@ public class SecurityConfiguration {
 							.requestMatchers("/uploads/**").permitAll()
 							.requestMatchers("/dashboard").permitAll()
 							.requestMatchers("/courses").permitAll()
-							.requestMatchers("/courses/**").permitAll()
+							.requestMatchers("/home").permitAll()
+							.requestMatchers("/home/**").permitAll()
 							.requestMatchers("/js/**").permitAll()
 							.requestMatchers("/css/**").permitAll()
 							.requestMatchers("/images/**").permitAll()
 							.requestMatchers("/webjars/**").permitAll()
+							.requestMatchers("/admin/login").permitAll()
 							.anyRequest().authenticated()
 				)
 				.formLogin(customizer -> customizer.disable())
 				.csrf(customizer -> customizer.disable())
 				.exceptionHandling(customizer -> {
-					customizer.accessDeniedPage("/auth/login/student");
+					customizer.accessDeniedPage("/auth/student/login");
 				})
 				.build();
 	}

@@ -6,5 +6,5 @@ import hcmute.wepr.ielts_app.Models.UserProgress;
 import hcmute.wepr.ielts_app.Models.UserProgressId;
 
 public interface UserProgressRepositoryInterface extends JpaRepository<UserProgress, UserProgressId> {
-
+	UserProgress findByUserProgressId(UserProgressId userProgressId);
 }

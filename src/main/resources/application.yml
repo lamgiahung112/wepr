@@ -10,6 +10,17 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.SQLServerDialect
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: lamgiahung112@gmail.com
+    password: ciybqehmplasdene
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 auth:
   jwt:
     secret: 2nVd'rOOx0O![#K|lBnfYPKeME/@3)A9aX4&QuoWMX!=z?%.E(B~JKV](gV]8KN
@@ -22,3 +33,9 @@ logging:
     org:
       hibernate:
         SQL: DEBUG
+config:
+  share_percentage: 0.7
+paypal:
+  client:
+    id: AbprxemC7WDSdsJn8J0hxrW5WgjA0y2KT4XMYKxd5b6yjx9cMziWRf4OeZf3KHKP6K6CromupA_7I8vd
+    secret: EDB-1abglvW5aetec4trGka62y1pyctSZ2_6LrpPwoncTVsezzKw-nvSmo02wbV48SqvQnzYDzNtozIi

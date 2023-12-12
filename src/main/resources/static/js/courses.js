@@ -84,8 +84,8 @@ function fetchCourses(page = 1) {
 	const itemsPerPage = parseInt($('#paginationLabel').text());
 	paginationData += `itemsPerPage=${itemsPerPage}`;
 
-	const baseURL = 'http://localhost:8080/courses/find'; // Replace with your actual API endpoint
-	const finalURL = `${baseURL}?${filterData}${sortData}${paginationData}&page=${page-1}`;
+	const baseURL = 'http://localhost:8080/home/courses/find'; // Replace with your actual API endpoint
+	const finalURL = `${baseURL}?${filterData}${sortData}${paginationData}&page=${page - 1}`;
 	console.log(finalURL);
 
 	// Make an AJAX POST request to the URL
@@ -115,12 +115,12 @@ function fetchCourses(page = 1) {
 				}
 				return `
                 <div class="col-md-3 mb-4">
-                    <div class="card course-card">
+                    <div class="card course-card" data-course-id="${course.courseId}">
                         <div class="course-img-section">
                             <img src="https://via.placeholder.com/200x200" class="card-img-top course-img" alt="Course Image">
                             <div class="d-flex flex-row justify-content-around course-img-btns">
                                 <a href="#" class="p-3"><img src="/images/favorite.png"></a>
-                                <a href="#" class="p-3"><img src="/images/shopping_cart.png"></a>
+                                <a id="addToCartLink" href="#" class="p-3"><img src="/images/shopping_cart.png"></a>
                                 <a href="#" class="p-3"><img src="/images/add.png"></a>
                             </div>
                         </div>
@@ -234,7 +234,7 @@ function fetchCourses(page = 1) {
 $(document).ready(function() {
 	fetchCourses();
 	$.ajax({
-		url: 'http://localhost:8080/courses/getTeacherName',
+		url: 'http://localhost:8080/home/courses/getTeacherName',
 		type: 'GET',
 		dataType: 'json',
 		success: function(data) {
@@ -454,8 +454,8 @@ $(document).ready(function() {
 		}
 	});
 
-	$('#get-result-btn').click( () => {
-		fetchCourses(0);
+	$('#get-result-btn').click(() => {
+		fetchCourses(1);
 	});
 });
 
@@ -464,4 +464,64 @@ $(document).on('mouseenter', '.course-card', function() {
 	$(this).find('.collapse').collapse('show');
 }).on('mouseleave', '.course-card', function() {
 	$(this).find('.collapse').collapse('hide');
+});
+
+
+function handleAddToCartResponse() {
+	// Show the success modal when a course is added to the cart
+	$('#addToCartModal').modal('show');
+
+	// Handle the "Go to Cart" button click
+	$('#goToCartBtn').click(function() {
+		window.location.href = '/cart/details'; // Redirect to cart/cartDetails
+	});
+}
+
+// Event handler for clicking on the "Add to Cart" button
+$(document).on('click', '#courses-container #addToCartLink', function(event) {
+    event.preventDefault(); // Prevent the default action of the anchor tag
+
+    // Get the courseId from the data attribute of the parent course card
+    const courseId = $(this).closest('.course-card').data('course-id');
+    console.log(courseId);
+
+    // Make a GET request to check if the user has progress in the course
+    $.ajax({
+        type: 'GET',
+		url: '/userprogress/getUserProgress',
+		data: {
+			courseId: courseId
+		},
+        success: function(response) {
+            // If the user has progress, do not add the course to the cart
+            console.log('User has already made progress in this course');
+            // Optionally, show a message indicating the user's progress
+        },
+        error: function(xhr, status, error) {
+            // If the user doesn't have progress, add the course to the cart
+            console.error('Error checking user progress:', status, error);
+            if (xhr.status === 400) {
+                console.log('Course will be added to cart');
+                // Make a POST request to add the course to the cart
+                $.ajax({
+                    type: 'POST',
+                    url: `/cart/add`,
+                    data: JSON.stringify({
+                        courseId: courseId
+                    }),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        console.log('Course added to cart successfully:', response);
+                        handleAddToCartResponse();
+                        // Optionally, show a success message or update the UI
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error adding course to cart:', status, error);
+                        window.location.href = "/auth/student/login";
+                        // Optionally, show an error message or handle the error
+                    }
+                });
+            }
+        }
+    });
 });

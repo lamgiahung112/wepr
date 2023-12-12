@@ -39,10 +39,12 @@ public class ApplicationUser {
 	private String hashPassword;
 	@Column(columnDefinition = "VARCHAR(60)")
 	private String email;
-	private float balance;
+	private double balance;
 	@Enumerated(EnumType.STRING)
 	@Column(columnDefinition = "VARCHAR(30)")
 	private Role role;
+	@Column(columnDefinition = "BIT")
+	private boolean isEnabled;
 	
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private UserProfile profile;

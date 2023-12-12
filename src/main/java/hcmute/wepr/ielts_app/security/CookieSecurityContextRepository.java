@@ -29,7 +29,9 @@ public class CookieSecurityContextRepository implements SecurityContextRepositor
 	private final Pattern[] STRICTLY_PUBLIC_ENDPOINT_WHITELIST = {
 		Pattern.compile("^/auth/.*$"),
 		Pattern.compile("^/webjars/.*$"),
-		Pattern.compile("^/courses.*$")
+		Pattern.compile("^/home/.*$"),
+		Pattern.compile("^/home"),
+		Pattern.compile("/admin/login")
 	};
 	
 	@Value("${auth.cookie.name}")

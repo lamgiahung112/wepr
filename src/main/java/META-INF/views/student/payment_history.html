@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<title>Payment history</title>
+	<link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="/css/payment_history.css">
+	<script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+	<script src="/js/payment_history.js"></script>
+</head>
+
+<body>
+	<div class="container mt-5">
+		<!-- User Section: Username and Profile -->
+		<div class="d-flex justify-content-between align-items-center mb-4">
+			<div>
+				<h3>Welcome, John Doe!</h3> <!-- Replace "John Doe" with the actual username -->
+			</div>
+			<div>
+				<a href="/user/profile" class="btn btn-primary">View Profile</a>
+				<!-- Replace "/user/profile" with the actual link to the user's profile -->
+			</div>
+		</div>
+
+		<h1>Payment History</h1>
+
+		<!-- Latest Payment Information -->
+		<div class="card mt-4">
+			<div class="card-header">
+				Latest Payment Information
+			</div>
+			<div class="card-body">
+				<!-- Display the latest payment information -->
+				<p><strong>Payment ID:</strong> <span th:text="${latestTransaction.paypalTransactionId}"></span></p>
+				<p><strong>Amount:</strong> <span th:text="${latestTransaction.amount}"></span></p>
+				<p><strong>Date:</strong> <span th:text="${latestTransaction.createdAt}"></span></p>
+				<!-- Add more details as needed -->
+			</div>
+		</div>
+
+		<!-- Courses in the Latest Payment -->
+		<div class="mt-4">
+			<h2>Courses in the Latest Payment</h2>
+			<div class="row row-cols-1 row-cols-md-4 g-4 mt-3">
+				<!-- Iterate over latest payment courses and display each -->
+				<div th:each="detail : ${latestTransaction.transactionDetails}">
+					<div class="col">
+						<div class="card h-100">
+							<img src="course_image.jpg" class="card-img-top" alt="Course Image">
+							<div class="card-body">
+								<h5 class="card-title" th:text="${detail.course.courseName}"></h5>
+								<p class="card-text" th:text="'$' + ${detail.course.price}"></p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Total Price of the Latest Payment -->
+			<div class="mt-3">
+				<p><strong>Total Price:</strong> </p>
+			</div>
+		</div>
+
+		<!-- Loop through purchaseTransactions and display each transaction -->
+		<div th:each="transaction, iterStat : ${purchaseTransactions}">
+			<!-- Display details of each transaction -->
+			<div class="card mt-4">
+				<div class="card-header">
+					<h5 class="mb-0">
+						<button class="btn btn-link collapsed" type="button" data-bs-toggle="collapse"
+							th:data-bs-target="'#transactionDetails_' + ${iterStat.index}" aria-expanded="false"
+							aria-controls="transactionDetails">
+							Payment ID: <span th:text="${transaction.paypalTransactionId}"></span>
+						</button>
+					</h5>
+				</div>
+				<div th:id="'transactionDetails_' + ${iterStat.index}" class="collapse" aria-labelledby="headingOne"
+					data-bs-parent="#purchaseTransactionAccordion">
+					<div class="card-body">
+						<!-- Display other transaction details -->
+						<p><strong>Amount:</strong> <span th:text="${transaction.amount}"></span></p>
+						<p><strong>Date:</strong> <span th:text="${transaction.createdAt}"></span></p>
+						<!-- Add more transaction details as needed -->
+
+						<!-- Iterate through transactionDetails for each transaction -->
+						<div th:each="detail : ${transaction.transactionDetails}">
+							<!-- Display details of each transaction detail -->
+							<div class="mt-3 border p-3 rounded">
+								<p><strong>Course Name:</strong> <span th:text="${detail.course.courseName}"></span></p>
+								<p><strong>Course Price:</strong> <span th:text="${detail.course.price}"></span></p>
+								<!-- Add more details of the course or transaction detail as needed -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<!-- Bootstrap Bundle with Popper.js -->
+	<script src="/webjars/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
