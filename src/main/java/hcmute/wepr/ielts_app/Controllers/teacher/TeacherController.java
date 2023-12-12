@@ -32,7 +32,7 @@ public class TeacherController {
 	public String getProfile() {
 		return "teacher/profile_teacher";
 	}
-	/*
+	
 	private final TeacherService teacherService; 
 
 	//@Autowired
@@ -53,5 +53,5 @@ public class TeacherController {
     public String updateTeacherProfile(@PathVariable Integer id, @ModelAttribute("teacherProfile") UserProfile updatedProfile) {
         teacherService.updateTeacherProfile(id, updatedProfile);
         return "redirect:/teacher/profile_teacher/" + id;
-    }*/
+    }
 }

@@ -27,7 +27,7 @@ public class TeacherService implements TeacherServiceInterface {
 		return userProfileRepository.save(userProfile);
 	}
 
-    /*public TeacherService(UserProfileRepositoryInterface userProfileRepository) {
+    public TeacherService(UserProfileRepositoryInterface userProfileRepository) {
         this.userProfileRepository = userProfileRepository;
     }
 	
@@ -51,5 +51,5 @@ public class TeacherService implements TeacherServiceInterface {
         }
 
         return null; // Handle if user is not found or other error cases
-    }*/
+    }
 }

@@ -6,6 +6,6 @@ import hcmute.wepr.ielts_app.Utilities.Requests.SignUpTeacherRequest;
 
 public interface TeacherServiceInterface {
 	UserProfile createTeacherProfile(ApplicationUser user, SignUpTeacherRequest request);
-	/*UserProfile getTeacherByID (Integer id);
-	UserProfile updateTeacherProfile (Integer id, UserProfile updateTeacher);*/
+	UserProfile getTeacherByID (Integer id);
+	UserProfile updateTeacherProfile (Integer id, UserProfile updateTeacher);
 }
