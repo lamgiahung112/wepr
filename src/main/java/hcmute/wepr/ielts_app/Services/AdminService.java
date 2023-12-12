@@ -5,16 +5,26 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import hcmute.wepr.ielts_app.Models.ApplicationUser;
 import hcmute.wepr.ielts_app.Models.PurchaseTransaction;
+import hcmute.wepr.ielts_app.Models.enums.Role;
 import hcmute.wepr.ielts_app.Services.Interfaces.AdminServiceInterface;
+import hcmute.wepr.ielts_app.Utilities.Requests.AdminGetUserListRequest;
+import hcmute.wepr.ielts_app.Utilities.Requests.AdminGetUserListRequest.ENABLE_OPTIONS;
+import hcmute.wepr.ielts_app.Utilities.Requests.AdminGetUserListRequest.ROLE_OPTIONS;
 import hcmute.wepr.ielts_app.Utilities.Requests.AdminStatisticsRequest;
 import hcmute.wepr.ielts_app.Utilities.responses.AdminStatisticsResponse;
 import hcmute.wepr.ielts_app.repositories.PurchaseTransactionRepositoryInterface;
+import hcmute.wepr.ielts_app.repositories.UserRepositoryInterface;
 
 @Service
 public class AdminService implements AdminServiceInterface {
@@ -22,20 +32,32 @@ public class AdminService implements AdminServiceInterface {
 	private double AUTHOR_REVENUE_PERCENTAGE;
 	
 	@Autowired
+	private UserRepositoryInterface userRepository;
+	@Autowired
 	private PurchaseTransactionRepositoryInterface purchaseTransactionRepository;
 
 	@Override
 	public AdminStatisticsResponse getStatistics(AdminStatisticsRequest request) {
 		LocalDateTime startTime = getStartTimeInMillis(request.getRange());
 		LocalDateTime endTime = getEndTimeInMillis(request.getRange());
-
-		List<PurchaseTransaction> allPurchases = purchaseTransactionRepository.findWithTransactionDetailsByCreatedAtBetween(startTime, endTime);
+		AtomicInteger totalCourses = new AtomicInteger(0);
+		AtomicReference<Double> totalCourseValue = new AtomicReference<>(0d);
+		
+		List<PurchaseTransaction> allPurchases = purchaseTransactionRepository.findWithTransactionDetailsWithCourseByCreatedAtBetween(startTime, endTime);
+		
+		allPurchases.stream().forEach(purchase -> {
+			totalCourses.getAndAdd(purchase.getTransactionDetails().size());
+			
+			purchase.getTransactionDetails().forEach(details -> {				
+				totalCourseValue.set(totalCourseValue.get() + details.getCourse().getPrice());
+			});
+		});
 		
 		return AdminStatisticsResponse.builder()
-				.numberOfStudents(0)
-				.numberOfSoldCourses(0)
-				.totalCourseValue(0)
-				.totalRevenue(0).build();
+				.numberOfSoldCourses(totalCourses.get())
+				.totalCourseValue(totalCourseValue.get())
+				.totalRevenue(totalCourseValue.get() * (1 - AUTHOR_REVENUE_PERCENTAGE))
+				.build();
 	}
 
 	private LocalDateTime getStartTimeInMillis(AdminStatisticsRequest.StatsRange range) {
@@ -99,5 +121,44 @@ public class AdminService implements AdminServiceInterface {
 	        default:
 	            throw new IllegalArgumentException("Unexpected value: " + range);
 	    }
+	}
+
+	@Override
+	public List<ApplicationUser> getUserList(AdminGetUserListRequest request) {
+		boolean isEnableOptionAll = request.getEnableOption().equals(ENABLE_OPTIONS.ALL);
+		boolean isRoleOptionAll = request.getRoleOption().equals(ROLE_OPTIONS.ALL);
+		
+		
+		Role role = request.getRoleOption().equals(ROLE_OPTIONS.STUDENT)
+				? Role.ROLE_STUDENT
+				: Role.ROLE_TEACHER;
+		boolean isEnabled = request.getEnableOption().equals(ENABLE_OPTIONS.ENABLED);
+		Pageable page = PageRequest.of(request.getPage(), 5);
+		
+		if (isEnableOptionAll && isRoleOptionAll) {
+			return userRepository.findAll(page).toList();
+		}
+		if (isEnableOptionAll && !isRoleOptionAll) {
+			return userRepository.findByRole(role, page).toList();
+		}
+		if (!isEnableOptionAll && isRoleOptionAll) {
+			return userRepository.findByIsEnabled(isEnabled, page).toList();
+		}
+		
+		return userRepository.findByRoleAndIsEnabled(role, isEnabled, page).toList();
+	}
+
+	@Override
+	public void disableUser(int userId) {
+		ApplicationUser user = userRepository.findById(userId).orElse(null);
+		user.setEnabled(false);
+		userRepository.save(user);
+	}
+
+	@Override
+	public void enableUser(int userId) {
+		ApplicationUser user = userRepository.findById(userId).orElse(null);
+		user.setEnabled(true);
+		userRepository.save(user);
 	}
 }

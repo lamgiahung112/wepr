@@ -7,7 +7,6 @@ import lombok.Data;
 @Builder
 public class AdminStatisticsResponse {
 	private int numberOfSoldCourses;
-	private int totalCourseValue;
-	private int totalRevenue;
-	private int numberOfStudents;
+	private double totalCourseValue;
+	private double totalRevenue;
 }
