@@ -41,7 +41,7 @@ public class SecurityConfiguration {
 				.formLogin(customizer -> customizer.disable())
 				.csrf(customizer -> customizer.disable())
 				.exceptionHandling(customizer -> {
-					customizer.accessDeniedPage("/auth/login/student");
+					customizer.accessDeniedPage("/auth/student/login");
 				})
 				.build();
 	}

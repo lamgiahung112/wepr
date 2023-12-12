@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,12 +32,24 @@ public class HomeController {
 	UserServiceInterface userService;
 	
 	@GetMapping
-	public String homePage() {
+	public String homePage(Authentication authentication, Model model) {
+		// Kiểm tra xem người dùng đã đăng nhập hay không
+	    if (authentication != null && authentication.isAuthenticated()) {
+	        // Lấy thông tin người dùng từ đối tượng Authentication
+	        String username = authentication.getName();
+	        // Gửi thông tin người dùng tới View
+	        model.addAttribute("username", username);
+	    }
 		return "home";
 	}
-	
 	@GetMapping("/courses")
-	public String coursePage() {
+	public String coursePage(Authentication authentication, Model model) {
+		if (authentication != null && authentication.isAuthenticated()) {
+	        // Lấy thông tin người dùng từ đối tượng Authentication
+	        String username = authentication.getName();
+	        // Gửi thông tin người dùng tới View
+	        model.addAttribute("username", username);
+	    }
 		return "courses";
 	}
 	
