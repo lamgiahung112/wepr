@@ -11,35 +11,35 @@
         <form id="teacherProfileForm">
             <div class="form-group">
                 <label for="username">Username:</label>
-                <input type="text" class="form-control" id="username" name="username"  readonly>
+                <input th:value="${user.username}" type="text" class="form-control" id="username" name="username"  readonly>
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input type="email" class="form-control" id="email" name="email"  readonly>
+                <input th:value="${user.email}" type="email" class="form-control" id="email" name="email"  readonly>
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
-                <input type="password" class="form-control" id="password" name="password" readonly>
+                <input value="**********" type="password" class="form-control" id="password" name="password" readonly>
             </div>
             <div class="form-group">
                 <label for="balance">Balance:</label>
-                <input type="number" class="form-control" id="balance" name="balance" readonly>
+                <input th:value="${user.balance}" type="number" class="form-control" id="balance" name="balance" readonly>
             </div>
             <div class="form-group">
                 <label for="address">Address:</label>
-                <input type="text" class="form-control" id="address" name="address" readonly>
+                <input th:value="${user.profile.address}" type="text" class="form-control" id="address" name="address" readonly>
             </div>
             <div class="form-group">
                 <label for="phoneNumber">Phone Number:</label>
-                <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" readonly>
+                <input th:value="${user.profile.phoneNumber}" type="tel" class="form-control" id="phoneNumber" name="phoneNumber" readonly>
             </div>
             <div class="form-group">
                 <label for="cvLink">CV Link:</label>
-                <input type="text" class="form-control" id="cvLink" name="cvLink" readonly>
+                <input th:value="${user.profile.cvLink}" type="text" class="form-control" id="cvLink" name="cvLink" readonly>
             </div>
             <div class="form-group">
                 <label for="experience">Experience Description:</label>
-                <textarea class="form-control" id="experience" name="experience" rows="4" readonly></textarea>
+                <textarea th:text="${user.profile.experienceDescription}" class="form-control" id="experience" name="experience" rows="4" readonly></textarea>
             </div>
             <button type="button" class="btn btn-primary" id="editButton">Edit</button>
             <button type="submit" class="btn btn-success d-none" id="saveButton">Save</button>
@@ -51,16 +51,39 @@
     <script>
         $(document).ready(function() {
             $('#editButton').click(function() {
-                $('input:not(#balance), textarea').removeAttr('readonly');
+                $('input:not(#balance, #username, #password), textarea').removeAttr('readonly');
                 $('#saveButton').removeClass('d-none');
                 $(this).addClass('d-none');
             });
 
             $('#teacherProfileForm').submit(function(event) {
                 event.preventDefault();
-                $('input, textarea').attr('readonly', true);
-                $('#saveButton').addClass('d-none');
-                $('#editButton').removeClass('d-none');
+				console.log($("#email"))
+                const data = {
+					email: $("#email").val(),
+					address: $("#address").val(),
+					phoneNumber: $("#phoneNumber").val(),
+					cvLink: $("#cvLink").val(),
+					experienceDescription: $("#experience").val()
+                }
+
+				var xhr = new XMLHttpRequest();
+			    xhr.open("POST", "/teacher/profile/update", true); // Adjust the URL based on your server configuration
+			    xhr.setRequestHeader("Content-Type", "application/json");
+
+			    xhr.onreadystatechange = function () {
+			        if (xhr.readyState === 4) {
+			            if (xhr.status === 200) {
+			                alert("Update successfully")
+			            } else {
+			                alert("Unexpected error")
+			            }
+			        }
+			    };
+
+			    // Convert the JavaScript object to JSON and send it in the request body
+			    xhr.send(JSON.stringify(data));
+                
             });
         });
     </script>
