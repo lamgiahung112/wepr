@@ -1,11 +1,269 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-<title>Teacher Dashboard</title>
-<link 
-	href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+	<title>Teacher Dashboard</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+	<style>
+		/* Common box formatting */
+		.course-box {
+			border: 2px solid #ccc;
+			padding: 20px;
+			margin: 10px;
+			border-radius: 8px;
+			text-align: center;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+			width: 45%;
+			box-sizing: border-box;
+			display: inline-block;
+		}
+
+		.course-box:hover {
+			background-color: #f0f0f0;
+		}
+
+		/* Image formatting */
+		.course-image {
+			max-width: 80px;
+			height: auto;
+			border-radius: 50%;
+			margin-bottom: 10px;
+		}
+
+		/* Course name formatting */
+		.course-name {
+			font-size: 18px;
+			font-weight: bold;
+			margin-bottom: 10px;
+		}
+
+		/* Course difficulty formatting */
+		.course-difficulty {
+			font-size: 16px;
+			color: #888;
+		}
+
+		/* Button and selection container */
+		.button-container {
+			text-align: center;
+			margin-top: 20px;
+		}
+
+		/* Buttons and selection */
+		.action-button {
+			background-color: #007bff;
+			color: #fff;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 5px;
+			cursor: pointer;
+		}
+
+		.difficulty-select {
+			padding: 8px;
+			border-radius: 5px;
+		}
+
+		/* Use Flexbox to balance boxes on all screens */
+		.box-container {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-around;
+			position: relative;
+		}
+
+		/* Adjust the position of elements */
+		.filter-section {
+			width: 20%;
+			float: left;
+		}
+
+		.search-section {
+			width: 70%;
+			float: left;
+			text-align: left;
+			display: flex;
+		}
+
+		.search-input {
+			flex: 1;
+			margin-right: 10px;
+		}
+
+		.add-course-section {
+			width: 100%;
+			text-align: right;
+			position: absolute;
+			top: 0;
+			right: 0;
+			margin-top: 100px;
+		}
+	</style>
+	<!-- Other JavaScript code and formatting here... -->
 </head>
+
 <body>
 	<div th:replace="fragments/teacher/navbar :: nav"></div>
+
+	<!-- Flexbox container to balance boxes -->
+	<div class="container mt-5">
+		<!-- Search and difficulty selection section -->
+		<div class="row">
+			<div class="col-md-2 filter-section">
+				<select class="form-select difficulty-select" onchange="filterCourses()">
+					<option value="all">All</option>
+					<option value="easy">Easy</option>
+					<option value="medium">Medium</option>
+					<option value="hard">Hard</option>
+				</select>
+			</div>
+
+			<div class="col-md-5 search-section">
+				<input type="text" id="searchInput" class="form-control search-input" placeholder="Enter keyword...">
+				<button class="btn btn-primary action-button" onclick="searchCourses()">Search</button>
+				<a href="/teacher/courses/new" class="btn btn-primary action-button ms-2">Add Course</a>
+			</div>
+
+			
+			
+			
+
+		<!-- Course boxes -->
+		<div class="box-container course-container">
+			<!-- First box -->
+			<div class="course-box" data-difficulty="easy" data-order="1" onclick="redirectToCourse(1)">
+				<img class="course-image"
+					src="https://play-lh.googleusercontent.com/B3PaZm4O39skWIIEOxomeQSasy_OnchM8wCUJ4Q2e8sGp7bOk-Kj3PKUE1MycECbAJE=w240-h480-rw"
+					alt="Course Image">
+				<div class="course-name">Course Name 1</div>
+				<div class="course-difficulty">Difficulty: Easy</div>
+			</div>
+	
+			<!-- Second box -->
+			<div class="course-box" data-difficulty="medium" data-order="2" onclick="redirectToCourse(2)">
+				<img class="course-image"
+					src="https://play-lh.googleusercontent.com/B3PaZm4O39skWIIEOxomeQSasy_OnchM8wCUJ4Q2e8sGp7bOk-Kj3PKUE1MycECbAJE=w240-h480-rw"
+					alt="Course Image">
+				<div class="course-name">Course Name 2</div>
+				<div class="course-difficulty">Difficulty: Medium</div>
+			</div>
+	
+			<!-- Third box -->
+			<div class="course-box" data-difficulty="hard" data-order="3" onclick="redirectToCourse(3)">
+				<img class="course-image"
+					src="https://play-lh.googleusercontent.com/B3PaZm4O39skWIIEOxomeQSasy_OnchM8wCUJ4Q2e8sGp7bOk-Kj3PKUE1MycECbAJE=w240-h480-rw"
+					alt="Course Image">
+				<div class="course-name">Course Name 3</div>
+				<div class="course-difficulty">Difficulty: Hard</div>
+			</div>
+	
+			<!-- Fourth box -->
+			<div class="course-box" data-difficulty="easy" data-order="4" onclick="redirectToCourse(4)">
+				<img class="course-image"
+					src="https://play-lh.googleusercontent.com/B3PaZm4O39skWIIEOxomeQSasy_OnchM8wCUJ4Q2e8sGp7bOk-Kj3PKUE1MycECbAJE=w240-h480-rw"
+					alt="Course Image">
+				<div class="course-name">Course Name 4</div>
+				<div class="course-difficulty">Difficulty: Easy</div>
+			</div>
+	
+			<!-- Fifth box -->
+			<div class="course-box" data-difficulty="medium" data-order="5" onclick="redirectToCourse(5)">
+				<img class="course-image"
+					src="https://play-lh.googleusercontent.com/B3PaZm4O39skWIIEOxomeQSasy_OnchM8wCUJ4Q2e8sGp7bOk-Kj3PKUE1MycECbAJE=w240-h480-rw"
+					alt="Course Image">
+				<div class="course-name">Course Name 5</div>
+				<div class="course-difficulty">Difficulty: Medium</div>
+			</div>
+	
+			<!-- Sixth box -->
+			<div class="course-box" data-difficulty="hard" data-order="6" onclick="redirectToCourse(6)">
+				<img class="course-image"
+					src="https://play-lh.googleusercontent.com/B3PaZm4O39skWIIEOxomeQSasy_OnchM8wCUJ4Q2e8sGp7bOk-Kj3PKUE1MycECbAJE=w240-h480-rw"
+					alt="Course Image">
+				<div class="course-name">Course Name 6</div>
+				<div class="course-difficulty">Difficulty: Hard</div>
+			</div>
+		</div>
+
+	<!-- Pagination input -->
+	<div class="pagination-container">
+		<label for="pageNumber">Page:</label>
+		<input type="number" id="pageNumber" name="pageNumber" min="1" value="1">
+		<button class="btn btn-primary" onclick="goToPage()">Go to Page</button>
+	</div>
+	<script>
+		// Function to handle "Go to Page" button click
+		function goToPage() {
+			var pageNumberInput = document.getElementById('pageNumber');
+			var pageNumber = parseInt(pageNumberInput.value);
+
+			// Do something with the selected page (e.g., navigate to a new page)
+			console.log("Go to page " + pageNumber);
+		}
+	</script>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+		// Function to handle difficulty selection change
+		function filterCourses() {
+			var difficultySelect = document.querySelector('.difficulty-select');
+			var selectedDifficulty = difficultySelect.value.toLowerCase();
+
+			// Select the container of course boxes
+            var courseContainer = document.querySelector('.course-container');
+            
+            // Remove previous classes for layout adjustment
+            courseContainer.classList.remove('two-columns');
+            
+            // Check the selected difficulty and add appropriate class
+            if (selectedDifficulty !== 'all') {
+                courseContainer.classList.add('two-columns');
+            }
+            
+            
+			// Iterate through all course boxes to show/hide based on difficulty
+			var courseBoxes = document.querySelectorAll('.course-box');
+			courseBoxes.forEach(function (box) {
+				var boxDifficulty = box.getAttribute('data-difficulty');
+				var boxOrder = parseInt(box.getAttribute('data-order'));
+
+				// Show/hide boxes based on the selected difficulty
+				if (selectedDifficulty === 'all' || boxDifficulty === selectedDifficulty) {
+					box.style.display = 'block';
+				} else {
+					box.style.display = 'none';
+				}
+
+				// Reorder boxes based on the original order
+				box.style.order = boxOrder;
+			});
+		}
+	</script>
+	<script>
+		function searchCourses() {
+			var searchInput = document.getElementById('searchInput');
+			var keyword = searchInput.value.toLowerCase();
+
+			var courseBoxes = document.querySelectorAll('.course-box');
+			var found = false;
+			courseBoxes.forEach(function (box) {
+				var courseName = box.querySelector('.course-name').textContent.toLowerCase();
+
+				if (courseName.includes(keyword)) {
+					box.style.display = 'block';
+					found = true;
+				} else {
+					box.style.display = 'none';
+				}
+			});
+
+			if (!found) {
+				alert("Không tìm thấy kết quả cho từ khóa '" + keyword + "'");
+			}
+		}
+	</script>
+
 </body>
+
 </html>

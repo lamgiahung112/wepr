@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Course details</title>
+<link rel="stylesheet"
+	href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
+<script th:inline="javascript">
+/*<![CDATA[*/
+	function onActionButtonClick() {
+		const btn = document.querySelector("#action-button")
+		
+		const hasBoughtCourse = /*[[${hasBoughtCourse}]]*/ false
+
+		if (hasBoughtCourse) {
+			window.location.href = /*[[@{/courses/{id}/learn(id=${course.courseId})}]]*/ "/"
+		}
+		
+		const data = {
+			userId: /*[[${userId}]]*/ "",
+			courseId: /*[[${course.courseId}]]*/ ""
+		}
+
+		var xhr = new XMLHttpRequest();
+	    xhr.open("POST", "/api/courses/buy", true); // Adjust the URL based on your server configuration
+	    xhr.setRequestHeader("Content-Type", "application/json");
+
+	    xhr.onreadystatechange = function () {
+	        if (xhr.readyState === 4) {
+	            if (xhr.status === 200) {
+	                // Successful response
+	                console.log("Course updated successfully");
+	                
+	                // Redirect to the teacher dashboard
+	                window.location.href = /*[[@{/courses/{id}/learn(id=${course.courseId})}]]*/ "/courses";
+	            } else {
+	                // Handle error response
+	                window.location.href = "/auth/login/student";
+	                console.error("Error adding course");
+	            }
+	        }
+	    };
+
+	    // Convert the JavaScript object to JSON and send it in the request body
+	    xhr.send(JSON.stringify(data));
+	}
+/*]]>*/
+</script>
+</head>
+<body>
+	<div class="container mt-5">
+		<!-- Cover Image Row -->
+		<div class="row justify-content-center">
+			<img
+				src="https://scontent.fsgn8-4.fna.fbcdn.net/v/t39.30808-6/327560770_1909796219368582_6426767247812503267_n.jpg?stp=cp6_dst-jpg&_nc_cat=103&ccb=1-7&_nc_sid=783fdb&_nc_ohc=uOwxHIj-OJgAX_15gWQ&_nc_oc=AQlB37I41Es5nNB8zR-gjD2K6uCyZVMDD2HcM10lI2notpdVN9MdiDvnKOQR7GSBpbg&_nc_ht=scontent.fsgn8-4.fna&oh=00_AfDm1bWykzGS8k3Pkzrce2esyJ-BBjpPZj7fxmZmdQbpfw&oe=657B9A9F"
+				alt="Course Cover Image" class="img-fluid">
+		</div>
+
+		<!-- Course Details Row -->
+		<div class="row mt-4">
+			<div class="col-md-8">
+				<h2 th:text="${course.courseName}"></h2>
+				<p th:text="@{By {author}(author=${author})}"></p>
+			</div>
+			<div class="col-md-4">
+				<button id="action-button" class="btn btn-primary btn-block"
+					th:text="${hasBoughtCourse ? 'Start Learning' : 'Buy Course'}">Buy
+					Course</button>
+			</div>
+		</div>
+
+		<!-- Star Rating Row -->
+		<div class="row mt-4">
+			<div class="col-md-12">
+				<!-- Add your star rating component here -->
+				<p th:text="@{Rating: {rating}(rating=${stats.averageRating})}"></p>
+				<p th:text="@{Students: {stu}(stu=${stats.numberOfStudents})}"></p>
+				<p th:text="@{Difficulty: {diff}(diff=${course.level})}"></p>
+			</div>
+		</div>
+
+		<!-- Course Description Row -->
+		<div class="row mt-4">
+			<div class="col-md-12">
+				<h3>Description</h3>
+				<p th:text="${course.description}"></p>
+			</div>
+		</div>
+
+		<!-- List of Lessons Row -->
+		<div class="row mt-4">
+			<div class="col-md-12">
+				<h3>Lessons</h3>
+				<ul>
+					<li th:each="lesson : ${course.lessons}" th:text="${lesson.title}"></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

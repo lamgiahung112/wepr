@@ -66,4 +66,5 @@ public class ApplicationUser {
 	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
 	private Set<Rating> ratings = new HashSet<>();
+
 }
