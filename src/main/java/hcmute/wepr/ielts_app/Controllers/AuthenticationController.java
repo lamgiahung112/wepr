@@ -111,6 +111,16 @@ public class AuthenticationController {
 		cookie.setPath("/");
 		cookie.setMaxAge(Integer.MAX_VALUE);
 		response.addCookie(cookie);
-		response.sendRedirect("/home/courses");
+		response.sendRedirect("/home");
+	}
+	@GetMapping("/student/logout") 
+	public String logout(HttpServletResponse response) throws IOException {
+		Cookie cookie = new Cookie(COOKIE_NAME, null);
+		cookie.setPath("/");
+		cookie.setHttpOnly(true);
+		cookie.setDomain("localhost");
+		cookie.setMaxAge(Integer.MAX_VALUE);
+		response.addCookie(cookie);
+		return "redirect:/auth/student/login";
 	}
 }

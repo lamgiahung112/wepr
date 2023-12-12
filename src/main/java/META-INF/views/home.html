@@ -15,13 +15,18 @@
 
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
-                <div class="container px-5">
+                <div class="container px-1">
                     <a class="navbar-brand" href="home"><span class="fw-bolder text-primary">Ielts Writing</span></a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
-                            <li class="nav-item"><a class="nav-link" href="courses" >Course</a></li>
-                            <li class="nav-item"><a class="btn btn-primary mr-2" href="auth/student/login">Login account</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/home/courses" >Course</a></li>
+							<li class="nav-item" th:if="${username}"><a class="nav-link" th:text="${username}"></a></li>
+							<li class="nav-item"><a th:if="${username}" class="btn btn-primary mr-2" href="/auth/student/logout">Logout</a></li>	
+               
+							<li class="nav-item" th:unless="${username}">
+								 <a class="btn btn-primary mr-2" href="auth/student/login">Login account</a>
+							</li>
                         </ul>
                     </div>
                 </div>
@@ -59,9 +64,16 @@
             <div class="container px-4 px-lg-5 d-flex h-100 align-items-center justify-content-center">
                 <div class="d-flex justify-content-center">
                     <div class="text-center">
-                        <h1 class="mx-auto my-0 text-uppercase">IELTS WRITING</h1>
+						<div th:if="${username}">
+							<h1>WELCOME,</h1> <h3 th:text="${username}" class="mx-auto my-0 text-uppercase"></h3>
+						</div>
+               
+							<div th:unless="${username}">
+								 <h1 class="mx-auto my-0 text-uppercase">IELTS WRITING</h1>
+							</div>
+                        
                         <h2 class="text-white-50 mx-auto mt-2 mb-5">"You don't have to be great to start but you have to start to be great"</h2>
-                        <a class="btn btn-primary" href="courses">Get Started</a>
+                        <a class="btn btn-primary" href="/home/courses">Get Started</a>
                     </div>
                 </div>
             </div>
