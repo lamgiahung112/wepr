@@ -23,6 +23,7 @@ import hcmute.wepr.ielts_app.Models.Rating;
 import hcmute.wepr.ielts_app.Models.RatingId;
 import hcmute.wepr.ielts_app.Models.UserProgress;
 import hcmute.wepr.ielts_app.Models.UserProgressId;
+import hcmute.wepr.ielts_app.Models.WritingExercise;
 import hcmute.wepr.ielts_app.Models.enums.DifficultLevel;
 import hcmute.wepr.ielts_app.Services.Interfaces.CourseServiceInterface;
 import hcmute.wepr.ielts_app.Utilities.Requests.CreateNewCourseRequest;
@@ -35,6 +36,7 @@ import hcmute.wepr.ielts_app.repositories.RatingRepositoryInterface;
 import hcmute.wepr.ielts_app.repositories.UserProfileRepositoryInterface;
 import hcmute.wepr.ielts_app.repositories.UserProgressRepositoryInterface;
 import hcmute.wepr.ielts_app.repositories.UserRepositoryInterface;
+import hcmute.wepr.ielts_app.repositories.WritingExerciseRepositoryInterface;
 import hcmute.wepr.ielts_app.specifications.CourseSpecifications;
 
 @Service
@@ -55,6 +57,9 @@ public class CourseService implements CourseServiceInterface {
 	
 	@Autowired
 	private UserProgressRepositoryInterface userProgressRepository;
+	
+	@Autowired
+	private WritingExerciseRepositoryInterface writingExerciseRepository;
 
 	@Override
 	public Course createNewCourse(CreateNewCourseRequest request) {
@@ -70,7 +75,14 @@ public class CourseService implements CourseServiceInterface {
 		request.getLessons().stream().forEach(lesson -> {
 			Lesson toBeSavedLesson = Lesson.builder().description(lesson.getDescription()).title(lesson.getTitle())
 					.video(lesson.getVideoLink()).course(savedCourse).build();
-			lessonRepository.save(toBeSavedLesson);
+			Lesson savedLesson = lessonRepository.save(toBeSavedLesson);
+			if (lesson.getExerciseTitle() != null && !lesson.getExerciseTitle().isEmpty()) {
+				WritingExercise exercise = WritingExercise.builder()
+						.lesson(savedLesson)
+						.title(lesson.getExerciseTitle())
+						.build();
+				writingExerciseRepository.save(exercise);
+			}
 		});
 		return savedCourse;
 	}
@@ -86,7 +98,9 @@ public class CourseService implements CourseServiceInterface {
 			.setLevel(request.getDifficultyLevel())
 			.setPrice(request.getPrice())
 			.setUpdatedAt(LocalDateTime.now());
+		List<WritingExercise> exerciseList = writingExerciseRepository.findAllExercisesByCourseId(request.getCourseId());
 		
+		writingExerciseRepository.deleteAllInBatch(exerciseList);
 		lessonRepository.deleteAllInBatch(course.getLessons());
 		
 		request.getLessons().stream().forEach(
@@ -97,7 +111,14 @@ public class CourseService implements CourseServiceInterface {
 							.video(lesson.getVideoLink())
 							.course(course)
 							.build();
-					lessonRepository.save(toBeSavedLesson);
+					Lesson savedLesson = lessonRepository.save(toBeSavedLesson);
+					if (lesson.getExerciseTitle() != null && !lesson.getExerciseTitle().isEmpty()) {
+						WritingExercise exercise = WritingExercise.builder()
+								.lesson(savedLesson)
+								.title(lesson.getExerciseTitle())
+								.build();
+						writingExerciseRepository.save(exercise);
+					}
 				}
 		);
 		
