@@ -33,7 +33,7 @@ public class TeacherService implements TeacherServiceInterface {
 	
 	@Override
 	public UserProfile getTeacherByID (Integer id) {
-		return userProfileRepository.findById(id).orElse(null);
+		return userProfileRepository.findByUserUserId(id);
 	}
 	
 	@Override 
