@@ -94,10 +94,9 @@
 						</div>
 						<div class="card-body">
 							<!-- Display Exercise Prompt -->
-							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis vel nulla at
-								condimentum.
-								Donec vitae est id turpis facilisis viverra. Nam consequat lectus vel risus posuere, nec
-								ullamcorper justo porttitor.</p>
+							<p th:if="${exercise != null}" th:text="${exercise.title}"></p>
+							<p th:unless="${exercise != null && exercise.title != null}">Exercise prompt is not
+								available.</p>
 						</div>
 					</div>
 
@@ -108,30 +107,50 @@
 						</div>
 						<div class="card-body">
 							<!-- Text Area for Writing -->
-							<textarea class="form-control" rows="15"
+							<textarea id="exerciseAnswer" class="form-control" rows="15"
 								placeholder="Write your response here..."></textarea>
 						</div>
 					</div>
 
 					<!-- Submission Button -->
-					<button class="btn btn-primary mb-4">Submit Exercise</button>
+					<button id="submitExerciseButton" class="btn btn-primary mb-4">Submit Exercise</button>
 
 					<!-- View Previous Attempts -->
-					<div class="card">
+					<div class="card mb-3">
 						<div class="card-header">
 							Previous Attempts
 						</div>
 						<div class="card-body">
-							<ul class="list-group">
-								<!-- Sample List of Previous Attempts -->
-								<li class="list-group-item">Attempt 1 - <span class="text-muted">Submitted on: January
-										1,
-										2023</span></li>
-								<li class="list-group-item">Attempt 2 - <span class="text-muted">Submitted on: January
-										5,
-										2023</span></li>
-								<!-- Add more list items for previous attempts -->
-							</ul>
+							<div class="d-flex flex-column" id="previousAttemptsList">
+								<div id="attempInfo">
+									<h5>Attempt ID: 52</h5>
+									<h5>Submitted At: 12/13/2023</h5>
+								</div>
+								<div id="answerSection" class="d-flex flex-column justify-content-around">
+									<div class="w-100 d-flex flex-row" id="title">
+										<div class="w-100 d-flex flex-row justify-content-center">
+											<h5>Student answer</h5>
+
+										</div>
+										<div class="w-100 d-flex flex-row justify-content-center">
+											<h5>Teacher response</h5>
+
+										</div>
+									</div>
+									<div class="w-100 d-flex flex-row" id="title">
+										<div class="w-100 d-flex flex-column align-items-start" id="studentAnswer">
+											<div class="w-100">
+												<p>My best mermory are the moments with mine farmily.</p>
+											</div>
+										</div>
+										<div class="w-100 d-flex flex-column align-items-start" id="teacherResponse">
+											<div class="w-100">
+												<p>My best me'r'mory are the moments with m'ine'' fa'r'mily.</p>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
