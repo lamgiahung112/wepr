@@ -8,7 +8,7 @@ function fetchCourses(page = 1) {
 	const itemsPerPage = parseInt('3');
 	paginationData += `itemsPerPage=${itemsPerPage}`;
 
-	const baseURL = 'http://localhost:8080/courses/find'; // Replace with your actual API endpoint
+	const baseURL = 'http://localhost:8080/home/courses/find'; // Replace with your actual API endpoint
 	const finalURL = `${baseURL}?${filterData}${sortData}${paginationData}&page=${page-1}`;
 	console.log(finalURL);
 
