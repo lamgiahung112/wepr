@@ -4,6 +4,7 @@ import java.util.List;
 
 import hcmute.wepr.ielts_app.Models.ApplicationUser;
 import hcmute.wepr.ielts_app.Models.enums.Role;
+import hcmute.wepr.ielts_app.Utilities.Requests.UpdateStudentRequest;
 import hcmute.wepr.ielts_app.Utilities.responses.TeacherNameDTO;
 
 public interface UserServiceInterface {
@@ -12,4 +13,5 @@ public interface UserServiceInterface {
 	List<TeacherNameDTO> getTeacherNameAndUsername();
 	ApplicationUser findById(int id);
 	ApplicationUser findWithUserProfileById(int id);
+	void updateStudent(int userId, UpdateStudentRequest request);
 }
