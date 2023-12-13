@@ -43,5 +43,4 @@ public class RatingService implements RatingServiceInterface {
 		courseRepository.save(course);
 	}
 
-    // Các phương thức khác nếu cần (lấy đánh giá theo ID, cập nhật đánh giá, xóa đánh giá, ...)
 }
