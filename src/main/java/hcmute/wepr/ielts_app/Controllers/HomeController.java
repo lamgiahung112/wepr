@@ -16,11 +16,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import hcmute.wepr.ielts_app.Models.Course;
+import hcmute.wepr.ielts_app.Models.UserProgress;
 import hcmute.wepr.ielts_app.Services.Interfaces.CourseServiceInterface;
+import hcmute.wepr.ielts_app.Services.Interfaces.UserProgressServiceInterface;
 import hcmute.wepr.ielts_app.Services.Interfaces.UserServiceInterface;
 import hcmute.wepr.ielts_app.Utilities.responses.CourseDTO;
 import hcmute.wepr.ielts_app.Utilities.responses.FilteredCourseResponse;
 import hcmute.wepr.ielts_app.Utilities.responses.TeacherNameDTO;
+import hcmute.wepr.ielts_app.repositories.UserProfileRepositoryInterface;
 
 @Controller
 @CrossOrigin
@@ -30,6 +33,8 @@ public class HomeController {
 	CourseServiceInterface courseService;
 	@Autowired
 	UserServiceInterface userService;
+	@Autowired
+	private UserProgressServiceInterface userProgressRepository;
 	
 	@GetMapping
 	public String homePage(Authentication authentication, Model model) {
@@ -63,6 +68,8 @@ public class HomeController {
 	@GetMapping("/courses/find")
 	@ResponseBody
 	public ResponseEntity<FilteredCourseResponse> getCourses(
+			Authentication auth,
+			@RequestParam(value = "isBought", required = false) Boolean isBought,
 	        @RequestParam(value = "authors", required = false) String authors,
 	        @RequestParam(value = "minPrice", required = false) Float minPrice,
 	        @RequestParam(value = "maxPrice", required = false) Float maxPrice,
@@ -115,6 +122,15 @@ public class HomeController {
 		
 		List<Course> courses = courseService.getCourseWithSpecAndPaging(authors, difficulties, priceRangeFilter, minPrice, maxPrice, ratingRangeFilter, minRating, maxRating, minEnrollment, maxEnrollment, nameSorting, priceSorting, ratingSorting, itemsPerPage, page);
 		Long totalResultNumber = courseService.countCourseWithSpecAndPaging(authors, difficulties, priceRangeFilter, minPrice, maxPrice, ratingRangeFilter, minRating, maxRating, minEnrollment, maxEnrollment, nameSorting, priceSorting, ratingSorting, itemsPerPage, page);
+		
+		if (isBought != null && auth != null && auth.getCredentials() != null) {
+			int userId = Integer.valueOf(auth.getCredentials().toString());
+			courses = courses.stream().filter(course -> {
+				UserProgress progress = userProgressRepository.findByUserProgressId(userId, course.getCourseId());
+				return isBought ? progress != null : progress == null;
+			}).toList();
+		}
+		
 		// Convert Course objects to CourseDTO objects
         List<CourseDTO> courseDTOs = courses.stream()
                 .map(this::convertToCourseDTO)
