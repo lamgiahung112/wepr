@@ -13,6 +13,7 @@ import hcmute.wepr.ielts_app.Models.enums.Role;
 import hcmute.wepr.ielts_app.Services.Interfaces.UserServiceInterface;
 import hcmute.wepr.ielts_app.Utilities.JwtDataWrapper;
 import hcmute.wepr.ielts_app.Utilities.JwtUtils;
+import hcmute.wepr.ielts_app.Utilities.Requests.UpdateStudentRequest;
 import hcmute.wepr.ielts_app.Utilities.responses.TeacherNameDTO;
 import hcmute.wepr.ielts_app.repositories.UserRepositoryInterface;
 
@@ -95,6 +96,14 @@ public class UserService implements UserServiceInterface {
 	@Override
 	public ApplicationUser findWithUserProfileById(int id) {
 		return userRepository.findUserWithProfileByUserId(id);
+	}
+
+	@Override
+	public void updateStudent(int userId, UpdateStudentRequest request) {
+		ApplicationUser user = userRepository.findById(userId).orElse(null);
+		
+		user.setEmail(request.getEmail());
+		userRepository.save(user);
 	}
 
 	

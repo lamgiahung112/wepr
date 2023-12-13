@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-	
 	<title>Student Profile</title>
 	<link rel="stylesheet" href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</html>
 
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-white py-3">
@@ -14,11 +12,11 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0 small fw-bolder">
                             <li class="nav-item"><a class="nav-link" href="/home/courses" >Course</a></li>
-                            <li class="nav-item" th:if="${username}"><a class="nav-link" href="/student/profile" >Profile</a></li>
-							<li class="nav-item" th:if="${username}"><a class="nav-link" th:text="${username}"></a></li>
-							<li class="nav-item"><a th:if="${username}" class="btn btn-primary mr-2" href="/auth/student/logout">Logout</a></li>	
+                            <li class="nav-item" th:if="${user.username}"><a class="nav-link" href="/student/profile" >Profile</a></li>
+							<li class="nav-item" th:if="${user.username}"><a class="nav-link" th:text="${user.username}"></a></li>
+							<li class="nav-item"><a th:if="${user.username}" class="btn btn-primary mr-2" href="/auth/student/logout">Logout</a></li>	
                
-							<li class="nav-item" th:unless="${username}">
+							<li class="nav-item" th:unless="${user.username}">
 								 <a class="btn btn-primary mr-2" href="auth/student/login">Login account</a>
 							</li>
                         </ul>
@@ -27,14 +25,18 @@
             </nav>
      <div class="container mt-5">
         <h1>Student Profile</h1>
-        <form id="">
+        <form id="profile-form">
             <div class="form-group">
                 <label for="username">Username:</label>
-                <input th:value="${username}" type="text" class="form-control" id="username" name=""  readonly>
+                <input th:value="${user.username}" type="text" class="form-control" id="username" name="username"  readonly>
             </div>
             <div class="form-group">
                 <label for="email">Email:</label>
-                <input  type="email" class="form-control" id="email" name="email"  readonly>
+                <input th:value="${user.email}" type="email" class="form-control" id="email" name="email"  readonly>
+            </div>
+            <div class="form-group">
+                <label for="balance">Balance:</label>
+                <input th:value="${user.balance}" type="number" class="form-control" id="balance" name="balance"  readonly>
             </div>
             <div class="form-group">
                 <label for="password">Password:</label>
@@ -49,10 +51,36 @@
     <script>
         $(document).ready(function() {
             $('#editButton').click(function() {
-                $('input:not(#username, #password), textarea').removeAttr('readonly');
+                $('input:not(#username, #password, #balance), textarea').removeAttr('readonly');
                 $('#saveButton').removeClass('d-none');
                 $(this).addClass('d-none');
+            });
+
+            $('#profile-form').submit(function(event) {
+                event.preventDefault();
+                const data = {
+					email: $("#email").val(),
+                }
+
+				var xhr = new XMLHttpRequest();
+			    xhr.open("POST", "/student/profile/update", true); // Adjust the URL based on your server configuration
+			    xhr.setRequestHeader("Content-Type", "application/json");
+
+			    xhr.onreadystatechange = function () {
+			        if (xhr.readyState === 4) {
+			            if (xhr.status === 200) {
+			                alert("Update successfully")
+			            } else {
+			                alert("Unexpected error")
+			            }
+			        }
+			    };
+
+			    // Convert the JavaScript object to JSON and send it in the request body
+			    xhr.send(JSON.stringify(data));
+                
             });
          });
     </script>
 </body>
+</html>
