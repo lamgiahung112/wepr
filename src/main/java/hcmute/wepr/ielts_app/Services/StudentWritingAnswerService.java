@@ -25,5 +25,13 @@ public class StudentWritingAnswerService implements StudentWritingAnswerServiceI
 	public List<StudentWritingAnswer> getAllAnswerAttemptWithCorrectionOfUserInAnExercise(int userId, int exerciseId) {
 		return studentWritingAnswerRepository.findWithWritingAnswerCorrectionByUserUserIdAndWritingExerciseExerciseId(userId, exerciseId);
 	}
+	@Override
+	public List<StudentWritingAnswer> getAllAnswerAttemptOfAnExercise(int exerciseId) {
+		return studentWritingAnswerRepository.findByWritingExerciseExerciseId(exerciseId);
+	}
+	@Override
+	public StudentWritingAnswer getAnswerWithExerciseAndCorrection(int answerId) {
+		return studentWritingAnswerRepository.findWithWritingAnswerCorrectionAndWithWritingExerciseByStudentWritingAnswerId(answerId);
+	}
 
 }

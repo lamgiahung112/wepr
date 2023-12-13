@@ -19,5 +19,6 @@ public class AnswerAttemptResponse {
 	private String answer;
 	private LocalDateTime createAt;
 	private StudentAnswerStatus studentAnswerStatus;
+	private WritingExerciseResponse writingExercise;
 	private WritingCorrectionResponse writingCorrectionResponse;
 }

@@ -29,4 +29,5 @@ public interface CourseServiceInterface {
 			Integer maxEnrollment, String nameSorting, String priceSorting, String ratingSorting, Integer itemsPerPage,
 			Integer page);
 	Course getCouseWithAllLessons(int courseId);
+	Course getCourseWithAllLessonsAndAssociatedExercise(int courseId);
 }
