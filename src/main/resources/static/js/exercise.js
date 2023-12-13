@@ -30,12 +30,12 @@ function updateUI() {
 						'</div>' +
 						'</div>' +
 						'<div class="w-100 d-flex flex-row" id="title">' +
-						'<div class="w-100 d-flex flex-column align-items-start" id="studentAnswer">' +
+						'<div class="w-50 d-flex flex-column align-items-start" id="studentAnswer">' +
 						'<div class="w-100">' +
 						'<p>' + attempt.answer + '</p>' +
 						'</div>' +
 						'</div>' +
-						'<div class="w-100 d-flex flex-column align-items-start" id="teacherResponse">' +
+						'<div class="w-50 d-flex flex-column align-items-start" id="teacherResponse">' +
 						'<div class="w-100">' +
 						'<p>' + (attempt.writingCorrectionResponse ? attempt.writingCorrectionResponse.correction : '(PENDING...) Please wait for teacher to response') + '</p>' +
 						'</div>' +
@@ -57,6 +57,10 @@ function updateUI() {
 function submitExerciseAnswer() {
 	// Get the exercise answer from the textarea or input field
 	let exerciseAnswer = $('#exerciseAnswer').val();
+	if (exerciseAnswer == "") {
+		alert("The answer is blank!");
+		return;
+	}
 	// Ajax call to submit the exercise answer
 	$.ajax({
 		type: 'POST', // Change this to 'POST' if your endpoint expects a POST request
@@ -66,6 +70,7 @@ function submitExerciseAnswer() {
 		},
 		success: function(response) {
 			updateUI();
+			alert("Submit exercise successfully!");
 		},
 		error: function(xhr, status, error) {
 			// Handle error response
@@ -110,6 +115,7 @@ $(document).ready(function() {
 
 	$('#submitExerciseButton').click(function() {
 		submitExerciseAnswer();
-
+		
+		$('#exerciseAnswer').val("");
 	});
 });

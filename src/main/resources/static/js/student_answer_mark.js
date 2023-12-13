@@ -1,8 +1,12 @@
 let currentAnswerId;
+let url = window.location.href;
+let segments = url.split('/');
+let courseId = segments[segments.length - 2]; // The course ID should be the second-to-last segment
 
+;
 function updateUI() {
 	$.ajax({
-		url: 'http://localhost:8080/answer/course/253', // Replace with your API endpoint
+		url: 'http://localhost:8080/answer/course/'+courseId, // Replace with your API endpoint
 		method: 'GET',
 		dataType: 'json',
 		success: function(data) {
