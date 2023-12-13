@@ -68,3 +68,13 @@
     transform: scale(1.05); /* Increase the scale as needed */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Add shadow or other effects as desired */
 }
+
+.star {
+	font-size: large;
+	padding-left: 8px;
+	padding-right: 8px;
+}
+
+.star:hover {
+	background-color: gainsboro;
+}

@@ -18,8 +18,7 @@
 						<div id="userIdHolder" th:attr="data-user-id=${userId}"></div>
 						<div id="courseIdHolder" th:attr="data-course-id=${courseWithLessons.courseId}"></div>
 						<h4 id="courseTitle" class="h-25 d-flex flex-row justify-content-center align-items-center"
-							th:text="${courseWithLessons.courseName}" 
-							>
+							th:text="${courseWithLessons.courseName}">
 							Course Title
 						</h4>
 					</div>
@@ -27,14 +26,12 @@
 				<div id="courseProgressiveBar"
 					class="h-25 d-flex flex-column justify-content-center align-items-center">
 					<div>
-						<h5>Progressive Bar</h5>
+						<h5 id="courseTitle" class="h-25 d-flex flex-row justify-content-center align-items-center"
+							th:text="${courseWithLessons.description}">
+							Course Description
+						</h5>
 					</div>
-					<div class="w-75">
-						<div class="progress">
-							<div class="progress-bar bg-success" role="progressbar" style="width: 50%;"
-								aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-						</div>
-					</div>
+					
 				</div>
 
 			</div>
@@ -73,18 +70,64 @@
 			</div>
 			<div id="userOperations" class="enable-border d-flex flex-row justify-content-between align-items-center">
 
-				<div id="leftUserOps" class="d-flex flex-row justify-content-around align-items-center">
-					<div class="enable-border">
-						<button type="button" class="btn btn-success">Mark as complete</button>
+				<div id="leftUserOps" class="d-flex flex-row justify-content-start align-items-center">
+					<div class="enable-border ms-3">
+						<button type="button" class="btn btn-success">Do exercise!</button>
 					</div>
-					<div class="enable-border">
-						<button type="button" class="btn btn-primary">Source code</button>
-
+					<div class="enable-border ms-3">
+						<a href="/home/courses"><button type="button" class="btn btn-success">Back to courses
+								page</button></a>
 					</div>
 				</div>
-				<div class="enable-border m-2">
-					<button type="button" class="btn btn-light">Light</button>
+			</div>
+		</div>
+	</div>
+	<div id="ratingSection" class="enable-border m-3">
+		<div id="ratingContainer" class="m-3">
+			<p>Rate this course</p>
+			<div class=" w-25 stars d-flex flex-row justify-content-around">
+				<div class="star" data-value="1">
+					<h5>&#9733;</h5>
 				</div>
+				<div class="star" data-value="2">
+					<h5>&#9733;</h5>
+				</div>
+				<div class="star" data-value="3">
+					<h5>&#9733;</h5>
+				</div>
+				<div class="star" data-value="4">
+					<h5>&#9733;</h5>
+				</div>
+				<div class="star" data-value="5">
+					<h5>&#9733;</h5>
+				</div>
+			</div>
+			<p>Your Rating: <span id="selectedRating">0</span> stars</p>
+			<div class="mb-3">
+				<label for="reviewMessage" class="form-label">Review Message:</label>
+				<textarea class="form-control" id="reviewMessage" rows="3"></textarea>
+			</div>
+			<button class="btn btn-primary m-3" onclick="submitRating()">Submit Rating</button>
+		</div>
+		<div id="allCourseRatings">
+			<h3>Course Ratings</h3>
+			<div class="rating-list d-flex flex-column align-items-start">
+				<div class="rating-item">
+					<p>User 1</p>
+					<div class="user-rating">★★★★☆</div>
+					<p>Great course!</p>
+				</div>
+				<div class="rating-item">
+					<p>User 2</p>
+					<div class="user-rating">★★★★★</div>
+					<p>Excellent content!</p>
+				</div>
+				<div class="rating-item">
+					<p>User 3</p>
+					<div class="user-rating">★★★☆☆</div>
+					<p>Could be better.</p>
+				</div>
+				<!-- Add more rating items as needed -->
 			</div>
 		</div>
 	</div>

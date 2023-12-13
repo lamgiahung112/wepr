@@ -6,8 +6,7 @@ import hcmute.wepr.ielts_app.Utilities.Requests.RateCourseRequest;
 import java.util.List;
 
 public interface RatingServiceInterface {
-    List<Rating> getAllRatings();
-
+    List<Rating> getAllRatingsOfACourse(int courseId);
     void rateCourse(RateCourseRequest request);
 
 

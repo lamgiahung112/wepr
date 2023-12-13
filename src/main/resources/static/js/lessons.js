@@ -1,6 +1,37 @@
 $(document).ready(function() {
 	let userId = $('#userIdHolder').data('user-id');
 	let courseId = $('#courseIdHolder').data('course-id');
+	
+	$.ajax({
+		type: 'GET',
+		url: '/api/ratings/' + courseId,
+		success: function(ratings) {
+			if (ratings && ratings.length > 0) {
+				// Clear existing ratings
+				$('#allCourseRatings .rating-list').empty();
+
+				// Loop through ratings and populate the HTML
+				ratings.forEach(function(rating) {
+					let stars = '★'.repeat(rating.rating) + '☆'.repeat(5 - rating.rating);
+					let ratingHTML = `
+                            <div class="rating-item">
+                                <p>User ${rating.userId}</p>
+                                <div class="user-rating">${stars}</div>
+                                <p>${rating.comment}</p>
+                            </div>
+                        `;
+					$('#allCourseRatings .rating-list').append(ratingHTML);
+				});
+			} else {
+				// Display a message if there are no ratings
+				$('#allCourseRatings .rating-list').html('<p>No ratings yet.</p>');
+			}
+		},
+		error: function(xhr, status, error) {
+			console.error('Error fetching ratings:', error);
+			// Handle errors here, display an error message or perform necessary actions.
+		}
+	});
 	// AJAX request to get the current user's progress
 	$.ajax({
 		type: 'GET',
@@ -70,4 +101,76 @@ $(document).ready(function() {
 			}
 		});
 	});
+
+	$('.star').click(function(event) {
+		let starValue = $(this).data('value');
+		$('#selectedRating').text(starValue);
+	});
+
 });
+
+function submitRating() {
+	let courseId = $('#courseIdHolder').data('course-id');
+	let userId = $('#userIdHolder').data('user-id');
+	let rating = parseInt($('#selectedRating').text());
+	let comment = $('#reviewMessage').val();
+
+	if (rating < 1 || rating > 5) {
+		// Add validation for the rating (1 to 5 stars)
+		console.log('Please select a rating between 1 and 5.');
+		return;
+	}
+
+	let rateCourseRequest = {
+		courseId: courseId,
+		userId: userId,
+		rating: rating,
+		comment: comment
+	};
+
+	$.ajax({
+		type: 'POST',
+		url: '/api/ratings/rate-course',
+		contentType: 'application/json',
+		data: JSON.stringify(rateCourseRequest),
+		success: function(response) {
+			alert('Rating submitted successfully.');
+			// You may want to perform additional actions here, such as updating UI or displaying a success message.
+		},
+		error: function(xhr, status, error) {
+			console.error('Error submitting rating:', error);
+			// Handle errors here, display an error message or perform necessary actions.
+		}
+	});
+
+	$.ajax({
+		type: 'GET',
+		url: '/api/ratings/' + courseId,
+		success: function(ratings) {
+			if (ratings && ratings.length > 0) {
+				// Clear existing ratings
+				$('#allCourseRatings .rating-list').empty();
+
+				// Loop through ratings and populate the HTML
+				ratings.forEach(function(rating) {
+					let stars = '★'.repeat(rating.rating) + '☆'.repeat(5 - rating.rating);
+					let ratingHTML = `
+                            <div class="rating-item">
+                                <p>User ${rating.userId}</p>
+                                <div class="user-rating">${stars}</div>
+                                <p>${rating.comment}</p>
+                            </div>
+                        `;
+					$('#allCourseRatings .rating-list').append(ratingHTML);
+				});
+			} else {
+				// Display a message if there are no ratings
+				$('#allCourseRatings .rating-list').html('<p>No ratings yet.</p>');
+			}
+		},
+		error: function(xhr, status, error) {
+			console.error('Error fetching ratings:', error);
+			// Handle errors here, display an error message or perform necessary actions.
+		}
+	});
+}
