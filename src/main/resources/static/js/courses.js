@@ -133,7 +133,7 @@ function fetchCourses(page = 1) {
                 			<span class="${difficultyClass}">${course.difficulty}</span>
                             <div class="collapse" id="detailsCollapse${course.courseId}">
                                 <p>Additional details here...</p>
-                                <button class="btn btn-primary btn-details">See Details</button>
+                                <button id="seeDetailsButton" class="btn btn-primary btn-details">See Details</button>
                             </div>
                         </div>
                     </div>
@@ -477,6 +477,9 @@ function handleAddToCartResponse() {
 	});
 }
 
+$(document).on('click', '#seeDetaisButton', function(event) {
+	window.location.href = "http://localhost:8080/courses/" + courseId;
+});
 // Event handler for clicking on the "Add to Cart" button
 $(document).on('click', '#courses-container #addToCartLink', function(event) {
     event.preventDefault(); // Prevent the default action of the anchor tag

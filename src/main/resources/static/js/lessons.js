@@ -1,3 +1,5 @@
+let lessonId;
+
 $(document).ready(function() {
 	let userId = $('#userIdHolder').data('user-id');
 	let courseId = $('#courseIdHolder').data('course-id');
@@ -68,7 +70,7 @@ $(document).ready(function() {
 
 	$('.lesson-link').on('click', function(e) {
 		e.preventDefault();
-		var lessonId = $(this).data('lesson-id');
+		lessonId = $(this).data('lesson-id');
 		// AJAX request
 		$.ajax({
 			type: 'GET',
@@ -105,6 +107,10 @@ $(document).ready(function() {
 	$('.star').click(function(event) {
 		let starValue = $(this).data('value');
 		$('#selectedRating').text(starValue);
+	});
+	
+	$('#doExerciseButton').click(function(event) {
+		window.location.href = "http://localhost:8080/exercise/" + lessonId;
 	});
 
 });

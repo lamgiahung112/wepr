@@ -46,7 +46,7 @@
 				<div th:each="detail : ${latestTransaction.transactionDetails}">
 					<div class="col">
 						<div class="card h-100">
-							<img src="course_image.jpg" class="card-img-top" alt="Course Image">
+							<img th:src="${detail.course.coverImage}" class="card-img-top" alt="Course Image">
 							<div class="card-body">
 								<h5 class="card-title" th:text="${detail.course.courseName}"></h5>
 								<p class="card-text" th:text="'$' + ${detail.course.price}"></p>
