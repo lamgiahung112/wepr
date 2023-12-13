@@ -70,4 +70,13 @@ public class TeacherCourseController {
 		model.addAttribute("course", course);
 		return "teacher/update_course";
 	}
+	
+	@GetMapping("/{id}/mark")
+	@IsTeacher
+	public String getMarkPage(Model model, @PathVariable(name = "id") int courseId) {
+		Course course = courseService.findCourseWithLessonsByCourseId(courseId);
+		
+		model.addAttribute("course", course);
+		return "teacher/student_answer_mark";
+	}
 }

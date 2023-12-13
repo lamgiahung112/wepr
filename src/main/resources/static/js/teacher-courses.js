@@ -117,7 +117,8 @@ function updateCourses(page = 1) {
                 			<span class="${difficultyClass}">${course.difficulty}</span>
                             <div class="collapse" id="detailsCollapse${course.courseId}">
                                 <p>Additional details here...</p>
-                                <button class="btn btn-primary btn-details">Update</button>
+                                <button data-course-id="${course.courseId}" id="updateBtn" class="btn btn-primary btn-details">Update</button>
+                                <button data-course-id="${course.courseId}" id="markBtn" class="btn btn-primary btn-details">Mark</button>
                             </div>
                         </div>
                     </div>
@@ -425,3 +426,15 @@ $(document).on('mouseenter', '.course-card', function() {
 }).on('mouseleave', '.course-card', function() {
 	$(this).find('.collapse').collapse('hide');
 });
+
+$(document).on('click', '#updateBtn', function() {
+	const courseId = $(this).data('course-id');
+	window.location.href = "/teacher/courses/"+ courseId+"/update";
+});
+
+$(document).on('click', '#markBtn', function() {
+	const courseId = $(this).data('course-id');
+	window.location.href = "/teacher/courses/"+ courseId+"/mark";
+});
+
+

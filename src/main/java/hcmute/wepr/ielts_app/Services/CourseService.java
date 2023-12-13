@@ -314,4 +314,9 @@ public class CourseService implements CourseServiceInterface {
 	public Course getCouseWithAllLessons(int courseId) {
 		return courseRepository.findCourseWithLessonsByCourseId(courseId);
 	}
+
+	@Override
+	public Course getCourseWithAllLessonsAndAssociatedExercise(int courseId) {
+		return courseRepository.findCourseWithLessonsWithWritingExerciseByCourseId(courseId);
+	}
 }
